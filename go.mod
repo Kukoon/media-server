@@ -10,6 +10,7 @@ require (
 	github.com/naoina/go-stringutil v0.1.0 // indirect
 	github.com/naoina/toml v0.1.1
 	github.com/prometheus/client_golang v1.9.0
+	github.com/stretchr/testify v1.4.0
 	gorm.io/gorm v1.20.12
 	gorm.io/plugin/prometheus v0.0.0-20210201030325-2d0d2f250610
 )
