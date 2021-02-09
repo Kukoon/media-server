@@ -13,6 +13,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-go@v2
+    - name: Install misspell
+      run: go get github.com/client9/misspell/cmd/misspell
+      env:
+        GOPATH: /home/runner/go
+    - name: Check misspell
+      run: find . -type f | grep -v webroot/assets | xargs /home/runner/go/bin/misspell -error
     - name: Check if format is correct
       run: .ci/check-gofmt
     - name: Check that every package has a testfiles
@@ -22,6 +28,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-go@v2
+    - name: Install swag
+      run: go get -u github.com/swaggo/swag/cmd/swag
+      env:
+        GOPATH: /home/runner/go
+    - name: Generate Docs
+      run: /home/runner/go/bin/swag init --parseDependency --parseDepth 2 --parseInternal -g web/main.go
     - name: Test
       run: go test $(go list ./... | grep -v /vendor/) -v -failfast -p 1 -coverprofile .testCoverage.txt
     - name: Show Coverage
@@ -31,5 +43,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-go@v2
+    - name: Install swag
+      run: go get -u github.com/swaggo/swag/cmd/swag
+      env:
+        GOPATH: /home/runner/go
+    - name: Generate Docs
+      run: /home/runner/go/bin/swag init --parseDependency --parseDepth 2 --parseInternal -g web/main.go
     - name: Build
       run: go build -v ./...
