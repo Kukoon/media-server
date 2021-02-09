@@ -10,11 +10,15 @@ import (
 	"gorm.io/plugin/prometheus"
 )
 
+// Webservice to store Configuration and Webserver wide objects
+// (like DB Connection)
 type Webservice struct {
 	Listen string
 	db     *gorm.DB
 }
 
+// Run to startup all related web parts
+// (e.g. configure the server, metrics, and finally bind routing)
 func (ws *Webservice) Run() error {
 	gin.EnableJsonDecoderDisallowUnknownFields()
 	gin.SetMode(gin.ReleaseMode)
@@ -34,6 +38,7 @@ func (ws *Webservice) Run() error {
 	return r.Run(ws.Listen)
 }
 
+// Bind all routing
 func (ws *Webservice) bind(r *gin.Engine) {
 	r.GET("/metrics", ginprom.PromHandler(promhttp.Handler()))
 	r.GET("/status", func(c *gin.Context) {

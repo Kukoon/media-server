@@ -5,9 +5,9 @@ import (
 	"time"
 
 	"github.com/naoina/toml"
-	//"github.com/BurntSushi/toml"
 )
 
+// TOMLDuration a time.Duration inside toml files
 type TOMLDuration time.Duration
 
 // UnmarshalText implements encoding.TextUnmarshaler
