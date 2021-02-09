@@ -5,12 +5,14 @@ import (
 
 	"github.com/bdlm/log"
 
+	"github.com/Kukoon/media-server/models"
 	"github.com/Kukoon/media-server/runtime"
 	"github.com/Kukoon/media-server/web"
 )
 
 type configData struct {
-	Webserver web.Webservice `toml:"webserver"`
+	Database  models.Database `toml:"database"`
+	Webserver web.Webservice  `toml:"webserver"`
 }
 
 func main() {
@@ -21,6 +23,13 @@ func main() {
 	if err := runtime.ReadTOML(configPath, config); err != nil {
 		log.Panicf("open config file: %s", err)
 	}
+
+	if err := config.Database.Run(); err != nil {
+		log.Fatal(err)
+	}
+
+	config.Webserver.DB = config.Database.DB
+
 	if err := config.Webserver.Run(); err != nil {
 		log.Fatal(err)
 	}
