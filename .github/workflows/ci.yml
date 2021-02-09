@@ -8,6 +8,15 @@ on:
   workflow_dispatch: {}
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+    - name: Check if format is correct
+      run: .ci/check-gofmt
+    - name: Check that every package has a testfiles
+      run: .ci/check-testfiles
   test:
     runs-on: ubuntu-latest
     steps:

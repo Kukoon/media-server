@@ -11,5 +11,5 @@ For the Frontend, take a look here: [media-ui](https://github.com/Kukoon/media-u
 go get -v -u github.com/FreifunkBremen/yanic
 ```
 
-## Configurate
+## Configuration
 Copy `config_example.toml` to `config.toml` and take a look there.
