@@ -107,6 +107,7 @@ func (ws *Webservice) rssChannel(c *gin.Context) {
 	}
 	pubTime := obj.Recordings[0].CreatedAt
 	p := podcast.New(obj.Title, "", "", &pubTime, &pubTime)
+	p.AddImage(obj.Logo)
 	p.Language = "de_DE"
 
 	for _, i := range obj.Recordings {
