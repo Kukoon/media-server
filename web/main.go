@@ -93,11 +93,14 @@ func (ws *Webservice) bind(r *gin.Engine) {
 		})
 	})
 	r.GET("/metrics", ginprom.PromHandler(promhttp.Handler()))
+	r.GET("/rss/:slug", ws.rssChannel)
 
 	api := r.Group("/api")
 	api.GET("/help/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	v1 := api.Group("/v1")
 	{
+		v1.GET("/channels", ws.apiChannelList)
+		v1.GET("/channel/:slug", ws.apiChannelGet)
 		v1.GET("/recordings", ws.apiRecordingList)
 		v1.GET("/recording/:slug", ws.apiRecordingGet)
 	}

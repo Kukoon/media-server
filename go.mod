@@ -8,6 +8,7 @@ require (
 	github.com/bdlm/std v1.0.1 // indirect
 	github.com/chenjiandongx/ginprom v0.0.0-20201217063207-fe11b7f55a35
 	github.com/cpuguy83/go-md2man/v2 v2.0.0 // indirect
+	github.com/eduncan911/podcast v1.4.2
 	github.com/gin-contrib/static v0.0.0-20200916080430-d45d9a37d28e
 	github.com/gin-gonic/autotls v0.0.3
 	github.com/gin-gonic/gin v1.6.3

@@ -15,12 +15,29 @@ import (
 // @Description Show a list of all recordings
 // @Produce  json
 // @Success 200 {array} models.Recording
-// @Failure 500 {object} string
+// @Failure 400 {object} HTTPError
+// @Failure 500 {object} HTTPError
 // @Router /v1/recordings [get]
+// @Param channel query string false "filter by UUID of a user"
 func (ws *Webservice) apiRecordingList(c *gin.Context) {
 	list := []*models.Recording{}
-	if err := ws.DB.Find(&list).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+	db := ws.DB
+	if str, ok := c.GetQuery("channel"); ok {
+		uuid, err := uuid.Parse(str)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, HTTPError{
+				Message: APIErrorInvalidRequestFormat,
+				Error:   err.Error(),
+			})
+			return
+		}
+		db = db.Where("channel_id", uuid)
+	}
+	if err := db.Joins("Channel").Find(&list).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, HTTPError{
+			Message: APIErrorInternalDatabase,
+			Error:   err.Error(),
+		})
 		return
 	}
 
@@ -30,14 +47,14 @@ func (ws *Webservice) apiRecordingList(c *gin.Context) {
 // @Summary Show Recording
 // @Description Show recording with all informations
 // @Produce  json
-// @Success 200 {object} models.Recording{Formats=[]models.RecordingFormat}
-// @Failure 400 {object} string
-// @Failure 404 {object} string
+// @Success 200 {object} models.Recording{formats=[]models.RecordingFormat}
+// @Failure 400 {object} HTTPError
+// @Failure 404 {object} HTTPError
 // @Router /v1/recording/{slug} [get]
 // @Param slug path string false "slug or uuid of recording"
 func (ws *Webservice) apiRecordingGet(c *gin.Context) {
 	slug := c.Params.ByName("slug")
-	db := ws.DB.Preload("Formats")
+	db := ws.DB.Joins("Channel").Preload("Formats")
 	obj := models.Recording{}
 
 	uuid, err := uuid.Parse(slug)
@@ -49,10 +66,17 @@ func (ws *Webservice) apiRecordingGet(c *gin.Context) {
 	}
 	if err := db.First(&obj).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.JSON(http.StatusNotFound, HTTPError{
+				Message: APIErrorNotFound,
+				Error:   err.Error(),
+			})
 			c.JSON(http.StatusNotFound, err.Error())
 			return
 		}
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusInternalServerError, HTTPError{
+			Message: APIErrorInternalDatabase,
+			Error:   err.Error(),
+		})
 		return
 	}
 
