@@ -110,21 +110,21 @@ func (ws *Webservice) rssChannel(c *gin.Context) {
 	p.AddImage(obj.Logo)
 	p.Language = "de_DE"
 
-	for _, i := range obj.Recordings {
+	for _, recording := range obj.Recordings {
 
-		url := i.Formats[0].URL
+		recordingFormat := recording.Formats[0]
 		format := podcast.MP4
 
 		// create an Item
 		item := podcast.Item{
-			Title:       i.CommonName,
-			Link:        url,
-			Description: "Description for Episode " + i.CommonName,
-			PubDate:     &i.CreatedAt,
+			Title:       recording.CommonName,
+			Link:        recordingFormat.URL,
+			Description: "Description for Episode " + recording.CommonName,
+			PubDate:     &recording.CreatedAt,
 		}
-		item.AddImage(i.Poster)
+		item.AddImage(recording.Poster)
 		// add a Download to the Item
-		item.AddEnclosure(url, format, 0)
+		item.AddEnclosure(recordingFormat.URL, format, recordingFormat.Bytes)
 
 		// add the Item and check for validation errors
 		if _, err := p.AddItem(item); err != nil {

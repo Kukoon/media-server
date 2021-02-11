@@ -28,4 +28,5 @@ type RecordingFormat struct {
 	URL        string `json:"url" example:"https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee_20201211_165251.mp4"`
 	IsVideo    bool   `json:"is_video" example:"true"`
 	Resolution string `json:"resolution" example:"1920x1080"`
+	Bytes      int64  `json:"bytes"`
 }

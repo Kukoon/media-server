@@ -59,6 +59,7 @@ var testdata = []*gormigrate.Migration{
 				RecordingID: testdataRecording1,
 				IsVideo:     true,
 				URL:         "https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee_20201211_165251.mp4",
+				Bytes:       3323919713,
 				Resolution:  "1920x1080",
 			}).Error
 		},
@@ -95,6 +96,7 @@ var testdata = []*gormigrate.Migration{
 				RecordingID: testdataRecording2,
 				IsVideo:     true,
 				URL:         "https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00_20210201_111916.mp4",
+				Bytes:       2878429977,
 				Resolution:  "1920x1080",
 			}).Error
 		},
@@ -131,6 +133,7 @@ var testdata = []*gormigrate.Migration{
 				RecordingID: testdataRecording3,
 				IsVideo:     true,
 				URL:         "https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/edb1cfbb-3476-d639-b3f5-795fabf4ef4d_20210207_111945.mp4",
+				Bytes:       1092701356,
 				Resolution:  "1920x1080",
 			}).Error
 		},
