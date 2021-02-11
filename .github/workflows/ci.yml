@@ -50,4 +50,32 @@ jobs:
     - name: Generate Docs
       run: /home/runner/go/bin/swag init --parseDependency --parseDepth 2 --parseInternal -g web/main.go
     - name: Build
-      run: go build -v ./...
+      run: go build -v
+    - name: Archive build artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: build
+        path: media-server
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    needs:
+      - lint
+      - test
+      - build
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: build/
+      - name: Upload to Server
+        uses: up9cloud/action-rsync@master
+        env:
+          USER: ${{secrets.DEPLOY_SSH_USER}}
+          HOST: ${{secrets.DEPLOY_SSH_HOST}}
+          KEY: ${{secrets.DEPLOY_SSH_KEY}}
+          ARGS: -rzh -O --delete-after
+          SSH_ARGS: '-p ${{secrets.DEPLOY_SSH_PORT}} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+          SOURCE: build/media-server
+          TARGET: /
