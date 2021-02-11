@@ -93,7 +93,7 @@ func (ws *Webservice) bind(r *gin.Engine) {
 		})
 	})
 	r.GET("/metrics", ginprom.PromHandler(promhttp.Handler()))
-	r.GET("/rss/:slug", ws.rssChannel)
+	r.GET("/rss/:slug/:format", ws.rssChannel)
 
 	api := r.Group("/api")
 	api.GET("/help/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

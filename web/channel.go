@@ -3,7 +3,6 @@ package web
 import (
 	"errors"
 	"net/http"
-	"time"
 
 	"github.com/eduncan911/podcast"
 	"github.com/gin-gonic/gin"
@@ -89,7 +88,9 @@ func (ws *Webservice) rssChannel(c *gin.Context) {
 	} else {
 		obj.ID = uuid
 	}
-	if err := db.Preload("Recordings.Formats").First(&obj).Error; err != nil {
+	if err := db.Preload("Recordings", func(db *gorm.DB) *gorm.DB {
+		return db.Order("Recordings.created_at DESC")
+	}).Preload("Recordings.Formats").First(&obj).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.JSON(http.StatusNotFound, HTTPError{
 				Message: APIErrorNotFound,
@@ -104,8 +105,9 @@ func (ws *Webservice) rssChannel(c *gin.Context) {
 		})
 		return
 	}
-	pubTime := time.Now()
+	pubTime := obj.Recordings[0].CreatedAt
 	p := podcast.New(obj.Title, "", "", &pubTime, &pubTime)
+	p.Language = "de_DE"
 
 	for _, i := range obj.Recordings {
 
