@@ -82,7 +82,7 @@ var testdata = []*gormigrate.Migration{
 				ID:         testdataRecording2,
 				ChannelID:  testdataChannel1,
 				CommonName: "2021-01-faschistische_jahrhundert",
-				Poster:     "https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00_20210201_111916.mp4",
+				Poster:     "https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00_20210201_111916mp4",
 				CreatedAt:  time.Date(2021, 01, 29, 20, 0, 0, 0, loc),
 				Duration:   time.Hour,
 				Public:     true,
