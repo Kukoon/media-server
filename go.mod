@@ -14,6 +14,7 @@ require (
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-gormigrate/gormigrate/v2 v2.0.0
 	github.com/go-openapi/spec v0.20.3 // indirect
+	github.com/gomarkdown/markdown v0.0.0-20210208175418-bda154fe17d8
 	github.com/google/uuid v1.2.0
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/naoina/go-stringutil v0.1.0 // indirect

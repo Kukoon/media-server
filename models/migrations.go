@@ -19,6 +19,7 @@ var migrations = []*gormigrate.Migration{
 		ID: "01-schema-0020-01-recording",
 		Migrate: func(tx *gorm.DB) error {
 			return tx.AutoMigrate(&Recording{},
+				&RecordingLang{},
 				&RecordingFormat{})
 		},
 		Rollback: func(tx *gorm.DB) error {

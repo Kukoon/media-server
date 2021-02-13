@@ -4,7 +4,6 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/eduncan911/podcast"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -68,80 +67,4 @@ func (ws *Webservice) apiChannelGet(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, &obj)
-}
-
-/**
- *
- * Podcast
- *
- */
-
-func (ws *Webservice) rssChannel(c *gin.Context) {
-	slug := c.Params.ByName("slug")
-	db := ws.DB
-	obj := models.Channel{}
-
-	uuid, err := uuid.Parse(slug)
-	if err != nil {
-		db = db.Where("common_name", slug)
-		obj.CommonName = slug
-	} else {
-		obj.ID = uuid
-	}
-	if err := db.Preload("Recordings", func(db *gorm.DB) *gorm.DB {
-		return db.Order("Recordings.created_at DESC")
-	}).Preload("Recordings.Formats").First(&obj).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			c.JSON(http.StatusNotFound, HTTPError{
-				Message: APIErrorNotFound,
-				Error:   err.Error(),
-			})
-			c.JSON(http.StatusNotFound, err.Error())
-			return
-		}
-		c.JSON(http.StatusInternalServerError, HTTPError{
-			Message: APIErrorInternalDatabase,
-			Error:   err.Error(),
-		})
-		return
-	}
-	pubTime := obj.Recordings[0].CreatedAt
-	p := podcast.New(obj.Title, "", "", &pubTime, &pubTime)
-	p.AddImage(obj.Logo)
-	p.Language = "de_DE"
-
-	for _, recording := range obj.Recordings {
-
-		recordingFormat := recording.Formats[0]
-		format := podcast.MP4
-
-		// create an Item
-		item := podcast.Item{
-			Title:       recording.CommonName,
-			Link:        recordingFormat.URL,
-			Description: "Description for Episode " + recording.CommonName,
-			PubDate:     &recording.CreatedAt,
-		}
-		item.AddImage(recording.Poster)
-		// add a Download to the Item
-		item.AddEnclosure(recordingFormat.URL, format, recordingFormat.Bytes)
-
-		// add the Item and check for validation errors
-		if _, err := p.AddItem(item); err != nil {
-			c.JSON(http.StatusInternalServerError, HTTPError{
-				Message: "Podcast Rendering Error",
-				Error:   err.Error(),
-			})
-			return
-		}
-	}
-
-	c.Writer.Header().Set("Content-Type", "application/xml")
-
-	if err := p.Encode(c.Writer); err != nil {
-		c.JSON(http.StatusInternalServerError, HTTPError{
-			Message: "Podcast Rendering Error",
-			Error:   err.Error(),
-		})
-	}
 }
