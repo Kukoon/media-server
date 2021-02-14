@@ -20,6 +20,7 @@ var (
 	testdataRecording2        = uuid.MustParse("45da89a7-e5e0-5104-b937-6d4c2d4b6d00")
 	testdataRecording2Lang1   = uuid.MustParse("20eb49e4-46a6-4b30-87eb-72e4dbe77b09")
 	testdataRecording2Format1 = uuid.MustParse("09858a43-0532-4ad8-8694-92ed71372ff4")
+	testdataRecording2Format2 = uuid.MustParse("918c0386-03ad-4d34-b930-d6ce6a7632eb")
 
 	testdataRecording3        = uuid.MustParse("edb1cfbb-3476-d639-b3f5-795fabf4ef4d")
 	testdataRecording3Lang1   = uuid.MustParse("d193bc41-99f6-46d8-870e-72a860520223")
@@ -156,7 +157,7 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 			if err != nil {
 				return err
 			}
-			return tx.Create(&RecordingFormat{
+			err = tx.Create(&RecordingFormat{
 				ID:          testdataRecording2Format1,
 				RecordingID: testdataRecording2,
 				Lang:        "de",
@@ -164,6 +165,18 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				URL:         "https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00_20210201_111916.mp4",
 				Bytes:       2878429977,
 				Resolution:  "1920x1080",
+			}).Error
+			if err != nil {
+				return err
+			}
+			return tx.Create(&RecordingFormat{
+				ID:          testdataRecording2Format2,
+				RecordingID: testdataRecording2,
+				Lang:        "de",
+				IsVideo:     false,
+				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/audio_best.mp3",
+				Bytes:       115967040,
+				Resolution:  "149kb",
 			}).Error
 		},
 		Rollback: func(tx *gorm.DB) error {

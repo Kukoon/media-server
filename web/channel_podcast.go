@@ -42,6 +42,16 @@ func (p PodcastFormat) IsVideo() bool {
 	return false
 }
 
+func (p PodcastFormat) BeautifulString() string {
+	switch p {
+	case VideoBestPodcastFormat:
+		return "Video Best"
+	case AudioBestPodcastFormat:
+		return "Audio Best"
+	}
+	return "ERROR"
+}
+
 func (ws *Webservice) rssChannel(c *gin.Context) {
 	slug := c.Params.ByName("slug")
 	language := c.Params.ByName("lang")
@@ -93,13 +103,13 @@ func (ws *Webservice) rssChannel(c *gin.Context) {
 		return
 	}
 	pubTime := obj.Recordings[0].CreatedAt
-	p := podcast.New(obj.Title, "", "", &pubTime, &pubTime)
+	p := podcast.New(obj.Title+" ("+formatStr.BeautifulString()+")", "", "", &pubTime, &pubTime)
 	p.AddImage(obj.Logo)
 	p.Language = language
 
 	for _, recording := range obj.Recordings {
 
-		if recording.RecordingLang == nil {
+		if recording.RecordingLang == nil || len(recording.Formats) == 0 {
 			continue
 		}
 
