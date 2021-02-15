@@ -14,6 +14,7 @@ type Recording struct {
 	// attributes
 	CommonName    string         `json:"common_name" gorm:"unique_index:idx_recording_channel" example:"2020-12-polizeigewalt"`
 	Poster        string         `json:"poster" example:"https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee_20201211_165251mp4"`
+	Preview       string         `json:"preview" example:"https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee_20201211_165251.gif"`
 	Duration      time.Duration  `json:"duration"`
 	CreatedAt     time.Time      `json:"created_at" example:"2020-12-10T19:00:00.000000+01:00"`
 	Public        bool           `json:"public"`
@@ -26,11 +27,13 @@ type RecordingFormat struct {
 	Recording   Recording `json:"-" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	RecordingID uuid.UUID `json:"-" gorm:"type:uuid"`
 	// attributes
-	Lang       string `json:"lang" gorm:"unique_index:idx_recording_lang" example:"de"`
-	URL        string `json:"url" example:"https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee_20201211_165251.mp4"`
+	Lang  string `json:"lang" gorm:"unique_index:idx_recording_lang" example:"de"`
+	URL   string `json:"url" example:"https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee_20201211_165251.mp4"`
+	Bytes int64  `json:"bytes"`
+	//Quality    0: origin quality, 100: 4k, 140: 1440p, 150: 1080p, 160: 720p, 180: 480p. 200: 360p, 250: 240p, 300: 144p
+	Quality    int64  `json:"quality" example:"0"`
 	IsVideo    bool   `json:"is_video" example:"true"`
 	Resolution string `json:"resolution" example:"1920x1080"`
-	Bytes      int64  `json:"bytes"`
 }
 
 type RecordingLang struct {

@@ -67,7 +67,7 @@ func (ws *Webservice) apiRecordingGet(c *gin.Context) {
 	obj := models.Recording{}
 
 	if str, ok := c.GetQuery("video_format"); ok {
-		b, err := strconv.ParseBool(str)
+		isVideo, err := strconv.ParseBool(str)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, HTTPError{
 				Message: APIErrorInvalidRequestFormat,
@@ -76,11 +76,13 @@ func (ws *Webservice) apiRecordingGet(c *gin.Context) {
 			return
 		}
 		db = db.Preload("Formats", func(db *gorm.DB) *gorm.DB {
-			return db.Where("is_video", b)
+			return db.Where("is_video", isVideo).Order("quality DESC")
 		})
 
 	} else {
-		db = db.Preload("Formats")
+		db = db.Preload("Formats", func(db *gorm.DB) *gorm.DB {
+			return db.Order("quality DESC")
+		})
 	}
 	if str, ok := c.GetQuery("lang"); ok {
 		db = db.Preload("RecordingLang", func(db *gorm.DB) *gorm.DB {
