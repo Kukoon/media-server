@@ -86,7 +86,7 @@ func (ws *Webservice) rssChannel(c *gin.Context) {
 	}).Preload("Recordings", func(db *gorm.DB) *gorm.DB {
 		return db.Order("created_at DESC")
 	}).Preload("Recordings.Formats", func(db *gorm.DB) *gorm.DB {
-		return db.Where("is_video", isVideo).Order("quality DESC")
+		return db.Where("is_video", isVideo).Order("quality ASC")
 	}).First(&obj).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.JSON(http.StatusNotFound, HTTPError{

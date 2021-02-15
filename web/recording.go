@@ -76,12 +76,12 @@ func (ws *Webservice) apiRecordingGet(c *gin.Context) {
 			return
 		}
 		db = db.Preload("Formats", func(db *gorm.DB) *gorm.DB {
-			return db.Where("is_video", isVideo).Order("quality DESC")
+			return db.Where("is_video", isVideo).Order("quality ASC")
 		})
 
 	} else {
 		db = db.Preload("Formats", func(db *gorm.DB) *gorm.DB {
-			return db.Order("quality DESC")
+			return db.Order("quality ASC")
 		})
 	}
 	if str, ok := c.GetQuery("lang"); ok {
