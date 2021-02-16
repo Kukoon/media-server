@@ -16,6 +16,9 @@ var (
 	testdataRecording1        = uuid.MustParse("542685cb-3693-e720-a957-f008f5dae3ee")
 	testdataRecording1Lang1   = uuid.MustParse("03d33e6a-151f-47d9-be79-a726e0f9a859")
 	testdataRecording1Format1 = uuid.MustParse("3a4f9157-65bf-4d15-a82b-1cd9295d07e0")
+	testdataRecording1Format2 = uuid.MustParse("95ac279c-9ec8-4463-9e55-b18f6e6094be")
+	testdataRecording1Format3 = uuid.MustParse("cfcd54de-dc30-4ee9-8877-92515d337af9")
+	testdataRecording1Format4 = uuid.MustParse("e3caa805-ff00-48aa-9410-c939804d5eac")
 
 	testdataRecording2        = uuid.MustParse("45da89a7-e5e0-5104-b937-6d4c2d4b6d00")
 	testdataRecording2Lang1   = uuid.MustParse("20eb49e4-46a6-4b30-87eb-72e4dbe77b09")
@@ -99,7 +102,7 @@ oder per [Paypal](https://www.paypal.com/donate?hosted_button_id=4BQQNN582WLN6) 
 			if err != nil {
 				return err
 			}
-			return tx.Create(&RecordingFormat{
+			err = tx.Create(&RecordingFormat{
 				ID:          testdataRecording1Format1,
 				RecordingID: testdataRecording1,
 				Lang:        "de",
@@ -109,9 +112,66 @@ oder per [Paypal](https://www.paypal.com/donate?hosted_button_id=4BQQNN582WLN6) 
 				Bytes:       3323919713,
 				Resolution:  "1920x1080",
 			}).Error
+			if err != nil {
+				return err
+			}
+			err = tx.Create(&RecordingFormat{
+				ID:          testdataRecording1Format2,
+				RecordingID: testdataRecording1,
+				Lang:        "de",
+				Quality:     160,
+				IsVideo:     true,
+				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/video_720.mp4",
+				Bytes:       0, // TODO
+				Resolution:  "1280x720",
+			}).Error
+			if err != nil {
+				return err
+			}
+			err = tx.Create(&RecordingFormat{
+				ID:          testdataRecording1Format3,
+				RecordingID: testdataRecording1,
+				Lang:        "de",
+				Quality:     180,
+				IsVideo:     true,
+				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/video_480p.mp4",
+				Bytes:       0, // TODO
+				Resolution:  "854x480",
+			}).Error
+			if err != nil {
+				return err
+			}
+			return tx.Create(&RecordingFormat{
+				ID:          testdataRecording1Format4,
+				RecordingID: testdataRecording1,
+				Lang:        "de",
+				Quality:     0,
+				IsVideo:     false,
+				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/audio_best.mp3",
+				Bytes:       130761076,
+				Resolution:  "128kb",
+			}).Error
 		},
 		Rollback: func(tx *gorm.DB) error {
 			err := tx.Delete(&RecordingFormat{
+				ID: testdataRecording1Format4,
+			}).Error
+			if err != nil {
+				return err
+			}
+			err = tx.Delete(&RecordingFormat{
+				ID: testdataRecording1Format3,
+			}).Error
+			if err != nil {
+				return err
+			}
+			err = tx.Delete(&RecordingFormat{
+				ID: testdataRecording1Format2,
+			}).Error
+			if err != nil {
+				return err
+			}
+			err = tx.Delete(&RecordingFormat{
 				ID: testdataRecording1Format1,
 			}).Error
 			if err != nil {
@@ -194,7 +254,7 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				Lang:        "de",
 				Quality:     180,
 				IsVideo:     true,
-				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/video_480p.mp4",
+				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/video_480.mp4",
 				Bytes:       0, // TODO
 				Resolution:  "854x480",
 			}).Error
