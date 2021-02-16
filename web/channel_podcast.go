@@ -23,12 +23,17 @@ type PodcastFormat string
 
 const (
 	VideoBestPodcastFormat PodcastFormat = "video_best"
+	VideoHDPodcastFormat   PodcastFormat = "video_hd"
+	VideoSDPodcastFormat   PodcastFormat = "video_sd"
 	AudioBestPodcastFormat PodcastFormat = "audio_best"
 )
 
 func (p PodcastFormat) IsValid() bool {
 	switch p {
-	case VideoBestPodcastFormat, AudioBestPodcastFormat:
+	case VideoBestPodcastFormat,
+		VideoHDPodcastFormat,
+		VideoSDPodcastFormat,
+		AudioBestPodcastFormat:
 		return true
 	}
 	return false
@@ -36,16 +41,33 @@ func (p PodcastFormat) IsValid() bool {
 
 func (p PodcastFormat) IsVideo() bool {
 	switch p {
-	case VideoBestPodcastFormat:
+	case VideoBestPodcastFormat,
+		VideoHDPodcastFormat,
+		VideoSDPodcastFormat:
 		return true
 	}
 	return false
 }
 
+func (p PodcastFormat) MinQuality() int {
+	switch p {
+	case VideoBestPodcastFormat, AudioBestPodcastFormat:
+		return 0
+	case VideoHDPodcastFormat:
+		return 160
+	case VideoSDPodcastFormat:
+		return 180
+	}
+	return 1000
+}
 func (p PodcastFormat) BeautifulString() string {
 	switch p {
 	case VideoBestPodcastFormat:
 		return "Video Best"
+	case VideoHDPodcastFormat:
+		return "Video HD"
+	case VideoSDPodcastFormat:
+		return "Video SD"
 	case AudioBestPodcastFormat:
 		return "Audio Best"
 	}
@@ -86,7 +108,7 @@ func (ws *Webservice) rssChannel(c *gin.Context) {
 	}).Preload("Recordings", func(db *gorm.DB) *gorm.DB {
 		return db.Order("created_at DESC")
 	}).Preload("Recordings.Formats", func(db *gorm.DB) *gorm.DB {
-		return db.Where("is_video", isVideo).Order("quality ASC")
+		return db.Where("is_video", isVideo).Where("quality >= ?", formatStr.MinQuality()).Order("quality ASC")
 	}).First(&obj).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.JSON(http.StatusNotFound, HTTPError{

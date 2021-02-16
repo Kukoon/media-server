@@ -21,7 +21,8 @@ var (
 	testdataRecording2Lang1   = uuid.MustParse("20eb49e4-46a6-4b30-87eb-72e4dbe77b09")
 	testdataRecording2Format1 = uuid.MustParse("09858a43-0532-4ad8-8694-92ed71372ff4")
 	testdataRecording2Format2 = uuid.MustParse("6b4cf4b0-db39-47a3-9bc9-4ff6ef539a88")
-	testdataRecording2Format3 = uuid.MustParse("918c0386-03ad-4d34-b930-d6ce6a7632eb")
+	testdataRecording2Format3 = uuid.MustParse("fc129d9b-b774-4b47-a7f3-a8cf046a5573")
+	testdataRecording2Format4 = uuid.MustParse("918c0386-03ad-4d34-b930-d6ce6a7632eb")
 
 	testdataRecording3        = uuid.MustParse("edb1cfbb-3476-d639-b3f5-795fabf4ef4d")
 	testdataRecording3Lang1   = uuid.MustParse("d193bc41-99f6-46d8-870e-72a860520223")
@@ -181,14 +182,27 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				Quality:     160,
 				IsVideo:     true,
 				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/video_720p.mp4",
-				Bytes:       115967040,
+				Bytes:       1149359246,
 				Resolution:  "1280x720",
 			}).Error
 			if err != nil {
 				return err
 			}
-			return tx.Create(&RecordingFormat{
+			err = tx.Create(&RecordingFormat{
 				ID:          testdataRecording2Format3,
+				RecordingID: testdataRecording2,
+				Lang:        "de",
+				Quality:     180,
+				IsVideo:     true,
+				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/video_480p.mp4",
+				Bytes:       0, // TODO
+				Resolution:  "854x480",
+			}).Error
+			if err != nil {
+				return err
+			}
+			return tx.Create(&RecordingFormat{
+				ID:          testdataRecording2Format4,
 				RecordingID: testdataRecording2,
 				Lang:        "de",
 				Quality:     0,
@@ -200,6 +214,12 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 		},
 		Rollback: func(tx *gorm.DB) error {
 			err := tx.Delete(&RecordingFormat{
+				ID: testdataRecording2Format4,
+			}).Error
+			if err != nil {
+				return err
+			}
+			err = tx.Delete(&RecordingFormat{
 				ID: testdataRecording2Format3,
 			}).Error
 			if err != nil {
