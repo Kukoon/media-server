@@ -122,7 +122,7 @@ oder per [Paypal](https://www.paypal.com/donate?hosted_button_id=4BQQNN582WLN6) 
 				Quality:     160,
 				IsVideo:     true,
 				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/video_720.mp4",
-				Bytes:       0, // TODO
+				Bytes:       1149359246,
 				Resolution:  "1280x720",
 			}).Error
 			if err != nil {
@@ -134,8 +134,8 @@ oder per [Paypal](https://www.paypal.com/donate?hosted_button_id=4BQQNN582WLN6) 
 				Lang:        "de",
 				Quality:     180,
 				IsVideo:     true,
-				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/video_480p.mp4",
-				Bytes:       0, // TODO
+				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/video_480.mp4",
+				Bytes:       654217779,
 				Resolution:  "854x480",
 			}).Error
 			if err != nil {
@@ -241,7 +241,7 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				Lang:        "de",
 				Quality:     160,
 				IsVideo:     true,
-				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/video_720p.mp4",
+				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/video_720.mp4",
 				Bytes:       1149359246,
 				Resolution:  "1280x720",
 			}).Error
@@ -255,7 +255,7 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				Quality:     180,
 				IsVideo:     true,
 				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/video_480.mp4",
-				Bytes:       0, // TODO
+				Bytes:       480268045,
 				Resolution:  "854x480",
 			}).Error
 			if err != nil {
