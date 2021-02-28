@@ -13,23 +13,36 @@ var (
 
 	testdataChannel1 = uuid.MustParse("df1555f5-7046-4f7a-adcc-195b73949723")
 
-	testdataRecording1        = uuid.MustParse("542685cb-3693-e720-a957-f008f5dae3ee")
-	testdataRecording1Lang1   = uuid.MustParse("03d33e6a-151f-47d9-be79-a726e0f9a859")
-	testdataRecording1Format1 = uuid.MustParse("3a4f9157-65bf-4d15-a82b-1cd9295d07e0")
-	testdataRecording1Format2 = uuid.MustParse("95ac279c-9ec8-4463-9e55-b18f6e6094be")
-	testdataRecording1Format3 = uuid.MustParse("cfcd54de-dc30-4ee9-8877-92515d337af9")
-	testdataRecording1Format4 = uuid.MustParse("e3caa805-ff00-48aa-9410-c939804d5eac")
+	testdataTagBuchvorstellung     = uuid.MustParse("0bca0cf4-a9b9-46d7-821f-18c59c08fc1d")
+	testdataTagBuchvorstellungLang = uuid.MustParse("35822fe2-1910-48e7-904f-15c9e6f7ea34")
+	testdataTagDiskussion          = uuid.MustParse("277026b0-b9d6-48d6-bfa1-96dcc7eb3451")
+	testdataTagDiskussionLang      = uuid.MustParse("38722845-beba-4e3d-ad3f-694c029d751f")
+	testdataTagVortrag             = uuid.MustParse("7297a654-71f9-43be-8120-69b8152f01fc")
+	testdataTagVortragLang         = uuid.MustParse("ec784c8e-2673-4870-b219-eb636e4765c8")
 
-	testdataRecording2        = uuid.MustParse("45da89a7-e5e0-5104-b937-6d4c2d4b6d00")
-	testdataRecording2Lang1   = uuid.MustParse("20eb49e4-46a6-4b30-87eb-72e4dbe77b09")
-	testdataRecording2Format1 = uuid.MustParse("09858a43-0532-4ad8-8694-92ed71372ff4")
-	testdataRecording2Format2 = uuid.MustParse("6b4cf4b0-db39-47a3-9bc9-4ff6ef539a88")
-	testdataRecording2Format3 = uuid.MustParse("fc129d9b-b774-4b47-a7f3-a8cf046a5573")
-	testdataRecording2Format4 = uuid.MustParse("918c0386-03ad-4d34-b930-d6ce6a7632eb")
+	testdataRecording1         = uuid.MustParse("542685cb-3693-e720-a957-f008f5dae3ee")
+	testdataRecording1Lang1    = uuid.MustParse("03d33e6a-151f-47d9-be79-a726e0f9a859")
+	testdataRecording1Format1  = uuid.MustParse("3a4f9157-65bf-4d15-a82b-1cd9295d07e0")
+	testdataRecording1Format2  = uuid.MustParse("95ac279c-9ec8-4463-9e55-b18f6e6094be")
+	testdataRecording1Format3  = uuid.MustParse("cfcd54de-dc30-4ee9-8877-92515d337af9")
+	testdataRecording1Format4  = uuid.MustParse("e3caa805-ff00-48aa-9410-c939804d5eac")
+	testdataRecording1Speaker1 = uuid.MustParse("7998f75e-7252-4ccd-8cfe-06989db28b51")
+	testdataRecording1Speaker2 = uuid.MustParse("c02bb21c-c8dc-4657-b14c-d0625188f463")
+	testdataRecording1Speaker3 = uuid.MustParse("6a3f1c47-9173-479e-bc53-262ea01a3ac1")
 
-	testdataRecording3        = uuid.MustParse("edb1cfbb-3476-d639-b3f5-795fabf4ef4d")
-	testdataRecording3Lang1   = uuid.MustParse("d193bc41-99f6-46d8-870e-72a860520223")
-	testdataRecording3Format1 = uuid.MustParse("6b1b95f2-d92d-4da7-b56c-1ba86ff22dcd")
+	testdataRecording2         = uuid.MustParse("45da89a7-e5e0-5104-b937-6d4c2d4b6d00")
+	testdataRecording2Lang1    = uuid.MustParse("20eb49e4-46a6-4b30-87eb-72e4dbe77b09")
+	testdataRecording2Format1  = uuid.MustParse("09858a43-0532-4ad8-8694-92ed71372ff4")
+	testdataRecording2Format2  = uuid.MustParse("6b4cf4b0-db39-47a3-9bc9-4ff6ef539a88")
+	testdataRecording2Format3  = uuid.MustParse("fc129d9b-b774-4b47-a7f3-a8cf046a5573")
+	testdataRecording2Format4  = uuid.MustParse("918c0386-03ad-4d34-b930-d6ce6a7632eb")
+	testdataRecording2Speaker1 = uuid.MustParse("5dfddf98-2b11-48c7-ab5e-8cc6a2db0dcd")
+	testdataRecording2Speaker2 = uuid.MustParse("a85fffb1-aa9f-4bd0-81e7-0058891827ef")
+
+	testdataRecording3         = uuid.MustParse("edb1cfbb-3476-d639-b3f5-795fabf4ef4d")
+	testdataRecording3Lang1    = uuid.MustParse("d193bc41-99f6-46d8-870e-72a860520223")
+	testdataRecording3Format1  = uuid.MustParse("6b1b95f2-d92d-4da7-b56c-1ba86ff22dcd")
+	testdataRecording3Speaker1 = uuid.MustParse("a098c2f5-aa63-4c54-87b1-46ddda1cde16")
 )
 
 var testdata = []*gormigrate.Migration{
@@ -41,7 +54,6 @@ var testdata = []*gormigrate.Migration{
 				CommonName: "kukoon",
 				Title:      "Im Kukoon",
 				Logo:       "https://media.kukoon.de/static/css/kukoon/logo.png",
-				Secret:     uuid.MustParse("1f349cf3-196d-4e39-9d22-3e35497e990c"),
 			}).Error
 		},
 		Rollback: func(tx *gorm.DB) error {
@@ -51,9 +63,81 @@ var testdata = []*gormigrate.Migration{
 		},
 	},
 	{
+		ID: "10-data-0018-01-tag-eg",
+		Migrate: func(tx *gorm.DB) error {
+			// -
+			if err := tx.Create(&Tag{
+				ID: testdataTagBuchvorstellung,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&TagLang{
+				ID:    testdataTagBuchvorstellungLang,
+				TagID: testdataTagBuchvorstellung,
+				Lang:  "de",
+				Name:  "Buchvorstellung",
+			}).Error; err != nil {
+				return err
+			}
+			// -
+			if err := tx.Create(&Tag{
+				ID: testdataTagDiskussion,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&TagLang{
+				ID:    testdataTagDiskussionLang,
+				TagID: testdataTagDiskussion,
+				Lang:  "de",
+				Name:  "Diskussion",
+			}).Error; err != nil {
+				return err
+			}
+			// -
+			if err := tx.Create(&Tag{
+				ID: testdataTagVortrag,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&TagLang{
+				ID:    testdataTagVortragLang,
+				TagID: testdataTagVortrag,
+				Lang:  "de",
+				Name:  "Vortrag",
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+		Rollback: func(tx *gorm.DB) error {
+			// -
+			if err := tx.Delete(&TagLang{ID: testdataTagVortragLang}).Error; err != nil {
+				return err
+			}
+			if err := tx.Delete(&Tag{ID: testdataTagVortrag}).Error; err != nil {
+				return err
+			}
+			// -
+			if err := tx.Delete(&TagLang{ID: testdataTagDiskussionLang}).Error; err != nil {
+				return err
+			}
+			if err := tx.Delete(&Tag{ID: testdataTagDiskussion}).Error; err != nil {
+				return err
+			}
+			// -
+			if err := tx.Delete(&TagLang{ID: testdataTagBuchvorstellungLang}).Error; err != nil {
+				return err
+			}
+			if err := tx.Delete(&Tag{ID: testdataTagBuchvorstellung}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+	},
+	{
 		ID: "10-data-0020-01-recording-1",
 		Migrate: func(tx *gorm.DB) error {
-			err := tx.Create(&Recording{
+			if err := tx.Create(&Recording{
 				ID:         testdataRecording1,
 				ChannelID:  testdataChannel1,
 				CommonName: "2020-12-polizeigewalt",
@@ -63,16 +147,36 @@ var testdata = []*gormigrate.Migration{
 				Duration:   time.Hour,
 				Public:     true,
 				Listed:     true,
-			}).Error
-			if err != nil {
+				Tags:       []*Tag{{ID: testdataTagDiskussion}},
+				Speakers: []*Speaker{
+					{
+						OwnerID:      testdataChannel1,
+						ID:           testdataRecording1Speaker1,
+						Name:         "Leila Abdul-Rahman",
+						Organisation: "Ruhr Universität Bochum",
+					},
+					{
+						OwnerID:      testdataChannel1,
+						ID:           testdataRecording1Speaker2,
+						Name:         "Greta",
+						Organisation: "Grün-Weiße Hilfe",
+					},
+					{
+						OwnerID:      testdataChannel1,
+						ID:           testdataRecording1Speaker3,
+						Name:         "Mathilda",
+						Organisation: "KOP Bremen",
+					},
+				},
+			}).Error; err != nil {
 				return err
 			}
-			err = tx.Create(&RecordingLang{
+			if err := tx.Create(&RecordingLang{
 				ID:          testdataRecording1Lang1,
 				RecordingID: testdataRecording1,
 				Lang:        "de",
 				Title:       "Polizeigewalt – ein deutsches Problem",
-				Description: `Ein deutsches Problem Diskussionsveranstaltung mit Laila Abdul-Rahman, Greta ([Grün-Weiße Hilfe Bremen](https://twitter.com/fanhilfe_bremen?lang=de)) und Mathilda ([Kampagne für Opfer rassistischer Polizeigewalt – KOP Bremen](https://www.facebook.com/KOP-Bremen-Kampagne-f%C3%BCr-Opfer-rassistischer-Polizeigewalt-Bremen-168776953679814/))
+				Long: `Ein deutsches Problem Diskussionsveranstaltung mit Laila Abdul-Rahman, Greta ([Grün-Weiße Hilfe Bremen](https://twitter.com/fanhilfe_bremen?lang=de)) und Mathilda ([Kampagne für Opfer rassistischer Polizeigewalt – KOP Bremen](https://www.facebook.com/KOP-Bremen-Kampagne-f%C3%BCr-Opfer-rassistischer-Polizeigewalt-Bremen-168776953679814/))
 
 Nachdem Mord an George Floyd ist es zu großen Protesten in den Vereinigten Staaten gekommen. Auch in Deutschland sterben schwarze Menschen in Polizeigewahrsam. Ihre Namen sind weitgehend unbekannt: William Tonou-Mbobda, Hussam Fadl, Rooble Warsame, Oury Jalloh, Yaya Diabi, Amed A., Aamir Ageeb, Achidi John, Laya-Alama Condé, Mohamed Idrissi – die Liste ließe sich fortsetzen.
 Gemeinsam mit **Laila Abdul-Rahman** vom [Forschungsprojekt Körperverletzung im Amt an der Ruhr-Universität Bochum](https://kviapol.rub.de/index.php/inhalte/zweiter-zwischenbericht), der Grün-Weißen Hilfe und der Kampagne für Opfer rassistischer Polizeigewalt (KOP-Bremen) wollen wir die Themen Polizeigewalt und rassistische Polizeigewalt beleuchten.
@@ -98,11 +202,10 @@ Wir bitten um eine kleine Spende an den Verein des Kukoon (*Verein für Bunte Ko
 	
 oder per [Paypal](https://www.paypal.com/donate?hosted_button_id=4BQQNN582WLN6) an verein@kukoon.de.
 				`,
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			err = tx.Create(&RecordingFormat{
+			if err := tx.Create(&RecordingFormat{
 				ID:          testdataRecording1Format1,
 				RecordingID: testdataRecording1,
 				Lang:        "de",
@@ -111,11 +214,10 @@ oder per [Paypal](https://www.paypal.com/donate?hosted_button_id=4BQQNN582WLN6) 
 				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/video_best.mp4",
 				Bytes:       3323919713,
 				Resolution:  "1920x1080",
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			err = tx.Create(&RecordingFormat{
+			if err := tx.Create(&RecordingFormat{
 				ID:          testdataRecording1Format2,
 				RecordingID: testdataRecording1,
 				Lang:        "de",
@@ -124,11 +226,10 @@ oder per [Paypal](https://www.paypal.com/donate?hosted_button_id=4BQQNN582WLN6) 
 				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/video_720.mp4",
 				Bytes:       1149359246,
 				Resolution:  "1280x720",
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			err = tx.Create(&RecordingFormat{
+			if err := tx.Create(&RecordingFormat{
 				ID:          testdataRecording1Format3,
 				RecordingID: testdataRecording1,
 				Lang:        "de",
@@ -137,11 +238,10 @@ oder per [Paypal](https://www.paypal.com/donate?hosted_button_id=4BQQNN582WLN6) 
 				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/video_480.mp4",
 				Bytes:       654217779,
 				Resolution:  "854x480",
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			return tx.Create(&RecordingFormat{
+			if err := tx.Create(&RecordingFormat{
 				ID:          testdataRecording1Format4,
 				RecordingID: testdataRecording1,
 				Lang:        "de",
@@ -150,48 +250,49 @@ oder per [Paypal](https://www.paypal.com/donate?hosted_button_id=4BQQNN582WLN6) 
 				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/audio_best.mp3",
 				Bytes:       130761076,
 				Resolution:  "128kb",
-			}).Error
+			}).Error; err != nil {
+				return err
+			}
+			return nil
 		},
 		Rollback: func(tx *gorm.DB) error {
-			err := tx.Delete(&RecordingFormat{
+			if err := tx.Delete(&RecordingFormat{
 				ID: testdataRecording1Format4,
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			err = tx.Delete(&RecordingFormat{
+			if err := tx.Delete(&RecordingFormat{
 				ID: testdataRecording1Format3,
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			err = tx.Delete(&RecordingFormat{
+			if err := tx.Delete(&RecordingFormat{
 				ID: testdataRecording1Format2,
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			err = tx.Delete(&RecordingFormat{
+			if err := tx.Delete(&RecordingFormat{
 				ID: testdataRecording1Format1,
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			err = tx.Delete(&RecordingLang{
+			if err := tx.Delete(&RecordingLang{
 				ID: testdataRecording1Lang1,
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			return tx.Delete(&Recording{
+			if err := tx.Delete(&Recording{
 				ID: testdataRecording1,
-			}).Error
+			}).Error; err != nil {
+				return err
+			}
+			return nil
 		},
 	},
 	{
 		ID: "10-data-0020-01-recording-2",
 		Migrate: func(tx *gorm.DB) error {
-			err := tx.Create(&Recording{
+			if err := tx.Create(&Recording{
 				ID:         testdataRecording2,
 				ChannelID:  testdataChannel1,
 				CommonName: "2021-01-faschistische_jahrhundert",
@@ -201,16 +302,31 @@ oder per [Paypal](https://www.paypal.com/donate?hosted_button_id=4BQQNN582WLN6) 
 				Duration:   time.Hour,
 				Public:     true,
 				Listed:     true,
-			}).Error
-			if err != nil {
+				Tags: []*Tag{
+					{ID: testdataTagBuchvorstellung},
+					{ID: testdataTagDiskussion},
+				},
+				Speakers: []*Speaker{
+					{
+						OwnerID: testdataChannel1,
+						ID:      testdataRecording2Speaker1,
+						Name:    "Volkmar Wölk",
+					},
+					{
+						OwnerID: testdataChannel1,
+						ID:      testdataRecording2Speaker2,
+						Name:    "Felix Schilk",
+					},
+				},
+			}).Error; err != nil {
 				return err
 			}
-			err = tx.Create(&RecordingLang{
+			if err := tx.Create(&RecordingLang{
 				ID:          testdataRecording2Lang1,
 				RecordingID: testdataRecording2,
 				Lang:        "de",
 				Title:       "Das faschistische Jahrhundert",
-				Description: `## Buchvorstellung: Das faschistische Jahrhundert
+				Long: `## Buchvorstellung: Das faschistische Jahrhundert
 
 „Wer das Wesen des Faschismus erkennen will, muss zurück zu dessen Wurzeln“ – so der Faschismusforscher Zeev Sternhell. Gleiches gilt für die europäische Neue Rechte. Aus welchen Gründen ist sie wann und wo mit welchen Zielen entstanden? Wo liegen ihre geistigen Wurzeln? Betreiben die „neuen“ Rechten tatsächlich eine ideologische Erneuerung der extremen Rechten, oder handelt es sich lediglich um alten Wein in neuen Schläuchen? **Volkmar Wölk** und **Felix Schilk**, Mitautoren des Bandes _Das faschistische Jahrhundert_, veranschaulichen die Denkwege der Neuen Rechten anhand von zwei zentralen Themenfelder: Einerseits ihre Europakonzeptionen und andererseits ihre wirtschafts- und sozialpolitischen Vorstellungen.
 
@@ -218,11 +334,10 @@ Ein kurzer Beitrag zu dem Buch [hier](https://www.deutschlandfunkkultur.de/fried
 
 Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxemburg-Initiative – Die Rosa-Luxemburg-Stiftung in Bremen_.
 				`,
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			err = tx.Create(&RecordingFormat{
+			if err := tx.Create(&RecordingFormat{
 				ID:          testdataRecording2Format1,
 				RecordingID: testdataRecording2,
 				Lang:        "de",
@@ -231,11 +346,10 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/video_best.mp4",
 				Bytes:       2878429977,
 				Resolution:  "1920x1080",
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			err = tx.Create(&RecordingFormat{
+			if err := tx.Create(&RecordingFormat{
 				ID:          testdataRecording2Format2,
 				RecordingID: testdataRecording2,
 				Lang:        "de",
@@ -244,11 +358,10 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/video_720.mp4",
 				Bytes:       1149359246,
 				Resolution:  "1280x720",
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			err = tx.Create(&RecordingFormat{
+			if err := tx.Create(&RecordingFormat{
 				ID:          testdataRecording2Format3,
 				RecordingID: testdataRecording2,
 				Lang:        "de",
@@ -257,11 +370,10 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/video_480.mp4",
 				Bytes:       480268045,
 				Resolution:  "854x480",
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			return tx.Create(&RecordingFormat{
+			if err := tx.Create(&RecordingFormat{
 				ID:          testdataRecording2Format4,
 				RecordingID: testdataRecording2,
 				Lang:        "de",
@@ -270,48 +382,49 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/audio_best.mp3",
 				Bytes:       115967040,
 				Resolution:  "149kb",
-			}).Error
+			}).Error; err != nil {
+				return err
+			}
+			return nil
 		},
 		Rollback: func(tx *gorm.DB) error {
-			err := tx.Delete(&RecordingFormat{
+			if err := tx.Delete(&RecordingFormat{
 				ID: testdataRecording2Format4,
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			err = tx.Delete(&RecordingFormat{
+			if err := tx.Delete(&RecordingFormat{
 				ID: testdataRecording2Format3,
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			err = tx.Delete(&RecordingFormat{
+			if err := tx.Delete(&RecordingFormat{
 				ID: testdataRecording2Format2,
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			err = tx.Delete(&RecordingFormat{
+			if err := tx.Delete(&RecordingFormat{
 				ID: testdataRecording2Format1,
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			err = tx.Delete(&RecordingLang{
+			if err := tx.Delete(&RecordingLang{
 				ID: testdataRecording2Lang1,
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			return tx.Delete(&Recording{
+			if err := tx.Delete(&Recording{
 				ID: testdataRecording2,
-			}).Error
+			}).Error; err != nil {
+				return err
+			}
+			return nil
 		},
 	},
 	{
 		ID: "10-data-0020-01-recording-3",
 		Migrate: func(tx *gorm.DB) error {
-			err := tx.Create(&Recording{
+			if err := tx.Create(&Recording{
 				ID:         testdataRecording3,
 				ChannelID:  testdataChannel1,
 				CommonName: "2021-02-pushbacks",
@@ -321,26 +434,34 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				Duration:   time.Hour,
 				Public:     true,
 				Listed:     true,
-			}).Error
-			if err != nil {
+				Tags:       []*Tag{{ID: testdataTagVortrag}},
+				Speakers: []*Speaker{
+					{
+						OwnerID: testdataChannel1,
+						ID:      testdataRecording3Speaker1,
+						Name:    "Bernd Kasparek",
+					},
+				},
+			}).Error; err != nil {
 				return err
 			}
-			err = tx.Create(&RecordingLang{
+			if err := tx.Create(&RecordingLang{
 				ID:          testdataRecording3Lang1,
 				RecordingID: testdataRecording3,
 				Lang:        "de",
-				Title:       "Pushbacks, Internierung, Zugangshürden – Zum Stand des europäischen Migrations- und Grenzregimes",
-				Description: `Nach dem katastrophalen Brand des Flüchtlingslagers Moria auf Lesbos hatte die Europäische Kommission erneut einen Neustart in der europäischen Migrations- und Asylpolitik versucht. Der Neue Pakt für Asyl und Migration spitzt jedoch vor allem die Entwicklungen zu, die das europäische Asylsystem seit dem Sommer der Migration 2015 kennzeichnen: Zugangshürden zum Asylsystem und massive Internierung. Der Pakt adressiert jedoch nicht die bestehenden Rechtsverletzungen, die das europäische Grenzregime kennzeichnen: illegale Pushbacks sind an vielen Abschnitten der europäischen Außengrenze zur Normalität geworden, und scheinen von der europäischen Grenzschutzagentur Frontex stillschweigend geduldet, oder sogar aktiv unterstützt zu werden. Dies ist vor allem deswegen Besorgnis erregend, da die Agentur bis 2027 über ein eigenes Grenzschutzkorps mit 10.000 Grenzschützern verfügen soll. In der Veranstaltung werden all diese Entwicklungen des letzten Jahres skizziert werden, wobei eine Diskussion um Alternativen und Handlungsmöglichkeiten für ein solidarisches Europa von unten nicht zu kurz kommen sollen.
+				Title:       "Pushbacks, Internierung, Zugangshürden",
+				Subtitle:    "Zum Stand des europäischen Migrations- und Grenzregimes",
+				Short:       "Nach dem katastrophalen Brand des Flüchtlingslagers Moria auf Lesbos hatte die Europäische Kommission erneut einen Neustart in der europäischen Migrations- und Asylpolitik versucht. ...",
+				Long: `Nach dem katastrophalen Brand des Flüchtlingslagers Moria auf Lesbos hatte die Europäische Kommission erneut einen Neustart in der europäischen Migrations- und Asylpolitik versucht. Der Neue Pakt für Asyl und Migration spitzt jedoch vor allem die Entwicklungen zu, die das europäische Asylsystem seit dem Sommer der Migration 2015 kennzeichnen: Zugangshürden zum Asylsystem und massive Internierung. Der Pakt adressiert jedoch nicht die bestehenden Rechtsverletzungen, die das europäische Grenzregime kennzeichnen: illegale Pushbacks sind an vielen Abschnitten der europäischen Außengrenze zur Normalität geworden, und scheinen von der europäischen Grenzschutzagentur Frontex stillschweigend geduldet, oder sogar aktiv unterstützt zu werden. Dies ist vor allem deswegen Besorgnis erregend, da die Agentur bis 2027 über ein eigenes Grenzschutzkorps mit 10.000 Grenzschützern verfügen soll. In der Veranstaltung werden all diese Entwicklungen des letzten Jahres skizziert werden, wobei eine Diskussion um Alternativen und Handlungsmöglichkeiten für ein solidarisches Europa von unten nicht zu kurz kommen sollen.
 
 **Bernd Kasparek** ist seit vielen Jahren Aktivist und Grenzregimeforscher. Sein Buch „Europa als Grenze. Eine Ethnographie der Grenzschutz-Agentur Frontex“ wird im Mai bei transcript erscheinen. Er ist Mitglied des Netzwerks für Kritische Migrations- und Grenzregimeforschung und der Forschungsassoziation [bordermonitoring.eu](http://bordermonitoring.eu/) e.V.
 
 Eine Veranstaltung des Kulturzentrum Kukoon in Kooperation mit der Rosa-Luxemburg-Initiative – Die Rosa-Luxemburg-Stiftung in Bremen.
 				`,
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			return tx.Create(&RecordingFormat{
+			if err := tx.Create(&RecordingFormat{
 				ID:          testdataRecording3Format1,
 				RecordingID: testdataRecording3,
 				Lang:        "de",
@@ -349,24 +470,28 @@ Eine Veranstaltung des Kulturzentrum Kukoon in Kooperation mit der Rosa-Luxembur
 				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/edb1cfbb-3476-d639-b3f5-795fabf4ef4d/video_best.mp4",
 				Bytes:       1092701356,
 				Resolution:  "1920x1080",
-			}).Error
+			}).Error; err != nil {
+				return err
+			}
+			return nil
 		},
 		Rollback: func(tx *gorm.DB) error {
-			err := tx.Delete(&RecordingFormat{
+			if err := tx.Delete(&RecordingFormat{
 				ID: testdataRecording3Format1,
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			err = tx.Delete(&RecordingLang{
+			if err := tx.Delete(&RecordingLang{
 				ID: testdataRecording3Lang1,
-			}).Error
-			if err != nil {
+			}).Error; err != nil {
 				return err
 			}
-			return tx.Delete(&Recording{
+			if err := tx.Delete(&Recording{
 				ID: testdataRecording3,
-			}).Error
+			}).Error; err != nil {
+				return err
+			}
+			return nil
 		},
 	},
 }

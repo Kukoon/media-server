@@ -103,7 +103,31 @@ func (ws *Webservice) rssChannel(c *gin.Context) {
 		obj.ID = uuid
 	}
 
-	if err := db.Preload("Recordings.RecordingLang", func(db *gorm.DB) *gorm.DB {
+	// just check current time
+
+	if err := db.Preload("Recordings", func(db *gorm.DB) *gorm.DB {
+		return db.Order("updated_at DESC")
+	}).First(&obj).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.JSON(http.StatusNotFound, HTTPError{
+				Message: APIErrorNotFound,
+				Error:   err.Error(),
+			})
+			c.JSON(http.StatusNotFound, err.Error())
+			return
+		}
+		c.JSON(http.StatusInternalServerError, HTTPError{
+			Message: APIErrorInternalDatabase,
+			Error:   err.Error(),
+		})
+		return
+	}
+
+	pubTime := obj.Recordings[0].UpdatedAt
+
+	// fetch every recording
+
+	if err := db.Preload("Recordings.Lang", func(db *gorm.DB) *gorm.DB {
 		return db.Where("lang", language)
 	}).Preload("Recordings", func(db *gorm.DB) *gorm.DB {
 		return db.Order("created_at DESC")
@@ -124,23 +148,22 @@ func (ws *Webservice) rssChannel(c *gin.Context) {
 		})
 		return
 	}
-	pubTime := obj.Recordings[0].CreatedAt
 	p := podcast.New(obj.Title+" ("+formatStr.BeautifulString()+")", "", "", &pubTime, &pubTime)
 	p.AddImage(obj.Logo)
 	p.Language = language
 
 	for _, recording := range obj.Recordings {
 
-		if recording.RecordingLang == nil || len(recording.Formats) == 0 {
+		if recording.Lang == nil || len(recording.Formats) == 0 {
 			continue
 		}
 
 		recordingFormat := recording.Formats[0]
-		description := markdown.ToHTML([]byte(recording.RecordingLang.Description), nil, nil)
+		description := markdown.ToHTML([]byte(recording.Lang.Long), nil, nil)
 
 		// create an Item
 		item := podcast.Item{
-			Title:       recording.RecordingLang.Title,
+			Title:       recording.Lang.Title,
 			Link:        recordingFormat.URL,
 			Description: string(description),
 			PubDate:     &recording.CreatedAt,

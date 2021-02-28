@@ -16,6 +16,37 @@ var migrations = []*gormigrate.Migration{
 		},
 	},
 	{
+		ID: "01-schema-0017-01-event",
+		Migrate: func(tx *gorm.DB) error {
+			return tx.AutoMigrate(&Event{})
+		},
+		Rollback: func(tx *gorm.DB) error {
+			return tx.Migrator().DropTable("events")
+		},
+	},
+	{
+		ID: "01-schema-0018-01-tag",
+		Migrate: func(tx *gorm.DB) error {
+			return tx.AutoMigrate(&Tag{},
+				&TagLang{})
+		},
+		Rollback: func(tx *gorm.DB) error {
+			if err := tx.Migrator().DropTable("tag_langs"); err != nil {
+				return err
+			}
+			return tx.Migrator().DropTable("tags")
+		},
+	},
+	{
+		ID: "01-schema-0010-01-speaker",
+		Migrate: func(tx *gorm.DB) error {
+			return tx.AutoMigrate(&Speaker{})
+		},
+		Rollback: func(tx *gorm.DB) error {
+			return tx.Migrator().DropTable("speakers")
+		},
+	},
+	{
 		ID: "01-schema-0020-01-recording",
 		Migrate: func(tx *gorm.DB) error {
 			return tx.AutoMigrate(&Recording{},
@@ -23,8 +54,10 @@ var migrations = []*gormigrate.Migration{
 				&RecordingFormat{})
 		},
 		Rollback: func(tx *gorm.DB) error {
-			err := tx.Migrator().DropTable("recording_formats")
-			if err != nil {
+			if err := tx.Migrator().DropTable("recording_formats"); err != nil {
+				return err
+			}
+			if err := tx.Migrator().DropTable("recording_langs"); err != nil {
 				return err
 			}
 			return tx.Migrator().DropTable("recordings")
