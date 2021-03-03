@@ -13,6 +13,12 @@ var (
 
 	testdataChannel1 = uuid.MustParse("df1555f5-7046-4f7a-adcc-195b73949723")
 
+	testdataStream1         = uuid.MustParse("dffe2c0e-3713-4399-8ee2-279becbbb06e")
+	testdataStream1Lang1    = uuid.MustParse("3a4f9157-65bf-4d15-a82b-1cd9295d07e0")
+	testdataStream1Speaker1 = uuid.MustParse("0d1b38cd-561c-4db4-b4b9-51f74ba3dba4")
+	testdataStream1Speaker2 = uuid.MustParse("1dbf0438-a9c1-4412-b44c-08fe7819902c")
+	testdataStream1Speaker3 = uuid.MustParse("d68e5de7-e56e-46a7-843c-4a06e540cf3a")
+
 	testdataTagBuchvorstellung     = uuid.MustParse("0bca0cf4-a9b9-46d7-821f-18c59c08fc1d")
 	testdataTagBuchvorstellungLang = uuid.MustParse("35822fe2-1910-48e7-904f-15c9e6f7ea34")
 	testdataTagDiskussion          = uuid.MustParse("277026b0-b9d6-48d6-bfa1-96dcc7eb3451")
@@ -488,6 +494,67 @@ Eine Veranstaltung des Kulturzentrum Kukoon in Kooperation mit der Rosa-Luxembur
 			}
 			if err := tx.Delete(&Recording{
 				ID: testdataRecording3,
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+	},
+	{
+		ID: "10-data-0030-01-stream-1",
+		Migrate: func(tx *gorm.DB) error {
+			if err := tx.Create(&Stream{
+				ID:        testdataStream1,
+				ChannelID: testdataChannel1,
+				Chat:      false,
+				Running:   true,
+				Poster:    "https://media.kukoon.de/images/00ff627e-cb44-4186-acf3-e7d38d63db74.jpg",
+				Tags:      []*Tag{{ID: testdataTagVortrag}},
+				Speakers: []*Speaker{
+					{
+						OwnerID: testdataChannel1,
+						ID:      testdataStream1Speaker1,
+						Name:    "Andreas Ehresmann",
+					},
+					{
+						OwnerID: testdataChannel1,
+						ID:      testdataStream1Speaker2,
+						Name:    "Ronald Sperling",
+					},
+					{
+						OwnerID: testdataChannel1,
+						ID:      testdataStream1Speaker3,
+						Name:    "Ines Dirolf",
+					},
+				},
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&StreamLang{
+				ID:       testdataStream1Lang1,
+				StreamID: testdataStream1,
+				Lang:     "de",
+				Title:    "„Die mir von der Wehrmacht angebotenen Kriegsgefangenen sind derart entkräftet“",
+				Subtitle: "Sowjetische Kriegsgefangene in Bremer Arbeitskommandos 1941-1945",
+				Short:    `Sowjetische Kriegsgefangene bildeten eine der größten Opfergruppen des Nationalsozialismus. Die Wehrmacht brachte Millionen sowjetische Soldat\*innen zum Arbeitseinsatz ins Deutsche Reich. Mehr als die Hälfte von ihnen überlebte die Kriegsgefangenschaft in den Kriegsgefangenenlagern wie dem Stalag X B Sandbostel und den Außenkommandos nicht. Auch in Bremen setzten Firmen und Behörden die kriegsgefangenen Rotarmisten zur Arbeit ein, vornehmlich in der Rüstungsindustrie. Im unserem Vortrag wollen wir die ökonomischen und ideologischen Hintergründe und Widersprüche dieser Arbeitseinsätze aufzeigen. ...`,
+				Long: `Sowjetische Kriegsgefangene bildeten eine der größten Opfergruppen des Nationalsozialismus. Die Wehrmacht brachte Millionen sowjetische Soldat\*innen zum Arbeitseinsatz ins Deutsche Reich. Mehr als die Hälfte von ihnen überlebte die Kriegsgefangenschaft in den Kriegsgefangenenlagern wie dem Stalag X B Sandbostel und den Außenkommandos nicht. Auch in Bremen setzten Firmen und Behörden die kriegsgefangenen Rotarmisten zur Arbeit ein, vornehmlich in der Rüstungsindustrie. Im unserem Vortrag wollen wir die ökonomischen und ideologischen Hintergründe und Widersprüche dieser Arbeitseinsätze aufzeigen. Anhand einzelner exemplarischer Arbeitskommandos beleuchten wir die Lebens- und Arbeitsbedingungen von sowjetischen Kriegsgefangenen in Bremen. Der Vortrag lädt alle Interessierte zum Austausch über dieses lange verdrängte Thema ein.
+
+Eine Veranstaltung der Gedenkstätte Lager Sandbostel in Kooperation mit dem Kulturzentrum Kukoon.
+
+Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, der am 15.09.1942 in das Arbeitskommando der Bremer Francke-Werke eingesetzt wurde und am 11.03.1942 an Tuberkulose starb, Quelle [https://obd-memorial.ru/html/info.htm?id=300643349](https://obd-memorial.ru/html/info.htm?id=300643349)`,
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+		Rollback: func(tx *gorm.DB) error {
+			if err := tx.Delete(&StreamLang{
+				ID: testdataStream1Lang1,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Delete(&Stream{
+				ID: testdataStream1,
 			}).Error; err != nil {
 				return err
 			}

@@ -103,6 +103,8 @@ func (ws *Webservice) bind(r *gin.Engine) {
 		v1.GET("/channel/:slug", ws.apiChannelGet)
 		v1.GET("/recordings", ws.apiRecordingList)
 		v1.GET("/recording/:slug", ws.apiRecordingGet)
+		v1.GET("/streams", ws.apiStreamList)
+		v1.GET("/stream/:slug", ws.apiStreamGet)
 	}
 
 	r.Use(static.Serve("/", static.LocalFile(ws.Webroot, false)))

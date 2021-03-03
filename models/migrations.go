@@ -63,4 +63,16 @@ var migrations = []*gormigrate.Migration{
 			return tx.Migrator().DropTable("recordings")
 		},
 	},
+	{
+		ID: "01-schema-0030-01-stream",
+		Migrate: func(tx *gorm.DB) error {
+			return tx.AutoMigrate(&Stream{}, &StreamLang{})
+		},
+		Rollback: func(tx *gorm.DB) error {
+			if err := tx.Migrator().DropTable(Stream{}.TableName()); err != nil {
+				return err
+			}
+			return tx.Migrator().DropTable(Stream{}.TableName())
+		},
+	},
 }
