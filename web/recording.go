@@ -122,7 +122,7 @@ func (ws *Webservice) apiRecordingList(c *gin.Context) {
 // @Param lang query string false "show description in given language"
 func (ws *Webservice) apiRecordingGet(c *gin.Context) {
 	slug := c.Params.ByName("slug")
-	db := ws.DB.Joins("Channel").Joins("Event").Preload("Speaker")
+	db := ws.DB.Joins("Channel").Joins("Event").Preload("Speakers")
 	obj := models.Recording{}
 
 	if str, ok := c.GetQuery("video_format"); ok {
