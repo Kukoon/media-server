@@ -85,5 +85,5 @@ type StreamLang struct {
 	Title    string `json:"title" example:"Pushbacks, Internierung, Zugangshürden"`
 	Subtitle string `json:"subtitle" example:"Zum Stand des europäischen Migrations- und Grenzregimes"`
 	Short    string `json:"short" example:"Nach dem katastrophalen Brand des Flüchtlingslagers Moria auf Lesbos hatte die Europäische Kommission erneut einen Neustart in der europäischen Migrations- und Asylpolitik versucht. [...]"`
-	Long     string `json:"Long" example:"Nach dem katastrophalen Brand des Flüchtlingslagers Moria auf Lesbos hatte die Europäische Kommission erneut einen Neustart in der europäischen Migrations- und Asylpolitik versucht."`
+	Long     string `json:"long" example:"Nach dem katastrophalen Brand des Flüchtlingslagers Moria auf Lesbos hatte die Europäische Kommission erneut einen Neustart in der europäischen Migrations- und Asylpolitik versucht."`
 }
