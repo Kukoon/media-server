@@ -99,7 +99,7 @@ func (ws *Webservice) apiRecordingList(c *gin.Context) {
 		}
 		db = db.Joins("LEFT JOIN recording_speakers ON recording_speakers.recording_id = recordings.id").Where("speaker_id IN (?)", ids)
 	}
-	if err := db.Find(&list).Error; err != nil {
+	if err := db.Order("created_at DESC").Find(&list).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, HTTPError{
 			Message: APIErrorInternalDatabase,
 			Error:   err.Error(),
