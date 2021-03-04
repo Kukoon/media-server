@@ -50,11 +50,15 @@ var (
 	testdataRecording3Format1  = uuid.MustParse("6b1b95f2-d92d-4da7-b56c-1ba86ff22dcd")
 	testdataRecording3Speaker1 = uuid.MustParse("a098c2f5-aa63-4c54-87b1-46ddda1cde16")
 
-	testdataRecording4         = uuid.MustParse("81b262e9-e010-1fa2-84a5-d8cee1a94835")
-	testdataRecording4Lang1    = uuid.MustParse("0ce4b366-9238-4aa4-a6d6-94227c1b0681")
-	testdataRecording4Format1  = uuid.MustParse("449e3361-f2e2-44ee-a5d7-3c013cfe1fdc")
-	testdataRecording4Speaker1 = uuid.MustParse("d8ba2b91-78f7-4bcd-9dc4-5af1d3c904a9")
-	testdataRecording4Speaker2 = uuid.MustParse("62d9ce45-1465-40f8-bf99-22607e7be91d")
+	testdataRecording4        = uuid.MustParse("27efbfff-d66c-c935-b308-9b1ee2bf78c8")
+	testdataRecording4Lang1   = uuid.MustParse("4f5ad673-2496-429a-a74f-0b48acdb807b")
+	testdataRecording4Format1 = uuid.MustParse("357af110-9481-4d0e-9fea-f61b30ee26f4")
+
+	testdataRecording5         = uuid.MustParse("81b262e9-e010-1fa2-84a5-d8cee1a94835")
+	testdataRecording5Lang1    = uuid.MustParse("0ce4b366-9238-4aa4-a6d6-94227c1b0681")
+	testdataRecording5Format1  = uuid.MustParse("449e3361-f2e2-44ee-a5d7-3c013cfe1fdc")
+	testdataRecording5Speaker1 = uuid.MustParse("d8ba2b91-78f7-4bcd-9dc4-5af1d3c904a9")
+	testdataRecording5Speaker2 = uuid.MustParse("62d9ce45-1465-40f8-bf99-22607e7be91d")
 )
 
 var testdata = []*gormigrate.Migration{
@@ -516,26 +520,14 @@ Eine Veranstaltung des Kulturzentrum Kukoon in Kooperation mit der Rosa-Luxembur
 			if err := tx.Create(&Recording{
 				ID:         testdataRecording4,
 				ChannelID:  testdataChannel1,
-				CommonName: "2021-03-verschwoerungserzaehlung",
-				Poster:     "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/poster.png",
-				Preview:    "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/preview.gif",
-				CreatedAt:  time.Date(2021, 3, 3, 19, 0, 0, 0, loc),
-				Duration:   time.Hour + 14*time.Minute + 17*time.Second,
+				CommonName: "2021-02-geschichte_wird_gemacht",
+				Poster:     "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/27efbfff-d66c-c935-b308-9b1ee2bf78c8/poster.png",
+				Preview:    "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/27efbfff-d66c-c935-b308-9b1ee2bf78c8/preview.gif",
+				CreatedAt:  time.Date(2021, 2, 26, 19, 0, 0, 0, loc),
+				Duration:   time.Hour + 12*time.Minute + 33*time.Second,
 				Public:     true,
 				Listed:     true,
-				Tags:       []*Tag{{ID: testdataTagVortrag}, {ID: testdataTagDiskussion}},
-				Speakers: []*Speaker{
-					{
-						OwnerID: testdataChannel1,
-						ID:      testdataRecording4Speaker1,
-						Name:    "Johanna Bröse",
-					},
-					{
-						OwnerID: testdataChannel1,
-						ID:      testdataRecording4Speaker2,
-						Name:    "Andrea Strübe",
-					},
-				},
+				Tags:       []*Tag{{ID: testdataTagDiskussion}},
 			}).Error; err != nil {
 				return err
 			}
@@ -543,12 +535,13 @@ Eine Veranstaltung des Kulturzentrum Kukoon in Kooperation mit der Rosa-Luxembur
 				ID:          testdataRecording4Lang1,
 				RecordingID: testdataRecording4,
 				Lang:        "de",
-				Title:       "Welche Funktion haben Verschwörungserzählungen?",
-				Subtitle:    "Warum der Glaube an einen Kapitalismus mit menschlichem Antlitz letztlich die größte Verschwörungsideologie ist.",
-				Short:       "Verschwörungen – es gibt sie wirklich. Sie sind ein wichtiges Instrument zur Sicherung der politischen und gesellschaftlichen Macht in der Klassengesellschaft, aber auch bei Machtkämpfen unterschiedlicher Interessensgruppen untereinander oder im Kampf gegen Systemalternativen. Der Kapitalismus als Klassengesellschaft ist darauf angewiesen, den Antagonismus zwischen Kapitalisten und Lohnabhängigen aufrecht zu erhalten, und die Arbeiter*innenklasse auch durch Strategien der Verschleierung der Ausbeutungsverhältnisse von einer weitreichenden Organisierung abzuhalten. ...",
-				Long: `Verschwörungen – es gibt sie wirklich. Sie sind ein wichtiges Instrument zur Sicherung der politischen und gesellschaftlichen Macht in der Klassengesellschaft, aber auch bei Machtkämpfen unterschiedlicher Interessensgruppen untereinander oder im Kampf gegen Systemalternativen. Der Kapitalismus als Klassengesellschaft ist darauf angewiesen, den Antagonismus zwischen Kapitalisten und Lohnabhängigen aufrecht zu erhalten, und die Arbeiter\*innenklasse auch durch Strategien der Verschleierung der Ausbeutungsverhältnisse von einer weitreichenden Organisierung abzuhalten. Viele der realen Verschwörungen wurden früher oder später aufgedeckt – durch kritische Journalist\*innen, Forscher\*innen, Aktivist\*innen.  Wiederum andere Verschwörungserzählungen – wie die, dass US-Eliten einen grausamen Handel mit Kindern aus einer Pizzeria heraus organisierten, konnten nie bewiesen werden. Warum? Weil sie schlicht und ergreifend falsch sind. Es gibt natürlich von vielen Menschen ein berechtigtes Unbehagen bis hin zum offenen Widerstand gegenüber dem gesellschaftlichen System, in dem wir leben. Ausbeutung, Ungleichheit, Klassenverhältnisse, struktureller Rassismus und Sexismus – um nur einige zu nennen – sind Erscheinungen eines globalen Kapitalismus. Aber nicht nur fortschrittliche Linke haben diesem den Kampf angesagt. Die Wut der Anhänger\*innen von Verschwörungserzählungen richtet sich gegen „die Multimilliardäre“, „das Establishment“ oder gegen „die Regierung“ –  ihre Macht wird aber mit einem Potpourri aus antisemitischen, rassistischen, antikommunistischen, antifeministischen und öfter auch esoterisch-wissenschaftsfeindlichen Versatzstücken erklärt. Verschwörungsanhänger\*innen versuchen also, grob gesagt, reale politische und gesellschaftliche Konflikte durch Machenschaften einer geheimen Gruppe zu erklären. Wie aber sollte man diesen Theorien und ihren Anhänger\*innen begegnen? Wie hängen Verschwörungstheorien und rechte Gesinnung zusammen? Und wie können wir produktiv mit der Erkenntnis umgehen, dass ein Kapitalismus mit menschlichem Antlitz letztlich die virulenteste Verschwörungserzählung ist?
+				Title:       "Geschichte wird gemacht",
+				Subtitle:    "aber wie und von wem?",
+				Short:       "Das Erinnern an die Verbrechen und ein würdiges Gedenken an die Opfer des Nationalsozialismus ist und bleibt wichtig. Darin sind sich ein großer Teil der Bremer:innen und auch viele Politiker:innen einig. Doch wie sollten diese Erinnerung(en) eigentlich gestaltet sein? ...",
+				Long: `
+Das Erinnern an die Verbrechen und ein würdiges Gedenken an die Opfer des Nationalsozialismus ist und bleibt wichtig. Darin sind sich ein großer Teil der Bremer:innen und auch viele Politiker:innen einig. Doch wie sollten diese Erinnerung(en) eigentlich gestaltet sein? Wie sollten die heutigen Kenntnisse und die geschichtlichen Perspektiven vermittelt werden? Wie können die Auseinandersetzungen um die historischen Orte in unserer unmittelbaren Umgebung aktuell bleiben? Diese und andere Fragen wollen wir als ein Zusammenschluß freier Mitarbeiter:innen am Denkort Bunker Valentin in einem digitalen Forum mit den Gästen diskutieren. Bewusst wollen wir damit die Konvention einer starren Frontalveranstaltung aufbrechen und miteinander ins Gespräch kommen. In einer anschließenden Podiumsdiskussion wollen wir dann abgleichen, wie es um die „gesellschaftliche Verantwortung“ in Bremen und anderswo praktisch bestellt ist. Wer macht diese Arbeit und unter welchen Bedingungen? Wir diskutieren mit einer Aktiven des „Arisierungs“-Mahnmals in Bremen und der Initiative „Geschichte wird gemacht“ aus Berlin. Gemeinsam sollen Grenzen und Chancen einer Geschichtsvermittlung diskutiert werden, die eine lebendige Erinnerungskultur nicht nur beredet sondern umsetzt. Alle Interessierten sind herzlich willkommen!
 
-Eine Veranstaltung von [kritisch-lesen.de](https://kritisch-lesen.de) in Kooperation mit dem Kulturzentrum Kukoon.
+Eine Veranstaltung von Erinnerungskultur anstellen. Organisierung freier Mitarbeitender am Denkort Bunker Valentin in kooperation mit dem Kulturzentrum Kukoon und Erinnern für die Zukunft e.V. sowie der Rosa-Luxemburg-Initiative – Die Rosa-Luxemburg-Stiftung in Bremen. 
 				`,
 			}).Error; err != nil {
 				return err
@@ -559,8 +552,8 @@ Eine Veranstaltung von [kritisch-lesen.de](https://kritisch-lesen.de) in Koopera
 				Lang:        "de",
 				Quality:     0,
 				IsVideo:     true,
-				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/video_best.mp4",
-				Bytes:       1426234816,
+				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/27efbfff-d66c-c935-b308-9b1ee2bf78c8/video_best.mp4",
+				Bytes:       862470450,
 				Resolution:  "1920x1080",
 			}).Error; err != nil {
 				return err
@@ -580,6 +573,82 @@ Eine Veranstaltung von [kritisch-lesen.de](https://kritisch-lesen.de) in Koopera
 			}
 			if err := tx.Delete(&Recording{
 				ID: testdataRecording4,
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+	},
+	{
+		ID: "10-data-0020-01-recording-5",
+		Migrate: func(tx *gorm.DB) error {
+			if err := tx.Create(&Recording{
+				ID:         testdataRecording5,
+				ChannelID:  testdataChannel1,
+				CommonName: "2021-03-verschwoerungserzaehlung",
+				Poster:     "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/poster.png",
+				Preview:    "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/preview.gif",
+				CreatedAt:  time.Date(2021, 3, 3, 19, 0, 0, 0, loc),
+				Duration:   time.Hour + 14*time.Minute + 17*time.Second,
+				Public:     true,
+				Listed:     true,
+				Tags:       []*Tag{{ID: testdataTagVortrag}, {ID: testdataTagDiskussion}},
+				Speakers: []*Speaker{
+					{
+						OwnerID: testdataChannel1,
+						ID:      testdataRecording5Speaker1,
+						Name:    "Johanna Bröse",
+					},
+					{
+						OwnerID: testdataChannel1,
+						ID:      testdataRecording5Speaker2,
+						Name:    "Andrea Strübe",
+					},
+				},
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&RecordingLang{
+				ID:          testdataRecording5Lang1,
+				RecordingID: testdataRecording5,
+				Lang:        "de",
+				Title:       "Welche Funktion haben Verschwörungserzählungen?",
+				Subtitle:    "Warum der Glaube an einen Kapitalismus mit menschlichem Antlitz letztlich die größte Verschwörungsideologie ist.",
+				Short:       "Verschwörungen – es gibt sie wirklich. Sie sind ein wichtiges Instrument zur Sicherung der politischen und gesellschaftlichen Macht in der Klassengesellschaft, aber auch bei Machtkämpfen unterschiedlicher Interessensgruppen untereinander oder im Kampf gegen Systemalternativen. Der Kapitalismus als Klassengesellschaft ist darauf angewiesen, den Antagonismus zwischen Kapitalisten und Lohnabhängigen aufrecht zu erhalten, und die Arbeiter*innenklasse auch durch Strategien der Verschleierung der Ausbeutungsverhältnisse von einer weitreichenden Organisierung abzuhalten. ...",
+				Long: `Verschwörungen – es gibt sie wirklich. Sie sind ein wichtiges Instrument zur Sicherung der politischen und gesellschaftlichen Macht in der Klassengesellschaft, aber auch bei Machtkämpfen unterschiedlicher Interessensgruppen untereinander oder im Kampf gegen Systemalternativen. Der Kapitalismus als Klassengesellschaft ist darauf angewiesen, den Antagonismus zwischen Kapitalisten und Lohnabhängigen aufrecht zu erhalten, und die Arbeiter\*innenklasse auch durch Strategien der Verschleierung der Ausbeutungsverhältnisse von einer weitreichenden Organisierung abzuhalten. Viele der realen Verschwörungen wurden früher oder später aufgedeckt – durch kritische Journalist\*innen, Forscher\*innen, Aktivist\*innen.  Wiederum andere Verschwörungserzählungen – wie die, dass US-Eliten einen grausamen Handel mit Kindern aus einer Pizzeria heraus organisierten, konnten nie bewiesen werden. Warum? Weil sie schlicht und ergreifend falsch sind. Es gibt natürlich von vielen Menschen ein berechtigtes Unbehagen bis hin zum offenen Widerstand gegenüber dem gesellschaftlichen System, in dem wir leben. Ausbeutung, Ungleichheit, Klassenverhältnisse, struktureller Rassismus und Sexismus – um nur einige zu nennen – sind Erscheinungen eines globalen Kapitalismus. Aber nicht nur fortschrittliche Linke haben diesem den Kampf angesagt. Die Wut der Anhänger\*innen von Verschwörungserzählungen richtet sich gegen „die Multimilliardäre“, „das Establishment“ oder gegen „die Regierung“ –  ihre Macht wird aber mit einem Potpourri aus antisemitischen, rassistischen, antikommunistischen, antifeministischen und öfter auch esoterisch-wissenschaftsfeindlichen Versatzstücken erklärt. Verschwörungsanhänger\*innen versuchen also, grob gesagt, reale politische und gesellschaftliche Konflikte durch Machenschaften einer geheimen Gruppe zu erklären. Wie aber sollte man diesen Theorien und ihren Anhänger\*innen begegnen? Wie hängen Verschwörungstheorien und rechte Gesinnung zusammen? Und wie können wir produktiv mit der Erkenntnis umgehen, dass ein Kapitalismus mit menschlichem Antlitz letztlich die virulenteste Verschwörungserzählung ist?
+
+Eine Veranstaltung von [kritisch-lesen.de](https://kritisch-lesen.de) in Kooperation mit dem Kulturzentrum Kukoon.
+				`,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&RecordingFormat{
+				ID:          testdataRecording5Format1,
+				RecordingID: testdataRecording5,
+				Lang:        "de",
+				Quality:     0,
+				IsVideo:     true,
+				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/video_best.mp4",
+				Bytes:       1426234816,
+				Resolution:  "1920x1080",
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+		Rollback: func(tx *gorm.DB) error {
+			if err := tx.Delete(&RecordingFormat{
+				ID: testdataRecording5Format1,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Delete(&RecordingLang{
+				ID: testdataRecording5Lang1,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Delete(&Recording{
+				ID: testdataRecording5,
 			}).Error; err != nil {
 				return err
 			}
