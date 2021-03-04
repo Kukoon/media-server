@@ -49,6 +49,12 @@ var (
 	testdataRecording3Lang1    = uuid.MustParse("d193bc41-99f6-46d8-870e-72a860520223")
 	testdataRecording3Format1  = uuid.MustParse("6b1b95f2-d92d-4da7-b56c-1ba86ff22dcd")
 	testdataRecording3Speaker1 = uuid.MustParse("a098c2f5-aa63-4c54-87b1-46ddda1cde16")
+
+	testdataRecording4         = uuid.MustParse("81b262e9-e010-1fa2-84a5-d8cee1a94835")
+	testdataRecording4Lang1    = uuid.MustParse("0ce4b366-9238-4aa4-a6d6-94227c1b0681")
+	testdataRecording4Format1  = uuid.MustParse("449e3361-f2e2-44ee-a5d7-3c013cfe1fdc")
+	testdataRecording4Speaker1 = uuid.MustParse("d8ba2b91-78f7-4bcd-9dc4-5af1d3c904a9")
+	testdataRecording4Speaker2 = uuid.MustParse("62d9ce45-1465-40f8-bf99-22607e7be91d")
 )
 
 var testdata = []*gormigrate.Migration{
@@ -181,7 +187,9 @@ var testdata = []*gormigrate.Migration{
 				ID:          testdataRecording1Lang1,
 				RecordingID: testdataRecording1,
 				Lang:        "de",
-				Title:       "Polizeigewalt – ein deutsches Problem",
+				Title:       "Polizeigewalt",
+				Subtitle:    "ein deutsches Problem",
+				Short:       "Nachdem Mord an George Floyd ist es zu großen Protesten in den Vereinigten Staaten gekommen. Auch in Deutschland sterben schwarze Menschen in Polizeigewahrsam. Ihre Namen sind weitgehend unbekannt: William Tonou-Mbobda, Hussam Fadl, Rooble Warsame, Oury Jalloh, Yaya Diabi, Amed A., Aamir Ageeb, Achidi John, Laya-Alama Condé, Mohamed Idrissi – die Liste ließe sich fortsetzen. ...",
 				Long: `Ein deutsches Problem Diskussionsveranstaltung mit Laila Abdul-Rahman, Greta ([Grün-Weiße Hilfe Bremen](https://twitter.com/fanhilfe_bremen?lang=de)) und Mathilda ([Kampagne für Opfer rassistischer Polizeigewalt – KOP Bremen](https://www.facebook.com/KOP-Bremen-Kampagne-f%C3%BCr-Opfer-rassistischer-Polizeigewalt-Bremen-168776953679814/))
 
 Nachdem Mord an George Floyd ist es zu großen Protesten in den Vereinigten Staaten gekommen. Auch in Deutschland sterben schwarze Menschen in Polizeigewahrsam. Ihre Namen sind weitgehend unbekannt: William Tonou-Mbobda, Hussam Fadl, Rooble Warsame, Oury Jalloh, Yaya Diabi, Amed A., Aamir Ageeb, Achidi John, Laya-Alama Condé, Mohamed Idrissi – die Liste ließe sich fortsetzen.
@@ -332,6 +340,8 @@ oder per [Paypal](https://www.paypal.com/donate?hosted_button_id=4BQQNN582WLN6) 
 				RecordingID: testdataRecording2,
 				Lang:        "de",
 				Title:       "Das faschistische Jahrhundert",
+				Subtitle:    "Neurechte Diskurse zu Abendland, Identität, Europa, Neoliberalismus",
+				Short:       "„Wer das Wesen des Faschismus erkennen will, muss zurück zu dessen Wurzeln“ ­– so der Faschismusforscher Zeev Sternhell. Gleiches gilt für die europäische Neue Rechte. ...",
 				Long: `## Buchvorstellung: Das faschistische Jahrhundert
 
 „Wer das Wesen des Faschismus erkennen will, muss zurück zu dessen Wurzeln“ – so der Faschismusforscher Zeev Sternhell. Gleiches gilt für die europäische Neue Rechte. Aus welchen Gründen ist sie wann und wo mit welchen Zielen entstanden? Wo liegen ihre geistigen Wurzeln? Betreiben die „neuen“ Rechten tatsächlich eine ideologische Erneuerung der extremen Rechten, oder handelt es sich lediglich um alten Wein in neuen Schläuchen? **Volkmar Wölk** und **Felix Schilk**, Mitautoren des Bandes _Das faschistische Jahrhundert_, veranschaulichen die Denkwege der Neuen Rechten anhand von zwei zentralen Themenfelder: Einerseits ihre Europakonzeptionen und andererseits ihre wirtschafts- und sozialpolitischen Vorstellungen.
@@ -494,6 +504,82 @@ Eine Veranstaltung des Kulturzentrum Kukoon in Kooperation mit der Rosa-Luxembur
 			}
 			if err := tx.Delete(&Recording{
 				ID: testdataRecording3,
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+	},
+	{
+		ID: "10-data-0020-01-recording-4",
+		Migrate: func(tx *gorm.DB) error {
+			if err := tx.Create(&Recording{
+				ID:         testdataRecording4,
+				ChannelID:  testdataChannel1,
+				CommonName: "2021-03-verschwoerungserzaehlung",
+				Poster:     "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/poster.png",
+				Preview:    "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/preview.gif",
+				CreatedAt:  time.Date(2021, 3, 3, 19, 0, 0, 0, loc),
+				Duration:   time.Hour + 14*time.Minute + 17*time.Second,
+				Public:     true,
+				Listed:     true,
+				Tags:       []*Tag{{ID: testdataTagVortrag}, {ID: testdataTagDiskussion}},
+				Speakers: []*Speaker{
+					{
+						OwnerID: testdataChannel1,
+						ID:      testdataRecording4Speaker1,
+						Name:    "Johanna Bröse",
+					},
+					{
+						OwnerID: testdataChannel1,
+						ID:      testdataRecording4Speaker2,
+						Name:    "Andrea Strübe",
+					},
+				},
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&RecordingLang{
+				ID:          testdataRecording4Lang1,
+				RecordingID: testdataRecording4,
+				Lang:        "de",
+				Title:       "Welche Funktion haben Verschwörungserzählungen?",
+				Subtitle:    "Warum der Glaube an einen Kapitalismus mit menschlichem Antlitz letztlich die größte Verschwörungsideologie ist.",
+				Short:       "Verschwörungen – es gibt sie wirklich. Sie sind ein wichtiges Instrument zur Sicherung der politischen und gesellschaftlichen Macht in der Klassengesellschaft, aber auch bei Machtkämpfen unterschiedlicher Interessensgruppen untereinander oder im Kampf gegen Systemalternativen. Der Kapitalismus als Klassengesellschaft ist darauf angewiesen, den Antagonismus zwischen Kapitalisten und Lohnabhängigen aufrecht zu erhalten, und die Arbeiter*innenklasse auch durch Strategien der Verschleierung der Ausbeutungsverhältnisse von einer weitreichenden Organisierung abzuhalten. ...",
+				Long: `Verschwörungen – es gibt sie wirklich. Sie sind ein wichtiges Instrument zur Sicherung der politischen und gesellschaftlichen Macht in der Klassengesellschaft, aber auch bei Machtkämpfen unterschiedlicher Interessensgruppen untereinander oder im Kampf gegen Systemalternativen. Der Kapitalismus als Klassengesellschaft ist darauf angewiesen, den Antagonismus zwischen Kapitalisten und Lohnabhängigen aufrecht zu erhalten, und die Arbeiter\*innenklasse auch durch Strategien der Verschleierung der Ausbeutungsverhältnisse von einer weitreichenden Organisierung abzuhalten. Viele der realen Verschwörungen wurden früher oder später aufgedeckt – durch kritische Journalist\*innen, Forscher\*innen, Aktivist\*innen.  Wiederum andere Verschwörungserzählungen – wie die, dass US-Eliten einen grausamen Handel mit Kindern aus einer Pizzeria heraus organisierten, konnten nie bewiesen werden. Warum? Weil sie schlicht und ergreifend falsch sind. Es gibt natürlich von vielen Menschen ein berechtigtes Unbehagen bis hin zum offenen Widerstand gegenüber dem gesellschaftlichen System, in dem wir leben. Ausbeutung, Ungleichheit, Klassenverhältnisse, struktureller Rassismus und Sexismus – um nur einige zu nennen – sind Erscheinungen eines globalen Kapitalismus. Aber nicht nur fortschrittliche Linke haben diesem den Kampf angesagt. Die Wut der Anhänger\*innen von Verschwörungserzählungen richtet sich gegen „die Multimilliardäre“, „das Establishment“ oder gegen „die Regierung“ –  ihre Macht wird aber mit einem Potpourri aus antisemitischen, rassistischen, antikommunistischen, antifeministischen und öfter auch esoterisch-wissenschaftsfeindlichen Versatzstücken erklärt. Verschwörungsanhänger\*innen versuchen also, grob gesagt, reale politische und gesellschaftliche Konflikte durch Machenschaften einer geheimen Gruppe zu erklären. Wie aber sollte man diesen Theorien und ihren Anhänger\*innen begegnen? Wie hängen Verschwörungstheorien und rechte Gesinnung zusammen? Und wie können wir produktiv mit der Erkenntnis umgehen, dass ein Kapitalismus mit menschlichem Antlitz letztlich die virulenteste Verschwörungserzählung ist?
+
+Eine Veranstaltung von [kritisch-lesen.de](https://kritisch-lesen.de) in Kooperation mit dem Kulturzentrum Kukoon.
+				`,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&RecordingFormat{
+				ID:          testdataRecording4Format1,
+				RecordingID: testdataRecording4,
+				Lang:        "de",
+				Quality:     0,
+				IsVideo:     true,
+				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/video_best.mp4",
+				Bytes:       1426234816,
+				Resolution:  "1920x1080",
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+		Rollback: func(tx *gorm.DB) error {
+			if err := tx.Delete(&RecordingFormat{
+				ID: testdataRecording4Format1,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Delete(&RecordingLang{
+				ID: testdataRecording4Lang1,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Delete(&Recording{
+				ID: testdataRecording4,
 			}).Error; err != nil {
 				return err
 			}
