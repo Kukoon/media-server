@@ -163,14 +163,19 @@ func (ws *Webservice) rssChannel(c *gin.Context) {
 
 		// create an Item
 		item := podcast.Item{
+			GUID:        recording.ID.String(),
 			Title:       recording.Lang.Title,
+			ISubtitle:   recording.Lang.Subtitle,
 			Link:        recordingFormat.URL,
 			Description: string(description),
 			PubDate:     &recording.CreatedAt,
 		}
+		item.AddSummary(recording.Lang.Short)
 		item.AddImage(recording.Poster)
 		// add a Download to the Item
 		item.AddEnclosure(recordingFormat.URL, format, recordingFormat.Bytes)
+
+		item.AddPubDate(&recording.CreatedAt)
 
 		// add the Item and check for validation errors
 		if _, err := p.AddItem(item); err != nil {
