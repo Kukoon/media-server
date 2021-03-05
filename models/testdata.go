@@ -59,6 +59,13 @@ var (
 	testdataRecording5Format1  = uuid.MustParse("449e3361-f2e2-44ee-a5d7-3c013cfe1fdc")
 	testdataRecording5Speaker1 = uuid.MustParse("d8ba2b91-78f7-4bcd-9dc4-5af1d3c904a9")
 	testdataRecording5Speaker2 = uuid.MustParse("62d9ce45-1465-40f8-bf99-22607e7be91d")
+
+	testdataRecording6         = uuid.MustParse("728edaf7-9ad9-f972-4d09-ba5940cd43f9")
+	testdataRecording6Lang1    = uuid.MustParse("acdf7eb1-0cb9-4900-a918-a411f9afc38d")
+	testdataRecording6Format1  = uuid.MustParse("4069206c-e6e5-4320-ab12-74af566791e3")
+	testdataRecording6Speaker1 = uuid.MustParse("0030a199-c771-489a-88a7-258f80db2bce")
+	testdataRecording6Speaker2 = uuid.MustParse("8bb5af2a-6e66-488b-9eac-6714ce005899")
+	testdataRecording6Speaker3 = uuid.MustParse("fa5323fc-5f54-487c-b5cc-173faa4e64f2")
 )
 
 var testdata = []*gormigrate.Migration{
@@ -649,6 +656,92 @@ Eine Veranstaltung von [kritisch-lesen.de](https://kritisch-lesen.de) in Koopera
 			}
 			if err := tx.Delete(&Recording{
 				ID: testdataRecording5,
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+	},
+	{
+		ID: "10-data-0020-01-recording-6",
+		Migrate: func(tx *gorm.DB) error {
+			if err := tx.Create(&Recording{
+				ID:         testdataRecording6,
+				ChannelID:  testdataChannel1,
+				CommonName: "2021-03-kriegsgefanngende_in_bremen",
+				Poster:     "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/poster.png",
+				Preview:    "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/preview.gif",
+				CreatedAt:  time.Date(2021, 3, 4, 19, 0, 0, 0, loc),
+				Duration:   time.Hour + 4*time.Minute + 25*time.Second,
+				Public:     true,
+				Listed:     true,
+				Tags:       []*Tag{{ID: testdataTagVortrag}},
+				Speakers: []*Speaker{
+					{
+						OwnerID: testdataChannel1,
+						ID:      testdataRecording6Speaker1,
+						Name:    "Andreas Ehresmann",
+					},
+					{
+						OwnerID: testdataChannel1,
+						ID:      testdataRecording6Speaker2,
+						Name:    "Ronald Sperling",
+					},
+					{
+						OwnerID: testdataChannel1,
+						ID:      testdataRecording6Speaker3,
+						Name:    "Ines Dirolf",
+					},
+				},
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&RecordingLang{
+				ID:          testdataRecording6Lang1,
+				RecordingID: testdataRecording6,
+				Lang:        "de",
+				Title:       "„Die mir von der Wehrmacht angebotenen Kriegsgefangenen sind derart entkräftet“",
+				Subtitle:    "Sowjetische Kriegsgefangene in Bremer Arbeitskommandos 1941-1945",
+				Short:       `Sowjetische Kriegsgefangene bildeten eine der größten Opfergruppen des Nationalsozialismus. Die Wehrmacht brachte Millionen sowjetische Soldat\*innen zum Arbeitseinsatz ins Deutsche Reich. ...`,
+				Long: `
+Sowjetische Kriegsgefangene bildeten eine der größten Opfergruppen des Nationalsozialismus. Die Wehrmacht brachte Millionen sowjetische Soldat\*innen zum Arbeitseinsatz ins Deutsche Reich. Mehr als die Hälfte von ihnen überlebte die Kriegsgefangenschaft in den Kriegsgefangenenlagern wie dem Stalag X B Sandbostel und den Außenkommandos nicht. Auch in Bremen setzten Firmen und Behörden die kriegsgefangenen Rotarmisten zur Arbeit ein, vornehmlich in der Rüstungsindustrie. Im unserem Vortrag wollen wir die ökonomischen und ideologischen Hintergründe und Widersprüche dieser Arbeitseinsätze aufzeigen. Anhand einzelner exemplarischer Arbeitskommandos beleuchten wir die Lebens- und Arbeitsbedingungen von sowjetischen Kriegsgefangenen in Bremen. Der Vortrag lädt alle Interessierte zum Austausch über dieses lange verdrängte Thema ein.
+
+Online-Vortrag mit Andreas Ehresmann, Ronald Sperling und Ines Dirolf.
+
+Eine Veranstaltung der Gedenkstätte Lager Sandbostel in Kooperation mit dem Kulturzentrum Kukoon.
+
+Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, der am 15.09.1942 in das Arbeitskommando der Bremer Francke-Werke eingesetzt wurde und am 11.03.1942 an Tuberkulose starb, Quelle [https://obd-memorial.ru/html/info.htm?id=300643349](https://obd-memorial.ru/html/info.htm?id=300643349)
+`,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&RecordingFormat{
+				ID:          testdataRecording6Format1,
+				RecordingID: testdataRecording6,
+				Lang:        "de",
+				Quality:     0,
+				IsVideo:     true,
+				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/video_best.mp4",
+				Bytes:       958856106,
+				Resolution:  "1920x1080",
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+		Rollback: func(tx *gorm.DB) error {
+			if err := tx.Delete(&RecordingFormat{
+				ID: testdataRecording6Format1,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Delete(&RecordingLang{
+				ID: testdataRecording6Lang1,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Delete(&Recording{
+				ID: testdataRecording6,
 			}).Error; err != nil {
 				return err
 			}
