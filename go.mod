@@ -7,7 +7,6 @@ require (
 	github.com/bdlm/log v0.1.20
 	github.com/bdlm/std v1.0.1 // indirect
 	github.com/chenjiandongx/ginprom v0.0.0-20201217063207-fe11b7f55a35
-	github.com/cpuguy83/go-md2man/v2 v2.0.0 // indirect
 	github.com/eduncan911/podcast v1.4.2
 	github.com/gin-contrib/static v0.0.0-20200916080430-d45d9a37d28e
 	github.com/gin-gonic/autotls v0.0.3
@@ -16,16 +15,15 @@ require (
 	github.com/go-openapi/spec v0.20.3 // indirect
 	github.com/gomarkdown/markdown v0.0.0-20210208175418-bda154fe17d8
 	github.com/google/uuid v1.2.0
+	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/naoina/go-stringutil v0.1.0 // indirect
 	github.com/naoina/toml v0.1.1
 	github.com/prometheus/client_golang v1.9.0
-	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/stretchr/testify v1.6.1
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14
 	github.com/swaggo/gin-swagger v1.3.0
 	github.com/swaggo/swag v1.7.0
-	github.com/urfave/cli v1.22.5 // indirect
 	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a
 	golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c // indirect
 	golang.org/x/tools v0.1.0 // indirect
