@@ -50,22 +50,27 @@ var (
 	testdataRecording3Format1  = uuid.MustParse("6b1b95f2-d92d-4da7-b56c-1ba86ff22dcd")
 	testdataRecording3Speaker1 = uuid.MustParse("a098c2f5-aa63-4c54-87b1-46ddda1cde16")
 
-	testdataRecording4        = uuid.MustParse("27efbfff-d66c-c935-b308-9b1ee2bf78c8")
-	testdataRecording4Lang1   = uuid.MustParse("4f5ad673-2496-429a-a74f-0b48acdb807b")
-	testdataRecording4Format1 = uuid.MustParse("357af110-9481-4d0e-9fea-f61b30ee26f4")
+	testdataRecording4         = uuid.MustParse("13a70ec7-6e74-5114-021f-4d7910752df1")
+	testdataRecording4Lang1    = uuid.MustParse("345a3743-42dd-4ee9-97ae-c3785bd4235e")
+	testdataRecording4Format1  = uuid.MustParse("fae90633-a15d-4dfb-b017-dc8561df95c3")
+	testdataRecording4Speaker1 = uuid.MustParse("f597b912-97b1-4e16-b431-054692a5d049")
 
-	testdataRecording5         = uuid.MustParse("81b262e9-e010-1fa2-84a5-d8cee1a94835")
-	testdataRecording5Lang1    = uuid.MustParse("0ce4b366-9238-4aa4-a6d6-94227c1b0681")
-	testdataRecording5Format1  = uuid.MustParse("449e3361-f2e2-44ee-a5d7-3c013cfe1fdc")
-	testdataRecording5Speaker1 = uuid.MustParse("d8ba2b91-78f7-4bcd-9dc4-5af1d3c904a9")
-	testdataRecording5Speaker2 = uuid.MustParse("62d9ce45-1465-40f8-bf99-22607e7be91d")
+	testdataRecording5        = uuid.MustParse("27efbfff-d66c-c935-b308-9b1ee2bf78c8")
+	testdataRecording5Lang1   = uuid.MustParse("4f5ad673-2496-429a-a74f-0b48acdb807b")
+	testdataRecording5Format1 = uuid.MustParse("357af110-9481-4d0e-9fea-f61b30ee26f4")
 
-	testdataRecording6         = uuid.MustParse("728edaf7-9ad9-f972-4d09-ba5940cd43f9")
-	testdataRecording6Lang1    = uuid.MustParse("acdf7eb1-0cb9-4900-a918-a411f9afc38d")
-	testdataRecording6Format1  = uuid.MustParse("4069206c-e6e5-4320-ab12-74af566791e3")
-	testdataRecording6Speaker1 = uuid.MustParse("0030a199-c771-489a-88a7-258f80db2bce")
-	testdataRecording6Speaker2 = uuid.MustParse("8bb5af2a-6e66-488b-9eac-6714ce005899")
-	testdataRecording6Speaker3 = uuid.MustParse("fa5323fc-5f54-487c-b5cc-173faa4e64f2")
+	testdataRecording6         = uuid.MustParse("81b262e9-e010-1fa2-84a5-d8cee1a94835")
+	testdataRecording6Lang1    = uuid.MustParse("0ce4b366-9238-4aa4-a6d6-94227c1b0681")
+	testdataRecording6Format1  = uuid.MustParse("449e3361-f2e2-44ee-a5d7-3c013cfe1fdc")
+	testdataRecording6Speaker1 = uuid.MustParse("d8ba2b91-78f7-4bcd-9dc4-5af1d3c904a9")
+	testdataRecording6Speaker2 = uuid.MustParse("62d9ce45-1465-40f8-bf99-22607e7be91d")
+
+	testdataRecording7         = uuid.MustParse("728edaf7-9ad9-f972-4d09-ba5940cd43f9")
+	testdataRecording7Lang1    = uuid.MustParse("acdf7eb1-0cb9-4900-a918-a411f9afc38d")
+	testdataRecording7Format1  = uuid.MustParse("4069206c-e6e5-4320-ab12-74af566791e3")
+	testdataRecording7Speaker1 = uuid.MustParse("0030a199-c771-489a-88a7-258f80db2bce")
+	testdataRecording7Speaker2 = uuid.MustParse("8bb5af2a-6e66-488b-9eac-6714ce005899")
+	testdataRecording7Speaker3 = uuid.MustParse("fa5323fc-5f54-487c-b5cc-173faa4e64f2")
 )
 
 var testdata = []*gormigrate.Migration{
@@ -527,14 +532,21 @@ Eine Veranstaltung des Kulturzentrum Kukoon in Kooperation mit der Rosa-Luxembur
 			if err := tx.Create(&Recording{
 				ID:         testdataRecording4,
 				ChannelID:  testdataChannel1,
-				CommonName: "2021-02-geschichte_wird_gemacht",
-				Poster:     "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/27efbfff-d66c-c935-b308-9b1ee2bf78c8/poster.png",
-				Preview:    "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/27efbfff-d66c-c935-b308-9b1ee2bf78c8/preview.webp",
-				CreatedAt:  time.Date(2021, 2, 26, 19, 0, 0, 0, loc),
-				Duration:   time.Hour + 12*time.Minute + 33*time.Second,
+				CommonName: "2021-02-der_berg_der_nackten_wahrheiten",
+				Poster:     "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/13a70ec7-6e74-5114-021f-4d7910752df1/poster.png",
+				Preview:    "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/13a70ec7-6e74-5114-021f-4d7910752df1/preview.webp",
+				CreatedAt:  time.Date(2021, 2, 11, 19, 0, 0, 0, loc),
+				Duration:   29*time.Minute + 56*time.Second,
 				Public:     true,
 				Listed:     true,
-				Tags:       []*Tag{{ID: testdataTagDiskussion}},
+				Tags:       []*Tag{{ID: testdataTagBuchvorstellung}},
+				Speakers: []*Speaker{
+					{
+						OwnerID: testdataChannel1,
+						ID:      testdataRecording4Speaker1,
+						Name:    "Jan Backmann",
+					},
+				},
 			}).Error; err != nil {
 				return err
 			}
@@ -542,13 +554,14 @@ Eine Veranstaltung des Kulturzentrum Kukoon in Kooperation mit der Rosa-Luxembur
 				ID:          testdataRecording4Lang1,
 				RecordingID: testdataRecording4,
 				Lang:        "de",
-				Title:       "Geschichte wird gemacht",
-				Subtitle:    "aber wie und von wem?",
-				Short:       "Das Erinnern an die Verbrechen und ein würdiges Gedenken an die Opfer des Nationalsozialismus ist und bleibt wichtig. Darin sind sich ein großer Teil der Bremer:innen und auch viele Politiker:innen einig. Doch wie sollten diese Erinnerung(en) eigentlich gestaltet sein? ...",
+				Title:       "Der Berg der nackten Wahrheiten",
+				Subtitle:    "Die Geschichte des legendären Monte Verità aus der Sicht einer Ziege erzählt",
+				Short:       `Gusto verbringt sein Leben auf dem Monte Verità im Tessin. Doch nicht alles verläuft so sorgenlos, wie der Hippie-Vorläufer es sich in seiner Traumwelt vorstellt hatte: Das Geld der vegetarisch-kommunistischen FKK-Gemeinschaft wird langsam knapp und als Gusto auch noch eine Ziege aus dem Dorfe bei sich aufnimmt, wächst die Wut der Bewohner\*innen von Ascona auf die Aussteiger\*innen.  ...`,
 				Long: `
-Das Erinnern an die Verbrechen und ein würdiges Gedenken an die Opfer des Nationalsozialismus ist und bleibt wichtig. Darin sind sich ein großer Teil der Bremer:innen und auch viele Politiker:innen einig. Doch wie sollten diese Erinnerung(en) eigentlich gestaltet sein? Wie sollten die heutigen Kenntnisse und die geschichtlichen Perspektiven vermittelt werden? Wie können die Auseinandersetzungen um die historischen Orte in unserer unmittelbaren Umgebung aktuell bleiben? Diese und andere Fragen wollen wir als ein Zusammenschluß freier Mitarbeiter:innen am Denkort Bunker Valentin in einem digitalen Forum mit den Gästen diskutieren. Bewusst wollen wir damit die Konvention einer starren Frontalveranstaltung aufbrechen und miteinander ins Gespräch kommen. In einer anschließenden Podiumsdiskussion wollen wir dann abgleichen, wie es um die „gesellschaftliche Verantwortung“ in Bremen und anderswo praktisch bestellt ist. Wer macht diese Arbeit und unter welchen Bedingungen? Wir diskutieren mit einer Aktiven des „Arisierungs“-Mahnmals in Bremen und der Initiative „Geschichte wird gemacht“ aus Berlin. Gemeinsam sollen Grenzen und Chancen einer Geschichtsvermittlung diskutiert werden, die eine lebendige Erinnerungskultur nicht nur beredet sondern umsetzt. Alle Interessierten sind herzlich willkommen!
+Gusto verbringt sein Leben auf dem Monte Verità im Tessin. Doch nicht alles verläuft so sorgenlos, wie der Hippie-Vorläufer es sich in seiner Traumwelt vorstellt hatte: Das Geld der vegetarisch-kommunistischen FKK-Gemeinschaft wird langsam knapp und als Gusto auch noch eine Ziege aus dem Dorfe bei sich aufnimmt, wächst die Wut der Bewohner\*innen von Ascona auf die Aussteiger\*innen. Nichtsdestotrotz schmiedet Gusto einen irrwitzigen Plan, wie er seine geliebte Ziege weiterhin bei sich behalten kann. Nach seinem ersten, sehr erfolgreichen Comic *Mühsam, Anarchist in Anführungsstrichen*, veröffentlicht der Autor nun eine Erzählung, die zehn Jahre früher spielt, vor dem Hintergrund der Aktivitäten auf dem Monte Verità, dem Treffpunkt der ersten Aussteiger\*innen im 20. Jahrhundert. Auch dieses Mal zapft Bachmann historische Quellen an, um daraus eine pointierte und bissige politische Komödie zu machen. Im Mittelpunkt steht nun allerdings eine Ziege, die Ziege der Vegetarier\*innen. Eine Leseprobe findet sich [hier](https://www.editionmoderne.ch/buch/der-berg-der-nackten-wahrheiten/).
 
-Eine Veranstaltung von Erinnerungskultur anstellen. Organisierung freier Mitarbeitender am Denkort Bunker Valentin in kooperation mit dem Kulturzentrum Kukoon und Erinnern für die Zukunft e.V. sowie der Rosa-Luxemburg-Initiative – Die Rosa-Luxemburg-Stiftung in Bremen. 
+**Jan Bachmann**
+Geboren 1986 in Basel, hat an der Deutschen Film- und Fernsehakademie in Berlin studiert. 2013 bis 2015 war er Mitglied in einem brandenburgischen FKK-Verein. Sein erster Comic *Mühsam, Anarchist in Anführungsstrichen* ist 2018 bei der Edition Moderne erschienen und wurde unter anderem für den Max und Moritz-Preis nominiert. Aktuell arbeitet er an einem Buch zum Exil von Kaiser Wilhelm II in Holland.
 				`,
 			}).Error; err != nil {
 				return err
@@ -559,8 +572,8 @@ Eine Veranstaltung von Erinnerungskultur anstellen. Organisierung freier Mitarbe
 				Lang:        "de",
 				Quality:     0,
 				IsVideo:     true,
-				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/27efbfff-d66c-c935-b308-9b1ee2bf78c8/video_best.mp4",
-				Bytes:       862470450,
+				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/13a70ec7-6e74-5114-021f-4d7910752df1/video_best.mp4",
+				Bytes:       2020856776,
 				Resolution:  "1920x1080",
 			}).Error; err != nil {
 				return err
@@ -592,26 +605,14 @@ Eine Veranstaltung von Erinnerungskultur anstellen. Organisierung freier Mitarbe
 			if err := tx.Create(&Recording{
 				ID:         testdataRecording5,
 				ChannelID:  testdataChannel1,
-				CommonName: "2021-03-verschwoerungserzaehlung",
-				Poster:     "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/poster.png",
-				Preview:    "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/preview.webp",
-				CreatedAt:  time.Date(2021, 3, 3, 19, 0, 0, 0, loc),
-				Duration:   time.Hour + 14*time.Minute + 17*time.Second,
+				CommonName: "2021-02-geschichte_wird_gemacht",
+				Poster:     "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/27efbfff-d66c-c935-b308-9b1ee2bf78c8/poster.png",
+				Preview:    "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/27efbfff-d66c-c935-b308-9b1ee2bf78c8/preview.webp",
+				CreatedAt:  time.Date(2021, 2, 26, 19, 0, 0, 0, loc),
+				Duration:   time.Hour + 12*time.Minute + 33*time.Second,
 				Public:     true,
 				Listed:     true,
-				Tags:       []*Tag{{ID: testdataTagVortrag}, {ID: testdataTagDiskussion}},
-				Speakers: []*Speaker{
-					{
-						OwnerID: testdataChannel1,
-						ID:      testdataRecording5Speaker1,
-						Name:    "Johanna Bröse",
-					},
-					{
-						OwnerID: testdataChannel1,
-						ID:      testdataRecording5Speaker2,
-						Name:    "Andrea Strübe",
-					},
-				},
+				Tags:       []*Tag{{ID: testdataTagDiskussion}},
 			}).Error; err != nil {
 				return err
 			}
@@ -619,12 +620,13 @@ Eine Veranstaltung von Erinnerungskultur anstellen. Organisierung freier Mitarbe
 				ID:          testdataRecording5Lang1,
 				RecordingID: testdataRecording5,
 				Lang:        "de",
-				Title:       "Welche Funktion haben Verschwörungserzählungen?",
-				Subtitle:    "Warum der Glaube an einen Kapitalismus mit menschlichem Antlitz letztlich die größte Verschwörungsideologie ist.",
-				Short:       "Verschwörungen – es gibt sie wirklich. Sie sind ein wichtiges Instrument zur Sicherung der politischen und gesellschaftlichen Macht in der Klassengesellschaft, aber auch bei Machtkämpfen unterschiedlicher Interessensgruppen untereinander oder im Kampf gegen Systemalternativen. Der Kapitalismus als Klassengesellschaft ist darauf angewiesen, den Antagonismus zwischen Kapitalisten und Lohnabhängigen aufrecht zu erhalten, und die Arbeiter*innenklasse auch durch Strategien der Verschleierung der Ausbeutungsverhältnisse von einer weitreichenden Organisierung abzuhalten. ...",
-				Long: `Verschwörungen – es gibt sie wirklich. Sie sind ein wichtiges Instrument zur Sicherung der politischen und gesellschaftlichen Macht in der Klassengesellschaft, aber auch bei Machtkämpfen unterschiedlicher Interessensgruppen untereinander oder im Kampf gegen Systemalternativen. Der Kapitalismus als Klassengesellschaft ist darauf angewiesen, den Antagonismus zwischen Kapitalisten und Lohnabhängigen aufrecht zu erhalten, und die Arbeiter\*innenklasse auch durch Strategien der Verschleierung der Ausbeutungsverhältnisse von einer weitreichenden Organisierung abzuhalten. Viele der realen Verschwörungen wurden früher oder später aufgedeckt – durch kritische Journalist\*innen, Forscher\*innen, Aktivist\*innen.  Wiederum andere Verschwörungserzählungen – wie die, dass US-Eliten einen grausamen Handel mit Kindern aus einer Pizzeria heraus organisierten, konnten nie bewiesen werden. Warum? Weil sie schlicht und ergreifend falsch sind. Es gibt natürlich von vielen Menschen ein berechtigtes Unbehagen bis hin zum offenen Widerstand gegenüber dem gesellschaftlichen System, in dem wir leben. Ausbeutung, Ungleichheit, Klassenverhältnisse, struktureller Rassismus und Sexismus – um nur einige zu nennen – sind Erscheinungen eines globalen Kapitalismus. Aber nicht nur fortschrittliche Linke haben diesem den Kampf angesagt. Die Wut der Anhänger\*innen von Verschwörungserzählungen richtet sich gegen „die Multimilliardäre“, „das Establishment“ oder gegen „die Regierung“ –  ihre Macht wird aber mit einem Potpourri aus antisemitischen, rassistischen, antikommunistischen, antifeministischen und öfter auch esoterisch-wissenschaftsfeindlichen Versatzstücken erklärt. Verschwörungsanhänger\*innen versuchen also, grob gesagt, reale politische und gesellschaftliche Konflikte durch Machenschaften einer geheimen Gruppe zu erklären. Wie aber sollte man diesen Theorien und ihren Anhänger\*innen begegnen? Wie hängen Verschwörungstheorien und rechte Gesinnung zusammen? Und wie können wir produktiv mit der Erkenntnis umgehen, dass ein Kapitalismus mit menschlichem Antlitz letztlich die virulenteste Verschwörungserzählung ist?
+				Title:       "Geschichte wird gemacht",
+				Subtitle:    "aber wie und von wem?",
+				Short:       "Das Erinnern an die Verbrechen und ein würdiges Gedenken an die Opfer des Nationalsozialismus ist und bleibt wichtig. Darin sind sich ein großer Teil der Bremer:innen und auch viele Politiker:innen einig. Doch wie sollten diese Erinnerung(en) eigentlich gestaltet sein? ...",
+				Long: `
+Das Erinnern an die Verbrechen und ein würdiges Gedenken an die Opfer des Nationalsozialismus ist und bleibt wichtig. Darin sind sich ein großer Teil der Bremer:innen und auch viele Politiker:innen einig. Doch wie sollten diese Erinnerung(en) eigentlich gestaltet sein? Wie sollten die heutigen Kenntnisse und die geschichtlichen Perspektiven vermittelt werden? Wie können die Auseinandersetzungen um die historischen Orte in unserer unmittelbaren Umgebung aktuell bleiben? Diese und andere Fragen wollen wir als ein Zusammenschluß freier Mitarbeiter:innen am Denkort Bunker Valentin in einem digitalen Forum mit den Gästen diskutieren. Bewusst wollen wir damit die Konvention einer starren Frontalveranstaltung aufbrechen und miteinander ins Gespräch kommen. In einer anschließenden Podiumsdiskussion wollen wir dann abgleichen, wie es um die „gesellschaftliche Verantwortung“ in Bremen und anderswo praktisch bestellt ist. Wer macht diese Arbeit und unter welchen Bedingungen? Wir diskutieren mit einer Aktiven des „Arisierungs“-Mahnmals in Bremen und der Initiative „Geschichte wird gemacht“ aus Berlin. Gemeinsam sollen Grenzen und Chancen einer Geschichtsvermittlung diskutiert werden, die eine lebendige Erinnerungskultur nicht nur beredet sondern umsetzt. Alle Interessierten sind herzlich willkommen!
 
-Eine Veranstaltung von [kritisch-lesen.de](https://kritisch-lesen.de) in Kooperation mit dem Kulturzentrum Kukoon.
+Eine Veranstaltung von Erinnerungskultur anstellen. Organisierung freier Mitarbeitender am Denkort Bunker Valentin in kooperation mit dem Kulturzentrum Kukoon und Erinnern für die Zukunft e.V. sowie der Rosa-Luxemburg-Initiative – Die Rosa-Luxemburg-Stiftung in Bremen. 
 				`,
 			}).Error; err != nil {
 				return err
@@ -635,8 +637,8 @@ Eine Veranstaltung von [kritisch-lesen.de](https://kritisch-lesen.de) in Koopera
 				Lang:        "de",
 				Quality:     0,
 				IsVideo:     true,
-				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/video_best.mp4",
-				Bytes:       1426234816,
+				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/27efbfff-d66c-c935-b308-9b1ee2bf78c8/video_best.mp4",
+				Bytes:       862470450,
 				Resolution:  "1920x1080",
 			}).Error; err != nil {
 				return err
@@ -668,29 +670,24 @@ Eine Veranstaltung von [kritisch-lesen.de](https://kritisch-lesen.de) in Koopera
 			if err := tx.Create(&Recording{
 				ID:         testdataRecording6,
 				ChannelID:  testdataChannel1,
-				CommonName: "2021-03-kriegsgefanngende_in_bremen",
-				Poster:     "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/poster.png",
-				Preview:    "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/preview.webp",
-				CreatedAt:  time.Date(2021, 3, 4, 19, 0, 0, 0, loc),
-				Duration:   time.Hour + 4*time.Minute + 25*time.Second,
+				CommonName: "2021-03-verschwoerungserzaehlung",
+				Poster:     "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/poster.png",
+				Preview:    "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/preview.webp",
+				CreatedAt:  time.Date(2021, 3, 3, 19, 0, 0, 0, loc),
+				Duration:   time.Hour + 14*time.Minute + 17*time.Second,
 				Public:     true,
 				Listed:     true,
-				Tags:       []*Tag{{ID: testdataTagVortrag}},
+				Tags:       []*Tag{{ID: testdataTagVortrag}, {ID: testdataTagDiskussion}},
 				Speakers: []*Speaker{
 					{
 						OwnerID: testdataChannel1,
 						ID:      testdataRecording6Speaker1,
-						Name:    "Andreas Ehresmann",
+						Name:    "Johanna Bröse",
 					},
 					{
 						OwnerID: testdataChannel1,
 						ID:      testdataRecording6Speaker2,
-						Name:    "Ronald Sperling",
-					},
-					{
-						OwnerID: testdataChannel1,
-						ID:      testdataRecording6Speaker3,
-						Name:    "Ines Dirolf",
+						Name:    "Andrea Strübe",
 					},
 				},
 			}).Error; err != nil {
@@ -700,18 +697,13 @@ Eine Veranstaltung von [kritisch-lesen.de](https://kritisch-lesen.de) in Koopera
 				ID:          testdataRecording6Lang1,
 				RecordingID: testdataRecording6,
 				Lang:        "de",
-				Title:       "„Die mir von der Wehrmacht angebotenen Kriegsgefangenen sind derart entkräftet“",
-				Subtitle:    "Sowjetische Kriegsgefangene in Bremer Arbeitskommandos 1941-1945",
-				Short:       `Sowjetische Kriegsgefangene bildeten eine der größten Opfergruppen des Nationalsozialismus. Die Wehrmacht brachte Millionen sowjetische Soldat\*innen zum Arbeitseinsatz ins Deutsche Reich. ...`,
-				Long: `
-Sowjetische Kriegsgefangene bildeten eine der größten Opfergruppen des Nationalsozialismus. Die Wehrmacht brachte Millionen sowjetische Soldat\*innen zum Arbeitseinsatz ins Deutsche Reich. Mehr als die Hälfte von ihnen überlebte die Kriegsgefangenschaft in den Kriegsgefangenenlagern wie dem Stalag X B Sandbostel und den Außenkommandos nicht. Auch in Bremen setzten Firmen und Behörden die kriegsgefangenen Rotarmisten zur Arbeit ein, vornehmlich in der Rüstungsindustrie. Im unserem Vortrag wollen wir die ökonomischen und ideologischen Hintergründe und Widersprüche dieser Arbeitseinsätze aufzeigen. Anhand einzelner exemplarischer Arbeitskommandos beleuchten wir die Lebens- und Arbeitsbedingungen von sowjetischen Kriegsgefangenen in Bremen. Der Vortrag lädt alle Interessierte zum Austausch über dieses lange verdrängte Thema ein.
+				Title:       "Welche Funktion haben Verschwörungserzählungen?",
+				Subtitle:    "Warum der Glaube an einen Kapitalismus mit menschlichem Antlitz letztlich die größte Verschwörungsideologie ist.",
+				Short:       "Verschwörungen – es gibt sie wirklich. Sie sind ein wichtiges Instrument zur Sicherung der politischen und gesellschaftlichen Macht in der Klassengesellschaft, aber auch bei Machtkämpfen unterschiedlicher Interessensgruppen untereinander oder im Kampf gegen Systemalternativen. Der Kapitalismus als Klassengesellschaft ist darauf angewiesen, den Antagonismus zwischen Kapitalisten und Lohnabhängigen aufrecht zu erhalten, und die Arbeiter*innenklasse auch durch Strategien der Verschleierung der Ausbeutungsverhältnisse von einer weitreichenden Organisierung abzuhalten. ...",
+				Long: `Verschwörungen – es gibt sie wirklich. Sie sind ein wichtiges Instrument zur Sicherung der politischen und gesellschaftlichen Macht in der Klassengesellschaft, aber auch bei Machtkämpfen unterschiedlicher Interessensgruppen untereinander oder im Kampf gegen Systemalternativen. Der Kapitalismus als Klassengesellschaft ist darauf angewiesen, den Antagonismus zwischen Kapitalisten und Lohnabhängigen aufrecht zu erhalten, und die Arbeiter\*innenklasse auch durch Strategien der Verschleierung der Ausbeutungsverhältnisse von einer weitreichenden Organisierung abzuhalten. Viele der realen Verschwörungen wurden früher oder später aufgedeckt – durch kritische Journalist\*innen, Forscher\*innen, Aktivist\*innen.  Wiederum andere Verschwörungserzählungen – wie die, dass US-Eliten einen grausamen Handel mit Kindern aus einer Pizzeria heraus organisierten, konnten nie bewiesen werden. Warum? Weil sie schlicht und ergreifend falsch sind. Es gibt natürlich von vielen Menschen ein berechtigtes Unbehagen bis hin zum offenen Widerstand gegenüber dem gesellschaftlichen System, in dem wir leben. Ausbeutung, Ungleichheit, Klassenverhältnisse, struktureller Rassismus und Sexismus – um nur einige zu nennen – sind Erscheinungen eines globalen Kapitalismus. Aber nicht nur fortschrittliche Linke haben diesem den Kampf angesagt. Die Wut der Anhänger\*innen von Verschwörungserzählungen richtet sich gegen „die Multimilliardäre“, „das Establishment“ oder gegen „die Regierung“ –  ihre Macht wird aber mit einem Potpourri aus antisemitischen, rassistischen, antikommunistischen, antifeministischen und öfter auch esoterisch-wissenschaftsfeindlichen Versatzstücken erklärt. Verschwörungsanhänger\*innen versuchen also, grob gesagt, reale politische und gesellschaftliche Konflikte durch Machenschaften einer geheimen Gruppe zu erklären. Wie aber sollte man diesen Theorien und ihren Anhänger\*innen begegnen? Wie hängen Verschwörungstheorien und rechte Gesinnung zusammen? Und wie können wir produktiv mit der Erkenntnis umgehen, dass ein Kapitalismus mit menschlichem Antlitz letztlich die virulenteste Verschwörungserzählung ist?
 
-Online-Vortrag mit Andreas Ehresmann, Ronald Sperling und Ines Dirolf.
-
-Eine Veranstaltung der Gedenkstätte Lager Sandbostel in Kooperation mit dem Kulturzentrum Kukoon.
-
-Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, der am 15.09.1942 in das Arbeitskommando der Bremer Francke-Werke eingesetzt wurde und am 11.03.1942 an Tuberkulose starb, Quelle [https://obd-memorial.ru/html/info.htm?id=300643349](https://obd-memorial.ru/html/info.htm?id=300643349)
-`,
+Eine Veranstaltung von [kritisch-lesen.de](https://kritisch-lesen.de) in Kooperation mit dem Kulturzentrum Kukoon.
+				`,
 			}).Error; err != nil {
 				return err
 			}
@@ -721,8 +713,8 @@ Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, d
 				Lang:        "de",
 				Quality:     0,
 				IsVideo:     true,
-				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/video_best.mp4",
-				Bytes:       958856106,
+				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/video_best.mp4",
+				Bytes:       1426234816,
 				Resolution:  "1920x1080",
 			}).Error; err != nil {
 				return err
@@ -742,6 +734,92 @@ Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, d
 			}
 			if err := tx.Delete(&Recording{
 				ID: testdataRecording6,
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+	},
+	{
+		ID: "10-data-0020-01-recording-7",
+		Migrate: func(tx *gorm.DB) error {
+			if err := tx.Create(&Recording{
+				ID:         testdataRecording7,
+				ChannelID:  testdataChannel1,
+				CommonName: "2021-03-kriegsgefanngende_in_bremen",
+				Poster:     "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/poster.png",
+				Preview:    "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/preview.webp",
+				CreatedAt:  time.Date(2021, 3, 4, 19, 0, 0, 0, loc),
+				Duration:   time.Hour + 4*time.Minute + 25*time.Second,
+				Public:     true,
+				Listed:     true,
+				Tags:       []*Tag{{ID: testdataTagVortrag}},
+				Speakers: []*Speaker{
+					{
+						OwnerID: testdataChannel1,
+						ID:      testdataRecording7Speaker1,
+						Name:    "Andreas Ehresmann",
+					},
+					{
+						OwnerID: testdataChannel1,
+						ID:      testdataRecording7Speaker2,
+						Name:    "Ronald Sperling",
+					},
+					{
+						OwnerID: testdataChannel1,
+						ID:      testdataRecording7Speaker3,
+						Name:    "Ines Dirolf",
+					},
+				},
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&RecordingLang{
+				ID:          testdataRecording7Lang1,
+				RecordingID: testdataRecording7,
+				Lang:        "de",
+				Title:       "„Die mir von der Wehrmacht angebotenen Kriegsgefangenen sind derart entkräftet“",
+				Subtitle:    "Sowjetische Kriegsgefangene in Bremer Arbeitskommandos 1941-1945",
+				Short:       `Sowjetische Kriegsgefangene bildeten eine der größten Opfergruppen des Nationalsozialismus. Die Wehrmacht brachte Millionen sowjetische Soldat\*innen zum Arbeitseinsatz ins Deutsche Reich. ...`,
+				Long: `
+Sowjetische Kriegsgefangene bildeten eine der größten Opfergruppen des Nationalsozialismus. Die Wehrmacht brachte Millionen sowjetische Soldat\*innen zum Arbeitseinsatz ins Deutsche Reich. Mehr als die Hälfte von ihnen überlebte die Kriegsgefangenschaft in den Kriegsgefangenenlagern wie dem Stalag X B Sandbostel und den Außenkommandos nicht. Auch in Bremen setzten Firmen und Behörden die kriegsgefangenen Rotarmisten zur Arbeit ein, vornehmlich in der Rüstungsindustrie. Im unserem Vortrag wollen wir die ökonomischen und ideologischen Hintergründe und Widersprüche dieser Arbeitseinsätze aufzeigen. Anhand einzelner exemplarischer Arbeitskommandos beleuchten wir die Lebens- und Arbeitsbedingungen von sowjetischen Kriegsgefangenen in Bremen. Der Vortrag lädt alle Interessierte zum Austausch über dieses lange verdrängte Thema ein.
+
+Online-Vortrag mit Andreas Ehresmann, Ronald Sperling und Ines Dirolf.
+
+Eine Veranstaltung der Gedenkstätte Lager Sandbostel in Kooperation mit dem Kulturzentrum Kukoon.
+
+Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, der am 15.09.1942 in das Arbeitskommando der Bremer Francke-Werke eingesetzt wurde und am 11.03.1942 an Tuberkulose starb, Quelle [https://obd-memorial.ru/html/info.htm?id=300643349](https://obd-memorial.ru/html/info.htm?id=300643349)
+`,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&RecordingFormat{
+				ID:          testdataRecording7Format1,
+				RecordingID: testdataRecording7,
+				Lang:        "de",
+				Quality:     0,
+				IsVideo:     true,
+				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/video_best.mp4",
+				Bytes:       958856106,
+				Resolution:  "1920x1080",
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+		Rollback: func(tx *gorm.DB) error {
+			if err := tx.Delete(&RecordingFormat{
+				ID: testdataRecording7Format1,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Delete(&RecordingLang{
+				ID: testdataRecording7Lang1,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Delete(&Recording{
+				ID: testdataRecording7,
 			}).Error; err != nil {
 				return err
 			}

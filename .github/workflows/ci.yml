@@ -18,7 +18,7 @@ jobs:
       env:
         GOPATH: /home/runner/go
     - name: Check misspell
-      run: find . -type f | grep -v webroot/assets | xargs /home/runner/go/bin/misspell -error -i esoterisch
+      run: find . -type f | grep -v webroot/assets | xargs /home/runner/go/bin/misspell -error -i "autor,esoterisch"
     - name: Check if format is correct
       run: .ci/check-gofmt
     - name: Check that every package has a testfiles
