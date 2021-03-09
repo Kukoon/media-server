@@ -34,7 +34,7 @@ func (config *Database) Run() error {
 	m := gormigrate.New(db, gormigrate.DefaultOptions, mig)
 
 	if err = m.Migrate(); err != nil {
-		return nil
+		return err
 	}
 	config.DB = db
 	return nil
