@@ -26,11 +26,16 @@ jobs:
   test:
     runs-on: ubuntu-latest
     services:
-      cockroachdb:
-        image: cockroachdb/cockroach:latest
-        options: cockroachdb/cockroach:latest start-single-node --insecure
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: root
+          POSTGRES_DB: media_server
         ports:
-        - 26257:26257
+        - 26257:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-go@v2
