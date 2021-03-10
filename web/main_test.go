@@ -25,7 +25,7 @@ type testServer struct {
 func testSetup(assert *assert.Assertions) *testServer {
 	// db setup
 	dbConfig := models.Database{
-		Connection: "user=root dbname=media_server host=cockroachdb port=26257 sslmode=disable",
+		Connection: "user=root dbname=media_server host=localhost port=26257 sslmode=disable",
 		Testdata:   true,
 		Debug:      true,
 		LogLevel:   0,

@@ -25,11 +25,12 @@ jobs:
       run: .ci/check-testfiles
   test:
     runs-on: ubuntu-latest
-    container: golang
     services:
       cockroachdb:
         image: cockroachdb/cockroach:latest
         options: cockroachdb/cockroach:latest start-single-node --insecure
+        ports:
+        - 26257:26257
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-go@v2
