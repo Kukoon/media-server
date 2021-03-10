@@ -22,6 +22,7 @@ func (config *Database) Run() error {
 	if err != nil {
 		return err
 	}
+	db.Debug().Exec("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";")
 	if config.Debug {
 		db = db.Debug()
 	}
