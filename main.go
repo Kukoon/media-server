@@ -8,11 +8,12 @@ import (
 	"github.com/Kukoon/media-server/models"
 	"github.com/Kukoon/media-server/runtime"
 	"github.com/Kukoon/media-server/web"
+	_ "github.com/Kukoon/media-server/web/all"
 )
 
 type configData struct {
 	Database  models.Database `toml:"database"`
-	Webserver web.Webservice  `toml:"webserver"`
+	Webserver web.Service     `toml:"webserver"`
 }
 
 func main() {
