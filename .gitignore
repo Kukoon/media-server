@@ -1,3 +1,4 @@
-/docs
+/web/docs/docs.go
+/web/docs/swagger.*
 .testCoverage.txt
 /config.toml
