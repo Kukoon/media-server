@@ -11,16 +11,6 @@ import (
 	"github.com/Kukoon/media-server/web/webtest"
 )
 
-func TestAPIChannelList(t *testing.T) {
-	assert := assert.New(t)
-	s := webtest.New(assert)
-	assert.NotNil(s)
-
-	list := []*models.Channel{}
-	// GET
-	s.Request(http.MethodGet, "/api/v1/channels", nil, http.StatusOK, &list)
-}
-
 func TestAPIChannelGet(t *testing.T) {
 	assert := assert.New(t)
 	s := webtest.New(assert)

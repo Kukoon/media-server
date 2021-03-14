@@ -17,7 +17,7 @@ type Recording struct {
 	CommonName string         `json:"common_name" gorm:"unique_index:idx_recording_channel" example:"2020-12-polizeigewalt"`
 	Poster     string         `json:"poster" example:"https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee_20201211_165251mp4"`
 	Preview    string         `json:"preview" example:"https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee_20201211_165251.gif"`
-	Duration   time.Duration  `json:"duration"`
+	Duration   time.Duration  `json:"duration" swaggertype:"primitive,integer"`
 	Public     bool           `json:"public"`
 	Listed     bool           `json:"listed"`
 	Lang       *RecordingLang `json:"lang"`

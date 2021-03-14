@@ -11,16 +11,6 @@ import (
 	"github.com/Kukoon/media-server/web/webtest"
 )
 
-func TestAPIStreamList(t *testing.T) {
-	assert := assert.New(t)
-	s := webtest.New(assert)
-	assert.NotNil(s)
-
-	list := []*models.PublicStream{}
-	// GET
-	s.Request(http.MethodGet, "/api/v1/streams", nil, http.StatusOK, &list)
-}
-
 func TestAPIStreamGet(t *testing.T) {
 	assert := assert.New(t)
 	s := webtest.New(assert)
