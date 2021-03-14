@@ -7,6 +7,15 @@ import (
 
 var migrations = []*gormigrate.Migration{
 	{
+		ID: "01-schema-0008-01-user",
+		Migrate: func(tx *gorm.DB) error {
+			return tx.AutoMigrate(&User{})
+		},
+		Rollback: func(tx *gorm.DB) error {
+			return tx.Migrator().DropTable("users")
+		},
+	},
+	{
 		ID: "01-schema-0010-01-channel",
 		Migrate: func(tx *gorm.DB) error {
 			return tx.AutoMigrate(&Channel{})

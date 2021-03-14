@@ -3,6 +3,10 @@ listen = ":8090"
 access_log = true
 webroot = "../media-ui/dist"
 
+[webserver.session]
+name = "mysession"
+secret = "CHANGEME"
+
 # if ACME / Let's Encrypt used, uncomment listen
 [webserver.acme]
 enable = false

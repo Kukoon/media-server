@@ -11,6 +11,8 @@ import (
 var (
 	loc = time.FixedZone("UTC+2", +2*60*60)
 
+	testdataUser1 = uuid.MustParse("88078ec0-2135-445f-bf05-632701c77695")
+
 	testdataChannel1 = uuid.MustParse("df1555f5-7046-4f7a-adcc-195b73949723")
 
 	testdataStream1         = uuid.MustParse("dffe2c0e-3713-4399-8ee2-279becbbb06e")
@@ -75,6 +77,22 @@ var (
 
 var testdata = []*gormigrate.Migration{
 	{
+		ID: "10-data-008-01-user",
+		Migrate: func(tx *gorm.DB) error {
+			user, err := NewUser("kukoon", "CHANGEME")
+			if err != nil {
+				return err
+			}
+			user.ID = testdataUser1
+			return tx.Create(user).Error
+		},
+		Rollback: func(tx *gorm.DB) error {
+			return tx.Delete(&User{
+				ID: testdataUser1,
+			}).Error
+		},
+	},
+	{
 		ID: "10-data-0010-01-channel",
 		Migrate: func(tx *gorm.DB) error {
 			return tx.Create(&Channel{
@@ -85,8 +103,8 @@ var testdata = []*gormigrate.Migration{
 			}).Error
 		},
 		Rollback: func(tx *gorm.DB) error {
-			return tx.Delete(&Recording{
-				ID: uuid.MustParse("df1555f5-7046-4f7a-adcc-195b73949723"),
+			return tx.Delete(&Channel{
+				ID: testdataChannel1,
 			}).Error
 		},
 	},

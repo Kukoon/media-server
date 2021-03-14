@@ -21,6 +21,10 @@ type Service struct {
 		Domains []string `toml:"domains"`
 		Cache   string   `toml:"cache"`
 	} `toml:"acme"`
+	Session struct {
+		Name   string `toml:"name"`
+		Secret string `toml:"secret"`
+	} `toml:"session"`
 	// internal
 	DB *gorm.DB `toml:"-"`
 }
@@ -38,7 +42,7 @@ func (config *Service) Run() error {
 		r.Use(gin.Logger())
 		log.Debug("request logging enabled")
 	}
-
+	config.LoadSession(r)
 	config.Bind(r)
 
 	if config.ACME.Enable {
