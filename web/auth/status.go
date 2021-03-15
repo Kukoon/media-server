@@ -4,7 +4,6 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/bdlm/log"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -14,12 +13,11 @@ import (
 	"github.com/Kukoon/media-server/web"
 )
 
-// @Summary Login
-// @Description Login by email and password, you will get a token for other API
+// @Summary Login status
+// @Description show user_id and username if logged in
 // @Accept json
 // @Produce  json
-// @Success 200 {object} models.User "get user of login"
-// @Failure 400 {object} web.HTTPError
+// @Success 200 {object} models.User
 // @Failure 401 {object} web.HTTPError
 // @Failure 500 {object} web.HTTPError
 // @Router /api/v1/auth/status [get]
@@ -36,9 +34,7 @@ func init() {
 				return
 			}
 
-			log.Infof("session: %v", v)
 			id := uuid.MustParse(v.(string))
-			log.Infof("session-id: %v", id)
 
 			d := &models.User{ID: id}
 			if err := ws.DB.First(d).Error; err != nil {
@@ -56,7 +52,7 @@ func init() {
 				return
 			}
 
-			c.JSON(200, d)
+			c.JSON(http.StatusOK, d)
 		})
 	})
 }

@@ -22,7 +22,7 @@ func TestAPIStreamGet(t *testing.T) {
 
 	obj = models.PublicStream{}
 	// GET - id
-	s.Request(http.MethodGet, "/api/v1/stream/df1555f5-7046-4f7a-adcc-195b73949723", nil, http.StatusOK, &obj)
+	s.Request(http.MethodGet, "/api/v1/stream/df1555f5-7046-4f7a-adcc-195b73949723?lang=de", nil, http.StatusOK, &obj)
 
 	/* TODO oO - that should not happen
 	hErr := web.HTTPError{}

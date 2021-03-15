@@ -18,10 +18,10 @@ type login struct {
 }
 
 // @Summary Login
-// @Description Login by email and password, you will get a token for other API
+// @Description Login by username and password, you will get a cookie of current session
 // @Accept json
 // @Produce  json
-// @Success 200 {object} models.User "get user of login"
+// @Success 200 {object} models.User
 // @Failure 400 {object} web.HTTPError
 // @Failure 401 {object} web.HTTPError
 // @Failure 500 {object} web.HTTPError

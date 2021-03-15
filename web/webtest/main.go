@@ -45,7 +45,11 @@ func New(assert *assert.Assertions) *testServer {
 	ws := &web.Service{
 		DB: dbConfig.DB,
 	}
+	ws.Session.Name = "mysession"
+	ws.Session.Secret = "hidden"
+
 	r := gin.Default()
+	ws.LoadSession(r)
 	ws.Bind(r)
 	return &testServer{
 		gin:    r,
