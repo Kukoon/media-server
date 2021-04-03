@@ -28,9 +28,9 @@ func init() {
 			slug := c.Params.ByName("slug")
 			db := ws.DB.Joins("Event").Preload("Speakers").Joins("Channel")
 			if id, err := uuid.Parse(slug); err == nil {
-				db = db.Joins("LEFT JOIN channels ON channels.id=streams.channel_id AND channels.id=?", id)
+				db = db.Where("streams.channel_id=?", id)
 			} else {
-				db = db.Joins("LEFT JOIN channels ON channels.id=streams.channel_id AND channels.common_name=?", slug)
+				db = db.Where("\"Channel\".\"common_name\"=?", slug)
 			}
 			obj := models.Stream{}
 

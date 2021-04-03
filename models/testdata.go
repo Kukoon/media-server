@@ -14,12 +14,15 @@ var (
 	testdataUser1 = uuid.MustParse("88078ec0-2135-445f-bf05-632701c77695")
 
 	testdataChannel1 = uuid.MustParse("df1555f5-7046-4f7a-adcc-195b73949723")
+	testdataChannel2 = uuid.MustParse("c4eba06b-1ab3-4367-93e1-da584b96fcc8")
 
 	testdataStream1         = uuid.MustParse("dffe2c0e-3713-4399-8ee2-279becbbb06e")
 	testdataStream1Lang1    = uuid.MustParse("3a4f9157-65bf-4d15-a82b-1cd9295d07e0")
 	testdataStream1Speaker1 = uuid.MustParse("0d1b38cd-561c-4db4-b4b9-51f74ba3dba4")
 	testdataStream1Speaker2 = uuid.MustParse("1dbf0438-a9c1-4412-b44c-08fe7819902c")
 	testdataStream1Speaker3 = uuid.MustParse("d68e5de7-e56e-46a7-843c-4a06e540cf3a")
+
+	testdataStream2 = uuid.MustParse("0801a547-59f1-4a63-946f-2ab03f62e6ee")
 
 	testdataTagBuchvorstellung     = uuid.MustParse("0bca0cf4-a9b9-46d7-821f-18c59c08fc1d")
 	testdataTagBuchvorstellungLang = uuid.MustParse("35822fe2-1910-48e7-904f-15c9e6f7ea34")
@@ -100,11 +103,33 @@ var testdata = []*gormigrate.Migration{
 				CommonName: "kukoon",
 				Title:      "Im Kukoon",
 				Logo:       "https://media.kukoon.de/static/css/kukoon/logo.png",
+				Owners: []User{
+					{ID: testdataUser1},
+				},
 			}).Error
 		},
 		Rollback: func(tx *gorm.DB) error {
 			return tx.Delete(&Channel{
 				ID: testdataChannel1,
+			}).Error
+		},
+	},
+	{
+		ID: "10-data-0010-02-channel",
+		Migrate: func(tx *gorm.DB) error {
+			return tx.Create(&Channel{
+				ID:         testdataChannel2,
+				CommonName: "c3woc",
+				Title:      "C3 Waffel Operation Center",
+				Logo:       "https://c3woc.de/images/logo.svg",
+				Owners: []User{
+					{ID: testdataUser1},
+				},
+			}).Error
+		},
+		Rollback: func(tx *gorm.DB) error {
+			return tx.Delete(&Channel{
+				ID: testdataChannel2,
 			}).Error
 		},
 	},
@@ -899,6 +924,29 @@ Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, d
 			}
 			if err := tx.Delete(&Stream{
 				ID: testdataStream1,
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+	},
+	{
+		ID: "10-data-0030-01-stream-2",
+		Migrate: func(tx *gorm.DB) error {
+			if err := tx.Create(&Stream{
+				ID:        testdataStream2,
+				ChannelID: testdataChannel2,
+				Chat:      false,
+				Running:   true,
+				Poster:    "https://c3woc.de/images/banner.jpg",
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+		Rollback: func(tx *gorm.DB) error {
+			if err := tx.Delete(&Stream{
+				ID: testdataStream2,
 			}).Error; err != nil {
 				return err
 			}

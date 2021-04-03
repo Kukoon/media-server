@@ -11,4 +11,5 @@ type Channel struct {
 	Title      string       `json:"title" example:"Im Kukoon"`
 	Logo       string       `json:"logo" example:"https://media.kukoon.de/static/css/kukoon/logo.png"`
 	Recordings []*Recording `json:"recordings,omitempty" swaggerignore:"true"`
+	Owners     []User       `json:"-" gorm:"many2many:user_channels;"`
 }
