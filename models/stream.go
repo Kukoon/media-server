@@ -17,8 +17,8 @@ type Stream struct {
 	Running   bool      `json:"running"`
 	// attributes
 	CommonName string      `json:"common_name" gorm:"unique_index:idx_stream_channel" example:"2020-12-polizeigewalt"`
-	Poster     string      `json:"poster" example:"https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee_20201211_165251mp4"`
-	Preview    string      `json:"preview" example:"https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee_20201211_165251.gif"`
+	Poster     string      `json:"poster" example:"https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/poster.png"`
+	Preview    string      `json:"preview" example:"https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/preview.webp"`
 	Lang       *StreamLang `json:"lang"`
 	EventID    *uuid.UUID  `json:"-" gorm:"type:uuid"`
 	Event      *Event      `json:"event,omitempty"`
