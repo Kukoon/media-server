@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 type User struct {
@@ -34,4 +35,8 @@ func (this *User) SetPassword(password string) error {
 func (this *User) ValidatePassword(password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(this.Password), []byte(password))
 	return err == nil
+}
+
+type HasPermission interface {
+	HasPermission(tx *gorm.DB, userID, objID uuid.UUID) (interface{}, error)
 }

@@ -46,7 +46,7 @@ func init() {
 
 			now := time.Now()
 
-			db = db.Where("listen_at < ?", now).Order("listen_at")
+			db = db.Where("listen_at < ?", now).Order("listen_at DESC")
 
 			if err := db.First(&obj).Error; err != nil {
 				if errors.Is(err, gorm.ErrRecordNotFound) {
