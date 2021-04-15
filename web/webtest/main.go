@@ -17,10 +17,15 @@ import (
 )
 
 type testServer struct {
-	gin    *gin.Engine
-	ws     *web.Service
-	assert *assert.Assertions
-	Token  string
+	gin         *gin.Engine
+	ws          *web.Service
+	assert      *assert.Assertions
+	lastCookies []*http.Cookie
+}
+
+type Login struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 func New(assert *assert.Assertions) *testServer {
@@ -28,7 +33,7 @@ func New(assert *assert.Assertions) *testServer {
 	dbConfig := models.Database{
 		Connection: "user=root password=root dbname=media_server host=localhost port=26257 sslmode=disable",
 		Testdata:   true,
-		Debug:      true,
+		Debug:      false,
 		LogLevel:   0,
 	}
 	err := dbConfig.Run()
@@ -71,8 +76,10 @@ func (this *testServer) Request(method, url string, body interface{}, expectCode
 	}
 	req, err := http.NewRequest(method, url, jsonBody)
 	this.assert.Nil(err, "no request created")
-	if this.Token != "" {
-		req.Header.Set("Authorization", "Bearer "+this.Token)
+	if len(this.lastCookies) > 0 {
+		for _, c := range this.lastCookies {
+			req.AddCookie(c)
+		}
 	}
 	w := httptest.NewRecorder()
 	this.gin.ServeHTTP(w, req)
@@ -89,12 +96,24 @@ func (this *testServer) Request(method, url string, body interface{}, expectCode
 		err = json.NewDecoder(w.Body).Decode(jsonObj)
 		this.assert.Nil(err, "decode json")
 	}
+
+	result := w.Result()
+	if result != nil {
+		cookies := result.Cookies()
+		if len(cookies) > 0 {
+			this.lastCookies = cookies
+		}
+	}
 }
 
-/* -
-func (this *testServer) login(login login) {
+func (this *testServer) Login(login Login) {
 	// POST: correct login
-	this.Request(http.MethodPost, "/api/v1/auth/login", &login, http.StatusOK, &this.Token)
-	this.assert.NotEqual("", this.Token)
+	this.Request(http.MethodPost, "/api/v1/auth/login", &login, http.StatusOK, nil)
 }
-*/
+
+func (this *testServer) TestLogin() {
+	this.Login(Login{
+		Username: "kukoon",
+		Password: "CHANGEME",
+	})
+}

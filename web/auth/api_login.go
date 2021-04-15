@@ -71,7 +71,7 @@ func init() {
 				return
 			}
 
-			c.JSON(200, d)
+			c.JSON(http.StatusOK, d)
 		})
 	})
 }
