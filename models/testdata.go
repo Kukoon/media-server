@@ -16,11 +16,8 @@ var (
 	testdataChannel1 = uuid.MustParse("df1555f5-7046-4f7a-adcc-195b73949723")
 	testdataChannel2 = uuid.MustParse("c4eba06b-1ab3-4367-93e1-da584b96fcc8")
 
-	testdataStream1         = uuid.MustParse("dffe2c0e-3713-4399-8ee2-279becbbb06e")
-	testdataStream1Lang1    = uuid.MustParse("3a4f9157-65bf-4d15-a82b-1cd9295d07e0")
-	testdataStream1Speaker1 = uuid.MustParse("0d1b38cd-561c-4db4-b4b9-51f74ba3dba4")
-	testdataStream1Speaker2 = uuid.MustParse("1dbf0438-a9c1-4412-b44c-08fe7819902c")
-	testdataStream1Speaker3 = uuid.MustParse("d68e5de7-e56e-46a7-843c-4a06e540cf3a")
+	testdataStream1      = uuid.MustParse("dffe2c0e-3713-4399-8ee2-279becbbb06e")
+	testdataStream1Lang1 = uuid.MustParse("3a4f9157-65bf-4d15-a82b-1cd9295d07e0")
 
 	testdataStream2 = uuid.MustParse("0801a547-59f1-4a63-946f-2ab03f62e6ee")
 
@@ -28,8 +25,10 @@ var (
 	testdataStream3Lang1    = uuid.MustParse("cff00fcd-5408-4cb4-8ac7-2d42b45fbd68")
 	testdataStream3Speaker1 = uuid.MustParse("c03aa102-551e-4b3a-b670-5b6c7ac13faa")
 
-	testdataStream4      = uuid.MustParse("57de7dfd-c060-4da1-8f57-f0880c1f2e5e")
-	testdataStream4Lang1 = uuid.MustParse("d92fbc3b-a027-49f6-849b-7efb425aa5c0")
+	testdataStream4         = uuid.MustParse("57de7dfd-c060-4da1-8f57-f0880c1f2e5e")
+	testdataStream4Lang1    = uuid.MustParse("d92fbc3b-a027-49f6-849b-7efb425aa5c0")
+	testdataStream4Speaker1 = uuid.MustParse("0d1b38cd-561c-4db4-b4b9-51f74ba3dba4")
+	testdataStream4Speaker2 = uuid.MustParse("1dbf0438-a9c1-4412-b44c-08fe7819902c")
 
 	testdataTagBuchvorstellung     = uuid.MustParse("0bca0cf4-a9b9-46d7-821f-18c59c08fc1d")
 	testdataTagBuchvorstellungLang = uuid.MustParse("35822fe2-1910-48e7-904f-15c9e6f7ea34")
@@ -891,19 +890,13 @@ Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, d
 				Tags:      []*Tag{{ID: testdataTagVortrag}},
 				Speakers: []*Speaker{
 					{
-						OwnerID: testdataChannel1,
-						ID:      testdataStream1Speaker1,
-						Name:    "Andreas Ehresmann",
+						ID: testdataRecording7Speaker1,
 					},
 					{
-						OwnerID: testdataChannel1,
-						ID:      testdataStream1Speaker2,
-						Name:    "Ronald Sperling",
+						ID: testdataRecording7Speaker2,
 					},
 					{
-						OwnerID: testdataChannel1,
-						ID:      testdataStream1Speaker3,
-						Name:    "Ines Dirolf",
+						ID: testdataRecording7Speaker3,
 					},
 				},
 			}).Error; err != nil {
@@ -1030,10 +1023,24 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				Running:   true,
 				StartAt:   time.Date(2021, 4, 22, 0, 0, 0, 0, loc),
 				ListenAt:  time.Date(2021, 4, 22, 0, 0, 0, 0, loc),
-				Poster:    "https://media.kukoon.de/images/41185fa4-3e22-44bb-9020-1d824e12ede3.jpg",
+				Poster:    "https://media.kukoon.de/images/f61fa2de-72d3-4a1e-98b2-65b13d8ecb01.jpg",
 				Tags: []*Tag{
 					{ID: testdataTagBuchvorstellung},
 					{ID: testdataTagDiskussion},
+				},
+				Speakers: []*Speaker{
+					{
+						OwnerID:      testdataChannel1,
+						ID:           testdataStream4Speaker1,
+						Name:         "Caro Keller",
+						Organisation: "NSU-Watch",
+					},
+					{
+						OwnerID:      testdataChannel1,
+						ID:           testdataStream4Speaker2,
+						Name:         "Lee Hielscher",
+						Organisation: "Initiative in Gedenken an Nguyễn Ngọc Châu und Đỗ Anh Lân",
+					},
 				},
 			}).Error; err != nil {
 				return err
