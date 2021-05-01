@@ -40,3 +40,15 @@ func (config *Database) Run() error {
 	config.DB = db
 	return nil
 }
+
+func (config *Database) Status() error {
+	sqlDB, err := config.DB.DB()
+	if err != nil {
+		return err
+
+	}
+	if err = sqlDB.Ping(); err != nil {
+		return err
+	}
+	return nil
+}

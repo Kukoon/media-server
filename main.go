@@ -21,6 +21,7 @@ type configData struct {
 
 func main() {
 	webM.VERSION = VERSION
+	webM.NAMESPACE = "media_server"
 
 	configPath := "config.toml"
 	showVersion := false
@@ -45,6 +46,10 @@ func main() {
 	}
 
 	config.Webserver.DB = config.Database.DB
+
+	webM.UP = func() bool {
+		return config.Database.Status() == nil
+	}
 
 	if err := config.Webserver.Run(); err != nil {
 		log.Fatal(err)
