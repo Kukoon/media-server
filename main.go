@@ -12,9 +12,7 @@ import (
 	webM "github.com/Kukoon/media-server/web/metrics"
 )
 
-const undefinedVersion = "developing"
-
-var VERSION = undefinedVersion
+var VERSION = "development"
 
 type configData struct {
 	Database  models.Database `toml:"database"`
