@@ -9,7 +9,12 @@ import (
 	"github.com/Kukoon/media-server/runtime"
 	"github.com/Kukoon/media-server/web"
 	_ "github.com/Kukoon/media-server/web/all"
+	webM "github.com/Kukoon/media-server/web/metrics"
 )
+
+const undefinedVersion = "developing"
+
+var VERSION = undefinedVersion
 
 type configData struct {
 	Database  models.Database `toml:"database"`
@@ -17,9 +22,21 @@ type configData struct {
 }
 
 func main() {
+	webM.VERSION = VERSION
+
 	configPath := "config.toml"
+	showVersion := false
+
 	flag.StringVar(&configPath, "c", configPath, "path to configuration file")
+	flag.BoolVar(&showVersion, "version", showVersion, "show current version")
+
 	flag.Parse()
+
+	if showVersion {
+		log.WithField("version", VERSION).Info("Version")
+		return
+	}
+
 	config := &configData{}
 	if err := runtime.ReadTOML(configPath, config); err != nil {
 		log.Panicf("open config file: %s", err)
