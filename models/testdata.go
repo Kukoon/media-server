@@ -16,6 +16,8 @@ var (
 	testdataChannel1 = uuid.MustParse("df1555f5-7046-4f7a-adcc-195b73949723")
 	testdataChannel2 = uuid.MustParse("c4eba06b-1ab3-4367-93e1-da584b96fcc8")
 
+	testdataEvent1 = uuid.MustParse("bff61adc-76d5-4beb-aab0-3ef11b337204")
+
 	testdataStream1      = uuid.MustParse("dffe2c0e-3713-4399-8ee2-279becbbb06e")
 	testdataStream1Lang1 = uuid.MustParse("3a4f9157-65bf-4d15-a82b-1cd9295d07e0")
 
@@ -29,6 +31,9 @@ var (
 	testdataStream4Lang1    = uuid.MustParse("d92fbc3b-a027-49f6-849b-7efb425aa5c0")
 	testdataStream4Speaker1 = uuid.MustParse("0d1b38cd-561c-4db4-b4b9-51f74ba3dba4")
 	testdataStream4Speaker2 = uuid.MustParse("1dbf0438-a9c1-4412-b44c-08fe7819902c")
+
+	testdataStream5      = uuid.MustParse("4fb029d6-063a-4302-9ae8-4c1c6a1542a5")
+	testdataStream5Lang1 = uuid.MustParse("d5262bb7-378b-456f-9e91-34f63b174c48")
 
 	testdataTagBuchvorstellung     = uuid.MustParse("0bca0cf4-a9b9-46d7-821f-18c59c08fc1d")
 	testdataTagBuchvorstellungLang = uuid.MustParse("35822fe2-1910-48e7-904f-15c9e6f7ea34")
@@ -209,6 +214,21 @@ var testdata = []*gormigrate.Migration{
 				return err
 			}
 			return nil
+		},
+	},
+	{
+		ID: "10-data-0010-01-event-01",
+		Migrate: func(tx *gorm.DB) error {
+			return tx.Create(&Event{
+				ID:          testdataEvent1,
+				Name:        "OUT LOUD",
+				Description: `OUT LOUD ist eine Veranstaltungsreihe des Bremer Literaturkontors und wird gefördert durch den Senator für Kultur der Freien Hansestadt Bremen, die VGH-Stiftung, die Waldemar-Koch-Stiftung, die Karin und Uwe Hollweg Stiftung, unterstützt vom Literaturhaus Bremen und präsentiert von Bremen Zwei.`,
+			}).Error
+		},
+		Rollback: func(tx *gorm.DB) error {
+			return tx.Delete(&Event{
+				ID: testdataEvent1,
+			}).Error
 		},
 	},
 	{
@@ -1072,6 +1092,52 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 			}
 			if err := tx.Delete(&Stream{
 				ID: testdataStream4,
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+	},
+	{
+		ID: "10-data-0030-01-stream-5",
+		Migrate: func(tx *gorm.DB) error {
+			if err := tx.Create(&Stream{
+				ID:        testdataStream5,
+				ChannelID: testdataChannel1,
+				EventID:   &testdataEvent1,
+				Chat:      true,
+				Running:   true,
+				StartAt:   time.Date(2021, 5, 5, 0, 0, 0, 0, loc),
+				ListenAt:  time.Date(2021, 5, 5, 0, 0, 0, 0, loc),
+				Poster:    "https://media.kukoon.de/images/67bd5c4c-81d6-47c8-adb9-458a9da58dbd.jpg",
+				Tags: []*Tag{
+					{ID: testdataTagBuchvorstellung},
+					{ID: testdataTagDiskussion},
+				},
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&StreamLang{
+				ID:       testdataStream5Lang1,
+				StreamID: testdataStream5,
+				Lang:     "de",
+				Title:    "Mareice Kaiser",
+				Subtitle: "Das Unwohlsein der modernen Mutter",
+				Short:    `Mütter sollen heute alles sein: Versorgerin, Businesswoman, Mom I'd like to fuck. Dass darunter ihr Wohlbefinden leidet, ist kein Wunder. Mareice Kaiser, Journalistin und selbst Mutter, stellt dabei immer wieder fest: ...`,
+				Long:     `Mütter sollen heute alles sein: Versorgerin, Businesswoman, Mom I'd like to fuck. Dass darunter ihr Wohlbefinden leidet, ist kein Wunder. Mareice Kaiser, Journalistin und selbst Mutter, stellt dabei immer wieder fest: Das Mutterideal ist unerreichbar und voller Widersprüche. Nichts kann man richtig machen und niemandem etwas recht. Mutterschaft berührt dabei, natürlich, jeden Lebensbereich: Denn egal, ob es um Arbeit, Geld, Sex, Körper, Psyche oder Liebe geht – Stereotype, Klischees und gesellschaftlichen Druck gibt es überall, auf Instagram, im Bett und im Büro. In ihrem Buch "Das Unwohlsein der modernen Mutter" (Rowohlt, 2021) zeigt die Autorin, wo Mütter heute stehen: noch immer öfter am Herd als in den Chefetagen. Und, wo sie stehen sollten: Dort, wo sie selbst sich sehen – frei und selbstbestimmt. Bei OUT LOUD liest Mareice Kaiser aus ihrem Buch und spricht mit uns über Frausein, Mutterschaft und Selbstbestimmung.`,
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+		Rollback: func(tx *gorm.DB) error {
+			if err := tx.Delete(&StreamLang{
+				ID: testdataStream5Lang1,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Delete(&Stream{
+				ID: testdataStream5,
 			}).Error; err != nil {
 				return err
 			}
