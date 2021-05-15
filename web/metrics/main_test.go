@@ -1,4 +1,4 @@
-package docs
+package metrics
 
 import (
 	"net/http"
