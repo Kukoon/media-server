@@ -5,6 +5,7 @@ import (
 
 	"github.com/bdlm/log"
 
+	"github.com/Kukoon/media-server/database"
 	"github.com/Kukoon/media-server/models"
 	"github.com/Kukoon/media-server/runtime"
 	"github.com/Kukoon/media-server/web"
@@ -15,8 +16,8 @@ import (
 var VERSION = "development"
 
 type configData struct {
-	Database  models.Database `toml:"database"`
-	Webserver web.Service     `toml:"webserver"`
+	Database  database.Database `toml:"database"`
+	Webserver web.Service       `toml:"webserver"`
 }
 
 func main() {
@@ -40,6 +41,8 @@ func main() {
 	if err := runtime.ReadTOML(configPath, config); err != nil {
 		log.Panicf("open config file: %s", err)
 	}
+
+	models.SetupMigration(&config.Database)
 
 	if err := config.Database.Run(); err != nil {
 		log.Fatal(err)
