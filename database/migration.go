@@ -4,6 +4,7 @@ import (
 	"errors"
 	"sort"
 
+	"github.com/bdlm/log"
 	gormigrate "github.com/go-gormigrate/gormigrate/v2"
 )
 
@@ -67,19 +68,29 @@ func (config *Database) addMigrate(testdata bool, m ...*gormigrate.Migration) {
 	}
 }
 
-/*
 func (config *Database) ReRun(id string) {
+	migrations := config.sortedMigration(true)
+	x := 0
+	for _, m := range migrations {
+		if m.ID == id {
+			break
+		}
+		x = x + 1
+	}
 
-	for i := len(migrations) - 1; i >= 0; i = i - 1 {
+	for i := len(migrations) - 1; i >= x; i = i - 1 {
 		m := migrations[i]
 		log.Warnf("rollback %s", m.ID)
-		err := m.Rollback(runtime.DB())
-		assert.Nil(err)
+		err := m.Rollback(config.DB)
+		if err != nil {
+			log.Errorf("rollback %s", err)
+		}
 	}
 	for _, m := range migrations {
 		log.Warnf("run %s", m.ID)
-		err := m.Migrate(runtime.DB())
-		assert.Nil(err)
+		err := m.Migrate(config.DB)
+		if err != nil {
+			log.Errorf("run %s", err)
+		}
 	}
 }
-*/

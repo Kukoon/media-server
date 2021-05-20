@@ -12,7 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/Kukoon/media-server/models"
+	"github.com/Kukoon/media-server/database"
 	"github.com/Kukoon/media-server/web"
 )
 
@@ -30,16 +30,16 @@ type Login struct {
 
 func New(assert *assert.Assertions) *testServer {
 	// db setup
-	dbConfig := models.Database{
+	dbConfig := database.Database{
 		Connection: "user=root password=root dbname=media_server host=localhost port=26257 sslmode=disable",
 		Testdata:   true,
 		Debug:      false,
 		LogLevel:   0,
 	}
 	err := dbConfig.Run()
-	assert.Nil(err)
-	if err != nil {
+	if err != nil && err != database.ErrNothingToMigrate {
 		fmt.Println(err.Error())
+		assert.Nil(err)
 	}
 	assert.NotNil(dbConfig.DB)
 
