@@ -37,10 +37,11 @@ func init() {
 				Up:      UP(),
 				Extras:  EXTRAS,
 			}
-			if status.Up {
-				c.JSON(http.StatusOK, status)
+			if !status.Up {
+				c.JSON(http.StatusInternalServerError, status)
+				return
 			}
-			c.JSON(http.StatusInternalServerError, status)
+			c.JSON(http.StatusOK, status)
 		})
 	})
 }
