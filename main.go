@@ -10,6 +10,7 @@ import (
 	"github.com/Kukoon/media-server/runtime"
 	"github.com/Kukoon/media-server/web"
 	_ "github.com/Kukoon/media-server/web/all"
+	apiStatus "github.com/Kukoon/media-server/web/api/status"
 	webM "github.com/Kukoon/media-server/web/metrics"
 )
 
@@ -53,6 +54,8 @@ func main() {
 	webM.UP = func() bool {
 		return config.Database.Status() == nil
 	}
+	apiStatus.VERSION = webM.VERSION
+	apiStatus.UP = webM.UP
 
 	if err := config.Webserver.Run(); err != nil {
 		log.Fatal(err)
