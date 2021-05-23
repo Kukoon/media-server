@@ -9,4 +9,5 @@ import (
 	_ "github.com/Kukoon/media-server/web/docs"
 	_ "github.com/Kukoon/media-server/web/metrics"
 	_ "github.com/Kukoon/media-server/web/podcast"
+	_ "github.com/Kukoon/media-server/web/ws/stream"
 )

@@ -3,7 +3,6 @@ module github.com/Kukoon/media-server
 go 1.15
 
 require (
-	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/bdlm/log v0.1.20
 	github.com/bdlm/std v1.0.1 // indirect
 	github.com/chenjiandongx/ginprom v0.0.0-20201217063207-fe11b7f55a35
@@ -27,8 +26,10 @@ require (
 	github.com/swaggo/swag v1.7.0
 	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a
 	golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c // indirect
+	golang.org/x/time v0.0.0-20191024005414-555d28b269f0
 	golang.org/x/tools v0.1.0 // indirect
 	gorm.io/driver/postgres v1.0.8
 	gorm.io/gorm v1.20.12
 	gorm.io/plugin/prometheus v0.0.0-20210201030325-2d0d2f250610
+	nhooyr.io/websocket v1.8.7
 )
