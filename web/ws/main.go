@@ -83,7 +83,7 @@ func (this *WebsocketEndpoint) readWorker(ctx context.Context, c *websocket.Conn
 		if err != nil {
 			return err
 		}
-		log.WithField("type", msg.Type).Debug("recieve")
+		log.WithField("type", msg.Type).Debug("receive")
 		msg.Subscriber = s
 		if handler, ok := this.handlers[msg.Type]; ok {
 			handler(ctx, &msg)
