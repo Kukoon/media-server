@@ -91,7 +91,7 @@ var (
 
 var testdata = []*gormigrate.Migration{
 	{
-		ID: "10-data-008-01-user",
+		ID: "10-data-0008-01-user",
 		Migrate: func(tx *gorm.DB) error {
 			user, err := NewUser("kukoon", "CHANGEME")
 			if err != nil {

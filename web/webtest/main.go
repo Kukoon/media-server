@@ -17,6 +17,7 @@ import (
 )
 
 type testServer struct {
+	db          *database.Database
 	gin         *gin.Engine
 	ws          *web.Service
 	assert      *assert.Assertions
@@ -57,12 +58,16 @@ func New(assert *assert.Assertions) *testServer {
 	ws.LoadSession(r)
 	ws.Bind(r)
 	return &testServer{
+		db:     &dbConfig,
 		gin:    r,
 		ws:     ws,
 		assert: assert,
 	}
 }
-
+func (this *testServer) DatabaseMigration(f func(db *database.Database)) {
+	f(this.db)
+	this.db.MigrateTestdata()
+}
 func (this *testServer) Request(method, url string, body interface{}, expectCode int, jsonObj interface{}) {
 	var jsonBody io.Reader
 	if body != nil {
