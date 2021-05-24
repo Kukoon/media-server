@@ -24,19 +24,30 @@ func init() {
 			s, ok := endpoints[id]
 			if !ok {
 				s = NewEndpoint()
+				prometheus.MustRegister(prometheus.NewGaugeFunc(
+					prometheus.GaugeOpts{
+						Namespace:   metrics.NAMESPACE,
+						Name:        "stream_viewers",
+						Help:        "count of current viewers (count by websocket)",
+						ConstLabels: prometheus.Labels{"stream": idString},
+					},
+					func() float64 {
+						return float64(len(s.Subscribers))
+					},
+				))
+				prometheus.MustRegister(prometheus.NewGaugeFunc(
+					prometheus.GaugeOpts{
+						Namespace:   metrics.NAMESPACE,
+						Name:        "stream_chatusers",
+						Help:        "count of current chat users (count by websocket)",
+						ConstLabels: prometheus.Labels{"stream": idString},
+					},
+					func() float64 {
+						return float64(len(s.usernames))
+					},
+				))
 				endpoints[id] = s
 			}
-			prometheus.MustRegister(prometheus.NewGaugeFunc(
-				prometheus.GaugeOpts{
-					Namespace:   metrics.NAMESPACE,
-					Name:        "stream_clients",
-					Help:        "count of current clients (count by websocket)",
-					ConstLabels: prometheus.Labels{"stream": idString},
-				},
-				func() float64 {
-					return float64(len(s.Subscribers))
-				},
-			))
 			s.Handler(c)
 		})
 	})

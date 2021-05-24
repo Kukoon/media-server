@@ -33,7 +33,7 @@ type WebsocketEndpoint struct {
 // MessageHandleFunc for handling messages
 type MessageHandleFunc func(ctx context.Context, msg *Message)
 
-type SubscriberEventFunc func(s *Subscriber)
+type SubscriberEventFunc func(s *Subscriber, msg chan<- *Message)
 
 // Message on websocket
 type Message struct {
@@ -85,6 +85,7 @@ func (this *WebsocketEndpoint) readWorker(ctx context.Context, c *websocket.Conn
 		}
 		log.WithField("type", msg.Type).Debug("receive")
 		msg.Subscriber = s
+		msg.Reply = s.out
 		if handler, ok := this.handlers[msg.Type]; ok {
 			handler(ctx, &msg)
 		} else if this.DefaultMessageHandler != nil {
@@ -109,13 +110,13 @@ func (this *WebsocketEndpoint) addSubscriber(ctxGin *gin.Context, c *websocket.C
 		delete(this.Subscribers, s)
 		this.subscribersMu.Unlock()
 		if this.OnClose != nil {
-			this.OnClose(s)
+			this.OnClose(s, s.out)
 		}
 		log.Debug("websocket closed")
 	}()
 
 	if this.OnOpen != nil {
-		this.OnOpen(s)
+		this.OnOpen(s, s.out)
 	}
 
 	ctx := ctxGin.Request.Context()
