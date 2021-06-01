@@ -46,7 +46,7 @@ jobs:
     - name: Generate Docs
       run: /home/runner/go/bin/swag init --parseDependency --parseDepth 2 --parseInternal -g web/docs.go -o web/docs
     - name: Test
-      run: go test -ldflags "-X dev.sum7.eu/genofire/golang-lib/web/webtest.DBConnection=postgres://root:root@postgres:26257/defaultdb?sslmode=disable" $(go list ./... | grep -v /vendor/) -v -failfast -p 1 -coverprofile .testCoverage.txt
+      run: go test -ldflags "-X dev.sum7.eu/genofire/golang-lib/web/webtest.DBConnection=postgres://root:root@localhost:26257/defaultdb?sslmode=disable" $(go list ./... | grep -v /vendor/) -v -failfast -p 1 -coverprofile .testCoverage.txt
     - name: Show Coverage
       run: go tool cover -func=".testCoverage.txt"
   build:
