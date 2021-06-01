@@ -1,4 +1,4 @@
-package api
+package web
 
 // Bind all routing
 // @title Mediathek API

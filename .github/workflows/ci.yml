@@ -44,7 +44,7 @@ jobs:
       env:
         GOPATH: /home/runner/go
     - name: Generate Docs
-      run: /home/runner/go/bin/swag init --parseDependency --parseDepth 2 --parseInternal -g web/api/docs.go -o web/docs
+      run: /home/runner/go/bin/swag init --parseDependency --parseDepth 2 --parseInternal -g web/docs.go -o web/docs
     - name: Test
       run: go test $(go list ./... | grep -v /vendor/) -v -failfast -p 1 -coverprofile .testCoverage.txt
     - name: Show Coverage
@@ -61,7 +61,7 @@ jobs:
       env:
         GOPATH: /home/runner/go
     - name: Generate Docs
-      run: /home/runner/go/bin/swag init --parseDependency --parseDepth 2 --parseInternal -g web/api/docs.go -o web/docs
+      run: /home/runner/go/bin/swag init --parseDependency --parseDepth 2 --parseInternal -g web/docs.go -o web/docs
     - name: Build
       run: go build -ldflags "-X main.VERSION=$(git describe --tags)" -v
     - name: Archive build artifacts
