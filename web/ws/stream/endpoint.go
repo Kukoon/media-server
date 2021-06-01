@@ -5,9 +5,8 @@ import (
 	"sync"
 	"time"
 
+	"dev.sum7.eu/genofire/golang-lib/web/ws"
 	"github.com/bdlm/log"
-
-	"github.com/Kukoon/media-server/web/ws"
 )
 
 const (

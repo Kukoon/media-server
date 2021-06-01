@@ -5,13 +5,13 @@ import (
 
 	"github.com/bdlm/log"
 
-	"github.com/Kukoon/media-server/database"
+	"dev.sum7.eu/genofire/golang-lib/database"
+	"dev.sum7.eu/genofire/golang-lib/web"
+	apiStatus "dev.sum7.eu/genofire/golang-lib/web/api/status"
+	webM "dev.sum7.eu/genofire/golang-lib/web/metrics"
 	"github.com/Kukoon/media-server/models"
 	"github.com/Kukoon/media-server/runtime"
-	"github.com/Kukoon/media-server/web"
-	_ "github.com/Kukoon/media-server/web/all"
-	apiStatus "github.com/Kukoon/media-server/web/api/status"
-	webM "github.com/Kukoon/media-server/web/metrics"
+	_ "github.com/Kukoon/media-server/web"
 )
 
 var VERSION = "development"

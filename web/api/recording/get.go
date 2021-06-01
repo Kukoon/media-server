@@ -5,12 +5,12 @@ import (
 	"net/http"
 	"strconv"
 
+	"dev.sum7.eu/genofire/golang-lib/web"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 
 	"github.com/Kukoon/media-server/models"
-	"github.com/Kukoon/media-server/web"
 )
 
 // @Summary Show Recording

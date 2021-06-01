@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/Kukoon/media-server/database"
+	"dev.sum7.eu/genofire/golang-lib/database"
 )
 
 func SetupMigration(db *database.Database) {

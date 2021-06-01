@@ -1,12 +1,11 @@
 package stream
 
 import (
+	"dev.sum7.eu/genofire/golang-lib/web"
+	"dev.sum7.eu/genofire/golang-lib/web/metrics"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/prometheus/client_golang/prometheus"
-
-	"github.com/Kukoon/media-server/web"
-	"github.com/Kukoon/media-server/web/metrics"
 )
 
 func init() {

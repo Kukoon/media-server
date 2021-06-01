@@ -3,10 +3,10 @@ package channel
 import (
 	"net/http"
 
+	"dev.sum7.eu/genofire/golang-lib/web"
 	"github.com/gin-gonic/gin"
 
 	"github.com/Kukoon/media-server/models"
-	"github.com/Kukoon/media-server/web"
 )
 
 // @Summary List all Channels

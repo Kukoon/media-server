@@ -3,7 +3,7 @@ package models
 import (
 	"fmt"
 
-	"github.com/Kukoon/media-server/database"
+	"dev.sum7.eu/genofire/golang-lib/database"
 )
 
 func DatabaseForTesting() *database.Database {

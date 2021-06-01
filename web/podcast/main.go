@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"dev.sum7.eu/genofire/golang-lib/web"
 	"github.com/eduncan911/podcast"
 	"github.com/gin-gonic/gin"
 	"github.com/gomarkdown/markdown"
@@ -11,7 +12,6 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/Kukoon/media-server/models"
-	"github.com/Kukoon/media-server/web"
 )
 
 /**

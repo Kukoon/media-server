@@ -6,6 +6,8 @@ import (
 	gormigrate "github.com/go-gormigrate/gormigrate/v2"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
+
+	"dev.sum7.eu/genofire/golang-lib/web/auth"
 )
 
 var (
@@ -93,7 +95,7 @@ var testdata = []*gormigrate.Migration{
 	{
 		ID: "10-data-0008-01-user",
 		Migrate: func(tx *gorm.DB) error {
-			user, err := NewUser("kukoon", "CHANGEME")
+			user, err := auth.NewUser("kukoon", "CHANGEME")
 			if err != nil {
 				return err
 			}
