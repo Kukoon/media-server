@@ -6,11 +6,11 @@ import (
 	"github.com/bdlm/log"
 
 	"dev.sum7.eu/genofire/golang-lib/database"
+	"dev.sum7.eu/genofire/golang-lib/file"
 	"dev.sum7.eu/genofire/golang-lib/web"
 	apiStatus "dev.sum7.eu/genofire/golang-lib/web/api/status"
 	webM "dev.sum7.eu/genofire/golang-lib/web/metrics"
 	"github.com/Kukoon/media-server/models"
-	"github.com/Kukoon/media-server/runtime"
 	_ "github.com/Kukoon/media-server/web"
 )
 
@@ -39,7 +39,7 @@ func main() {
 	}
 
 	config := &configData{}
-	if err := runtime.ReadTOML(configPath, config); err != nil {
+	if err := file.ReadTOML(configPath, config); err != nil {
 		log.Panicf("open config file: %s", err)
 	}
 
