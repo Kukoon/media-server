@@ -10,9 +10,13 @@ import (
 )
 
 const (
-	MessageTypeChat     = "chat"
-	MessageTypePing     = "ping"
-	MessageTypeStatus   = "status"
+	// MessageTypeChat of chat messages
+	MessageTypeChat = "chat"
+	// MessageTypePing of ping messages
+	MessageTypePing = "ping"
+	// MessageTypeStatus of status messages
+	MessageTypeStatus = "status"
+	// MessageTypeUsername of username messages
 	MessageTypeUsername = "username"
 )
 
@@ -24,83 +28,19 @@ type endpoint struct {
 	chatMessages       []*ws.Message
 }
 
-func (this *endpoint) onOpen(s *ws.Subscriber, out chan<- *ws.Message) {
-	for _, msg := range this.chatMessages {
+// onOpen of subscriber connections - send preaves messages
+func (we *endpoint) onOpen(s *ws.Subscriber, out chan<- *ws.Message) {
+	for _, msg := range we.chatMessages {
 		out <- msg
 	}
 }
-func (this *endpoint) onClose(s *ws.Subscriber, out chan<- *ws.Message) {
-	this.deleteUsername(s)
+
+// onClose of subscriber connections - delete username
+func (we *endpoint) onClose(s *ws.Subscriber, out chan<- *ws.Message) {
+	we.deleteUsername(s)
 }
 
-func (this *endpoint) SendStatus(origin *ws.Message) {
-	this.usernameMU.RLock()
-	msg := ws.Message{
-		Type: MessageTypeStatus,
-		Body: map[string]interface{}{
-			"viewers":   len(this.Subscribers),
-			"chatusers": len(this.usernames),
-		},
-	}
-	this.usernameMU.RUnlock()
-	if origin != nil {
-		origin.Reply <- &msg
-	} else {
-		this.Broadcast(&msg)
-	}
-}
-func (this *endpoint) chatHandler(_ context.Context, msg *ws.Message) {
-	msg.Body["username"] = this.getUsername(msg.Subscriber)
-	this.chatMessages = append(this.chatMessages, msg)
-	log.Warnf("chatHandler: %v", msg.Body)
-	this.Broadcast(msg)
-}
-
-func (this *endpoint) getUsername(s *ws.Subscriber) string {
-	this.usernameMU.RLock()
-	defer this.usernameMU.RUnlock()
-
-	username, ok := this.subscriberUsername[s]
-	if !ok {
-		return "unknown"
-	}
-	return username
-}
-func (this *endpoint) setUsername(s *ws.Subscriber, username string) bool {
-	this.usernameMU.Lock()
-	defer this.usernameMU.Unlock()
-
-	if _, ok := this.usernames[username]; ok {
-		return false
-	}
-	this.usernames[username] = s
-	this.subscriberUsername[s] = username
-	return true
-}
-func (this *endpoint) deleteUsername(s *ws.Subscriber) {
-	this.usernameMU.Lock()
-	defer this.usernameMU.Unlock()
-
-	username := this.subscriberUsername[s]
-	delete(this.usernames, username)
-	delete(this.subscriberUsername, s)
-}
-func (this *endpoint) usernameHandler(_ context.Context, msg *ws.Message) {
-	if u, ok := msg.Body[ws.BodySet]; ok {
-		username := u.(string)
-		if this.setUsername(msg.Subscriber, username) {
-			msg.Body[ws.BodySet] = username
-		} else {
-			msg.Body[ws.BodyError] = "already in use"
-		}
-	}
-	if _, ok := msg.Body[ws.BodyGet]; ok {
-		msg.Body[ws.BodyGet] = this.getUsername(msg.Subscriber)
-	}
-	log.Warnf("usernameHandler: %v", msg.Body)
-	msg.Reply <- msg
-}
-
+// NewEndpoint of Websocket for stream
 func NewEndpoint() *endpoint {
 	we := endpoint{
 		WebsocketEndpoint:  ws.NewEndpoint(),
@@ -115,7 +55,7 @@ func NewEndpoint() *endpoint {
 	}
 
 	we.AddMessageHandler(MessageTypePing, func(ctx context.Context, msg *ws.Message) {
-		msg.Reply <- msg
+		msg.Reply(msg)
 	})
 	we.AddMessageHandler(MessageTypeStatus, func(ctx context.Context, msg *ws.Message) {
 		we.SendStatus(msg)
