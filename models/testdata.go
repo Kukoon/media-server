@@ -37,6 +37,9 @@ var (
 	testdataStream5      = uuid.MustParse("4fb029d6-063a-4302-9ae8-4c1c6a1542a5")
 	testdataStream5Lang1 = uuid.MustParse("d5262bb7-378b-456f-9e91-34f63b174c48")
 
+	testdataStream6      = uuid.MustParse("1742d9b6-c9c6-45fb-a3a3-4a3e7fac2987")
+	testdataStream6Lang1 = uuid.MustParse("0b7136a6-4c51-49ac-99e9-27ef833169f6")
+
 	testdataTagBuchvorstellung     = uuid.MustParse("0bca0cf4-a9b9-46d7-821f-18c59c08fc1d")
 	testdataTagBuchvorstellungLang = uuid.MustParse("35822fe2-1910-48e7-904f-15c9e6f7ea34")
 	testdataTagDiskussion          = uuid.MustParse("277026b0-b9d6-48d6-bfa1-96dcc7eb3451")
@@ -1140,6 +1143,58 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 			}
 			if err := tx.Delete(&Stream{
 				ID: testdataStream5,
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+	},
+	{
+		ID: "10-data-0030-01-stream-6",
+		Migrate: func(tx *gorm.DB) error {
+			if err := tx.Create(&Stream{
+				ID:        testdataStream6,
+				ChannelID: testdataChannel1,
+				Chat:      true,
+				Running:   true,
+				StartAt:   time.Date(2021, 6, 24, 0, 0, 0, 0, loc),
+				ListenAt:  time.Date(2021, 6, 24, 0, 0, 0, 0, loc),
+				Poster:    "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/1742d9b6-c9c6-45fb-a3a3-4a3e7fac2987/poster.png",
+				Tags: []*Tag{
+					{ID: testdataTagDiskussion},
+				},
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&StreamLang{
+				ID:       testdataStream6Lang1,
+				StreamID: testdataStream6,
+				Lang:     "de",
+				Title:    "System Change not Climate Change!",
+				Subtitle: "Einführung zu Klimakrise und Kapitalismuskritik",
+				Short: `Diskussionsveranstaltung mit der Gruppe **direction f** (Hannover)
+
+**Kukoon im Park** oder hier`,
+				Long: `Diskussionsveranstaltung mit der Gruppe **direction f** (Hannover)
+
+**Kukoon im Park** oder hier
+
+Zwar verblasst die Klimakrise seit einem Jahr im medialen Schatten der Corona-Pandemie, die Dringlichkeit zum Handeln bleibt jedoch unverändert. Klar ist, dass die Klimakrise kein rein ökologisches Phänomen sondern ebenso sehr eine soziale Krise ist. Als »direction f« haben wir uns bisher vorrangig mit den Zusammenhängen von Klimakrise und Kapitalismus befasst. Im Rahmen der Veranstaltung wollen wir kurz auf den Ist-Zustand und bestehende Zusammenhänge eingehen. Davon ausgehend würden wir gerne darüber diskutieren, was (un)taugliche Strategien gegen die drohende Klimakatstrophe sein können und welche Rolle und Aufgaben dabei einer (radikalen) Linken zukämen. direction f ist ein Zusammenschluss von Menschen in Hannover, der sich bisher schwerpunktmäßig mit dem Zusammenhang von Klimakrise und Kapitalismus befasst hat.
+
+Mehr Infos unter [direction-f.org](https://direction-f.org/)`,
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+		Rollback: func(tx *gorm.DB) error {
+			if err := tx.Delete(&StreamLang{
+				ID: testdataStream6Lang1,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Delete(&Stream{
+				ID: testdataStream6,
 			}).Error; err != nil {
 				return err
 			}
