@@ -92,6 +92,16 @@ var (
 	testdataRecording7Speaker1 = uuid.MustParse("0030a199-c771-489a-88a7-258f80db2bce")
 	testdataRecording7Speaker2 = uuid.MustParse("8bb5af2a-6e66-488b-9eac-6714ce005899")
 	testdataRecording7Speaker3 = uuid.MustParse("fa5323fc-5f54-487c-b5cc-173faa4e64f2")
+
+	testdataRecording9         = testdataStream4
+	testdataRecording9Lang1    = testdataStream4Lang1
+	testdataRecording9Speaker1 = testdataStream4Speaker1
+	testdataRecording9Speaker2 = testdataStream4Speaker2
+	testdataRecording9Format1  = uuid.MustParse("e0250ff4-ad36-47d2-a58a-5ba857f50ab4")
+
+	testdataRecording10        = testdataStream5
+	testdataRecording10Lang1   = testdataStream5Lang1
+	testdataRecording10Format1 = uuid.MustParse("5473a466-3a71-4be3-8436-a34f92c5ecc6")
 )
 
 var testdata = []*gormigrate.Migration{
@@ -901,6 +911,155 @@ Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, d
 		},
 	},
 	{
+		ID: "10-data-0020-01-recording-9",
+		Migrate: func(tx *gorm.DB) error {
+			if err := tx.Create(&Recording{
+				ID:         testdataRecording9,
+				ChannelID:  testdataChannel1,
+				CommonName: "2021-04_nsu-watch",
+				CreatedAt:  time.Date(2021, 4, 22, 19, 0, 0, 0, loc),
+				Poster:     "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/57de7dfd-c060-4da1-8f57-f0880c1f2e5e/poster.png",
+				Preview:    "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/57de7dfd-c060-4da1-8f57-f0880c1f2e5e/preview.webp",
+				Duration:   2*time.Hour + 18*time.Minute + 41*time.Second,
+				Public:     true,
+				Listed:     false,
+				Tags: []*Tag{
+					{ID: testdataTagBuchvorstellung},
+					{ID: testdataTagDiskussion},
+				},
+				Speakers: []*Speaker{
+					{
+						OwnerID:      testdataChannel1,
+						ID:           testdataRecording9Speaker1,
+						Name:         "Caro Keller",
+						Organisation: "NSU-Watch",
+					},
+					{
+						OwnerID:      testdataChannel1,
+						ID:           testdataRecording9Speaker2,
+						Name:         "Lee Hielscher",
+						Organisation: "Initiative in Gedenken an Nguyễn Ngọc Châu und Đỗ Anh Lân",
+					},
+				},
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&RecordingLang{
+				ID:          testdataRecording9Lang1,
+				RecordingID: testdataRecording9,
+				Lang:        "de",
+				Title:       "Aufklären und Einmischen",
+				Subtitle:    "Der NSU-Komplex und der Münchner Prozess - Buchvorstellung mit NSU-Watch",
+				Short:       `Im November 2011 kam eine rechtsterroristische Mord- und Anschlagsserie des sogenannten Nationalsozialistischen Untergrunds (NSU) ans Licht, die in ihrer Dimension neu war. In den folgenden Untersuchungen formte sich ein erstes Bild des NSU-Komplexes. ...`,
+				Long: `Im November 2011 kam eine rechtsterroristische Mord- und Anschlagsserie des sogenannten Nationalsozialistischen Untergrunds (NSU) ans Licht, die in ihrer Dimension neu war. In den folgenden Untersuchungen formte sich ein erstes Bild des NSU-Komplexes. Dabei wurde deutlich, dass eine noch umfassendere juristische und gesellschaftliche Aufarbeitung anstand. So beschlossen antifaschistische Initiativen und Einzelpersonen, die Arbeit am NSU-Komplex zu verstetigen, und gründeten »NSU-Watch«. Neun Jahre später ist die Aufarbeitung des NSU-Komplexes noch lange nicht abgeschlossen, die Gefahr des rechten Terrors bleibt schrecklich aktuell. NSU-Watch hat den NSU-Prozess beobachtet, jeden Tag protokolliert und der Öffentlichkeit zur Verfügung gestellt. Darüber hinaus haben sich Landesprojekte gegründet, die die parlamentarischen Aufklärungsbemühungen begleiten. Das zentrale Anliegen des Buches von NSU-Watch ist, die rassistischen Strukturen, die den NSU hervorbrachten, ihn wissentlich oder unwissentlich unterstützten und so zehn Morde, drei Sprengstoffanschläge und 15 Raubüberfälle zwischen 1998 und 2011 möglich machten, entlang der Geschehnisse und Akteur*innen des NSU-Prozesses in München aufzuzeigen. Trotz der vielen offen gebliebenen Fragen soll das Buch eine Zwischenbilanz bieten, die antifaschistischer Demokratieförderung zugrunde gelegt werden kann.
+
+## NSU-Watch
+Das Autor\*innen-Kollektiv NSU-WATCH besteht aus Mitgliedern der unabhängigen Beobachtungsstelle NSU-Watch – Aufklären & Einmischen, die sich im Jahr 2012 gegründet hat, um die Aufklärungsbemühungen zum NSU-Komplex zu unterstützen und kritisch zu begleiten. NSU-Watch wird von einem Bündnis aus rund einem Dutzend antifaschistischer und antirassistischer Gruppen und Einzelpersonen aus dem ganzen Bundesgebiet getragen, die teilweise seit Jahrzehnten zum Themenkomplex Rechter Terror arbeiten. Kern der Arbeit von NSU-Watch war bzw. ist die Beobachtung des NSU-Prozesses am Oberlandesgericht in München sowie der diversen parlamentarischen Untersuchungsausschüsse im Bundestag und in den Ländern.
+
+Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxemburg-Initiative – Die Rosa-Luxemburg-Stiftung in Bremen_.
+				`,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&RecordingFormat{
+				ID:          testdataRecording9Format1,
+				RecordingID: testdataRecording9,
+				Lang:        "de",
+				Quality:     0,
+				IsVideo:     true,
+				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/57de7dfd-c060-4da1-8f57-f0880c1f2e5e/video_best.mp4",
+				Bytes:       2186863051,
+				Resolution:  "1920x1080",
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+		Rollback: func(tx *gorm.DB) error {
+			if err := tx.Delete(&RecordingFormat{
+				ID: testdataRecording9Format1,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Delete(&RecordingLang{
+				ID: testdataRecording9Lang1,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Delete(&Recording{
+				ID: testdataRecording9,
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+	},
+	{
+		ID: "10-data-0020-01-recording-10",
+		Migrate: func(tx *gorm.DB) error {
+			if err := tx.Create(&Recording{
+				ID:         testdataRecording10,
+				ChannelID:  testdataChannel1,
+				EventID:    &testdataEvent1,
+				CommonName: "2021-05_out_loud-mareice_kaiser-modernen_mutter",
+				CreatedAt:  time.Date(2021, 5, 5, 19, 0, 0, 0, loc),
+				Poster:     "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/4fb029d6-063a-4302-9ae8-4c1c6a1542a5/poster.png",
+				Preview:    "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/4fb029d6-063a-4302-9ae8-4c1c6a1542a5/preview.webm",
+				Duration:   time.Hour + 28*time.Minute + 26*time.Second,
+				Public:     true,
+				Listed:     false,
+				Tags: []*Tag{
+					{ID: testdataTagBuchvorstellung},
+					{ID: testdataTagDiskussion},
+				},
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&RecordingLang{
+				ID:          testdataRecording10Lang1,
+				RecordingID: testdataRecording10,
+				Lang:        "de",
+				Title:       "Mareice Kaiser",
+				Subtitle:    "Das Unwohlsein der modernen Mutter",
+				Short:       `Mütter sollen heute alles sein: Versorgerin, Businesswoman, Mom I'd like to fuck. Dass darunter ihr Wohlbefinden leidet, ist kein Wunder. Mareice Kaiser, Journalistin und selbst Mutter, stellt dabei immer wieder fest: ...`,
+				Long:        `Mütter sollen heute alles sein: Versorgerin, Businesswoman, Mom I'd like to fuck. Dass darunter ihr Wohlbefinden leidet, ist kein Wunder. Mareice Kaiser, Journalistin und selbst Mutter, stellt dabei immer wieder fest: Das Mutterideal ist unerreichbar und voller Widersprüche. Nichts kann man richtig machen und niemandem etwas recht. Mutterschaft berührt dabei, natürlich, jeden Lebensbereich: Denn egal, ob es um Arbeit, Geld, Sex, Körper, Psyche oder Liebe geht – Stereotype, Klischees und gesellschaftlichen Druck gibt es überall, auf Instagram, im Bett und im Büro. In ihrem Buch "Das Unwohlsein der modernen Mutter" (Rowohlt, 2021) zeigt die Autorin, wo Mütter heute stehen: noch immer öfter am Herd als in den Chefetagen. Und, wo sie stehen sollten: Dort, wo sie selbst sich sehen – frei und selbstbestimmt. Bei OUT LOUD liest Mareice Kaiser aus ihrem Buch und spricht mit uns über Frausein, Mutterschaft und Selbstbestimmung.`,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&RecordingFormat{
+				ID:          testdataRecording10Format1,
+				RecordingID: testdataRecording10,
+				Lang:        "de",
+				Quality:     0,
+				IsVideo:     true,
+				URL:         "https://v2.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/4fb029d6-063a-4302-9ae8-4c1c6a1542a5/video_best.mp4",
+				Bytes:       2443666130,
+				Resolution:  "1920x1080",
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+		Rollback: func(tx *gorm.DB) error {
+			if err := tx.Delete(&RecordingFormat{
+				ID: testdataRecording10Format1,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Delete(&RecordingLang{
+				ID: testdataRecording10Lang1,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Delete(&Recording{
+				ID: testdataRecording10,
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+	},
+	{
 		ID: "10-data-0030-01-stream-1",
 		Migrate: func(tx *gorm.DB) error {
 			if err := tx.Create(&Stream{
@@ -1055,16 +1214,10 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				},
 				Speakers: []*Speaker{
 					{
-						OwnerID:      testdataChannel1,
-						ID:           testdataStream4Speaker1,
-						Name:         "Caro Keller",
-						Organisation: "NSU-Watch",
+						ID: testdataStream4Speaker1,
 					},
 					{
-						OwnerID:      testdataChannel1,
-						ID:           testdataStream4Speaker2,
-						Name:         "Lee Hielscher",
-						Organisation: "Initiative in Gedenken an Nguyễn Ngọc Châu und Đỗ Anh Lân",
+						ID: testdataStream4Speaker2,
 					},
 				},
 			}).Error; err != nil {
