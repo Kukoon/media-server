@@ -65,6 +65,10 @@ func init() {
 			} else {
 				obj.ID = uuid
 			}
+
+			// TODO login - own channel
+			db = db.Where("public", true)
+
 			if err := db.First(&obj).Error; err != nil {
 				if errors.Is(err, gorm.ErrRecordNotFound) {
 					c.JSON(http.StatusNotFound, web.HTTPError{

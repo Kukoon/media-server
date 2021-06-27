@@ -100,6 +100,10 @@ func init() {
 				}
 				db = db.Joins("LEFT JOIN recording_speakers ON recording_speakers.recording_id = recordings.id").Where("speaker_id IN (?)", ids)
 			}
+
+			// TODO login - own channel
+			db = db.Where("public", true).Where("listed", true)
+
 			if err := db.Order("created_at DESC").Find(&list).Error; err != nil {
 				c.JSON(http.StatusInternalServerError, web.HTTPError{
 					Message: web.APIErrorInternalDatabase,
