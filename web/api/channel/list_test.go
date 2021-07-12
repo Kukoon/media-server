@@ -12,12 +12,14 @@ import (
 
 func TestAPIChannelList(t *testing.T) {
 	assert := assert.New(t)
-	s := webtest.New(assert)
+	s, err := webtest.New()
+	assert.NoError(err)
 	defer s.Close()
 	assert.NotNil(s)
 	models.SetupMigration(s.DB)
 
 	list := []*models.Channel{}
 	// GET
-	s.Request(http.MethodGet, "/api/v1/channels", nil, http.StatusOK, &list)
+	err = s.Request(http.MethodGet, "/api/v1/channels", nil, http.StatusOK, &list)
+	assert.NoError(err)
 }

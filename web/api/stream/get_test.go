@@ -14,22 +14,26 @@ import (
 
 func TestAPIStreamGet(t *testing.T) {
 	assert := assert.New(t)
-	s := webtest.New(assert)
+	s, err := webtest.New()
+	assert.NoError(err)
 	defer s.Close()
 	assert.NotNil(s)
 	models.SetupMigration(s.DB)
 
 	obj := models.PublicStream{}
 	// GET - common name
-	s.Request(http.MethodGet, "/api/v1/stream/kukoon", nil, http.StatusOK, &obj)
+	err = s.Request(http.MethodGet, "/api/v1/stream/kukoon", nil, http.StatusOK, &obj)
+	assert.NoError(err)
 
 	obj = models.PublicStream{}
 	// GET - id
-	s.Request(http.MethodGet, "/api/v1/stream/df1555f5-7046-4f7a-adcc-195b73949723?lang=de", nil, http.StatusOK, &obj)
+	err = s.Request(http.MethodGet, "/api/v1/stream/df1555f5-7046-4f7a-adcc-195b73949723?lang=de", nil, http.StatusOK, &obj)
+	assert.NoError(err)
 
 	/* TODO oO - that should not happen
 	hErr := web.HTTPError{}
 	// GET - not found
-	s.Request(http.MethodGet, "/api/v1/stream/00000000-0000-0000-0000-000000000001", nil, http.StatusNotFound, &hErr)
+	err = s.Request(http.MethodGet, "/api/v1/stream/00000000-0000-0000-0000-000000000001", nil, http.StatusNotFound, &hErr)
+	assert.NoError(err)
 	*/
 }

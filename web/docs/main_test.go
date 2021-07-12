@@ -12,10 +12,13 @@ import (
 
 func TestDocsLoaded(t *testing.T) {
 	assert := assert.New(t)
-	s := webtest.New(assert)
+	s, err := webtest.New()
+	assert.NoError(err)
+	defer s.Close()
 	assert.NotNil(s)
 
 	// GET
-	s.Request(http.MethodGet, "/api/help/index.html", nil, http.StatusOK, nil)
+	err := s.Request(http.MethodGet, "/api/help/index.html", nil, http.StatusOK, nil)
+	assert.NoError(err)
 }
 */

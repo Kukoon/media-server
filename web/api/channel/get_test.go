@@ -14,20 +14,24 @@ import (
 
 func TestAPIChannelGet(t *testing.T) {
 	assert := assert.New(t)
-	s := webtest.New(assert)
+	s, err := webtest.New()
+	assert.NoError(err)
 	defer s.Close()
 	assert.NotNil(s)
 	models.SetupMigration(s.DB)
 
 	obj := models.Channel{}
 	// GET - common name
-	s.Request(http.MethodGet, "/api/v1/channel/kukoon", nil, http.StatusOK, &obj)
+	err = s.Request(http.MethodGet, "/api/v1/channel/kukoon", nil, http.StatusOK, &obj)
+	assert.NoError(err)
 
 	obj = models.Channel{}
 	// GET - id
-	s.Request(http.MethodGet, "/api/v1/channel/df1555f5-7046-4f7a-adcc-195b73949723", nil, http.StatusOK, &obj)
+	err = s.Request(http.MethodGet, "/api/v1/channel/df1555f5-7046-4f7a-adcc-195b73949723", nil, http.StatusOK, &obj)
+	assert.NoError(err)
 
 	hErr := web.HTTPError{}
 	// GET - not found
-	s.Request(http.MethodGet, "/api/v1/channel/00000000-0000-0000-0000-000000000001", nil, http.StatusNotFound, &hErr)
+	err = s.Request(http.MethodGet, "/api/v1/channel/00000000-0000-0000-0000-000000000001", nil, http.StatusNotFound, &hErr)
+	assert.NoError(err)
 }
