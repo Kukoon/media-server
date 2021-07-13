@@ -93,6 +93,11 @@ var (
 	testdataRecording7Speaker2 = uuid.MustParse("8bb5af2a-6e66-488b-9eac-6714ce005899")
 	testdataRecording7Speaker3 = uuid.MustParse("fa5323fc-5f54-487c-b5cc-173faa4e64f2")
 
+	testdataRecording8         = testdataStream3
+	testdataRecording8Lang1    = testdataStream3Lang1
+	testdataRecording8Speaker1 = testdataStream3Speaker1
+	testdataRecording8Format1  = uuid.MustParse("b98078df-b430-4a19-971c-84d324fd9b14")
+
 	testdataRecording9         = testdataStream4
 	testdataRecording9Lang1    = testdataStream4Lang1
 	testdataRecording9Speaker1 = testdataStream4Speaker1
@@ -911,6 +916,80 @@ Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, d
 		},
 	},
 	{
+		ID: "10-data-0020-01-recording-8",
+		Migrate: func(tx *gorm.DB) error {
+			if err := tx.Create(&Recording{
+				ID:         testdataRecording8,
+				ChannelID:  testdataChannel1,
+				CommonName: "2021-03-kriegsgefanngende_in_bremen",
+				Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/06e3a71e-581d-4735-9647-3e4a49b5caa8/poster.png",
+				Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/06e3a71e-581d-4735-9647-3e4a49b5caa8/preview.webp",
+				CreatedAt:  time.Date(2021, 4, 15, 19, 0, 0, 0, loc),
+				Duration:   time.Hour + 8*time.Minute,
+				Public:     true,
+				Listed:     true,
+				Tags: []*Tag{
+					{ID: testdataTagBuchvorstellung},
+					{ID: testdataTagDiskussion},
+				},
+				Speakers: []*Speaker{
+					{
+						OwnerID: testdataChannel1,
+						ID:      testdataRecording8Speaker1,
+						Name:    "Andreas Speit",
+					},
+				},
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&RecordingLang{
+				ID:          testdataRecording8Lang1,
+				RecordingID: testdataRecording8,
+				Lang:        "de",
+				Title:       "Rechte Egoshooter",
+				Subtitle:    "Von der virtuellen Hetze zum Livestream-Attentat",
+				Short:       `Weltweit gibt es rechtsterroristische Attentate eines neuen Typs. In Halle (Saale) verhinderte nur eine verschlossene Holztür der Synagoge ein größeres Massaker. ...`,
+				Long: `Weltweit gibt es rechtsterroristische Attentate eines neuen Typs. In Halle (Saale) verhinderte nur eine verschlossene Holztür der Synagoge ein größeres Massaker. Am 9. Oktober 2019 wollte dort ein Rechtsextremist die versammelten Juden hinrichten. Mit selbstgebauten Waffen schoss er auf die Tür und warf eigens hergestellte Sprengsätze. Online konnten Gleichgesinnte zusehen, wie er zwei Menschen ermordete: Seine Tat verbreitete er per Videokamera auf einem Portal für Computerspiel-Videos. Er ahmte damit andere »Egoshooter« nach – wie einen Rechtsextremisten, der in Neuseeland wenige Monate zuvor die Tötung von 51 Menschen live im Internet übertragen hatte. Was treibt Menschen vom Bildschirm zur realen Gewalt auf der Straße? Die Beiträge des Buches gehen den Spuren der Attentäter nach und zeigen die speziellen Radikalisierungsmechanismen im Netz auf. Sie erklären die Hintergründe und Motive dieser Männer, die in ihren rechten Online-Gemeinden Antisemitismus, Rassismus und Antifeminismus verbreiten. Das Buch gibt Einblicke in eine Welt, die vielen unbekannt ist.
+
+Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxemburg-Initiative – Die Rosa-Luxemburg-Stiftung in Bremen_.
+				`,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&RecordingFormat{
+				ID:          testdataRecording8Format1,
+				RecordingID: testdataRecording8,
+				Lang:        "de",
+				Quality:     0,
+				IsVideo:     true,
+				URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/06e3a71e-581d-4735-9647-3e4a49b5caa8/video_best.mp4",
+				Bytes:       995280142,
+				Resolution:  "1920x1080",
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+		Rollback: func(tx *gorm.DB) error {
+			if err := tx.Delete(&RecordingFormat{
+				ID: testdataRecording8Format1,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Delete(&RecordingLang{
+				ID: testdataRecording8Lang1,
+			}).Error; err != nil {
+				return err
+			}
+			if err := tx.Delete(&Recording{
+				ID: testdataRecording8,
+			}).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+	},
+	{
 		ID: "10-data-0020-01-recording-9",
 		Migrate: func(tx *gorm.DB) error {
 			if err := tx.Create(&Recording{
@@ -922,7 +1001,7 @@ Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, d
 				Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/57de7dfd-c060-4da1-8f57-f0880c1f2e5e/preview.webp",
 				Duration:   2*time.Hour + 18*time.Minute + 41*time.Second,
 				Public:     true,
-				Listed:     false,
+				Listed:     true,
 				Tags: []*Tag{
 					{ID: testdataTagBuchvorstellung},
 					{ID: testdataTagDiskussion},
@@ -953,7 +1032,8 @@ Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, d
 				Short:       `Im November 2011 kam eine rechtsterroristische Mord- und Anschlagsserie des sogenannten Nationalsozialistischen Untergrunds (NSU) ans Licht, die in ihrer Dimension neu war. In den folgenden Untersuchungen formte sich ein erstes Bild des NSU-Komplexes. ...`,
 				Long: `Im November 2011 kam eine rechtsterroristische Mord- und Anschlagsserie des sogenannten Nationalsozialistischen Untergrunds (NSU) ans Licht, die in ihrer Dimension neu war. In den folgenden Untersuchungen formte sich ein erstes Bild des NSU-Komplexes. Dabei wurde deutlich, dass eine noch umfassendere juristische und gesellschaftliche Aufarbeitung anstand. So beschlossen antifaschistische Initiativen und Einzelpersonen, die Arbeit am NSU-Komplex zu verstetigen, und gründeten »NSU-Watch«. Neun Jahre später ist die Aufarbeitung des NSU-Komplexes noch lange nicht abgeschlossen, die Gefahr des rechten Terrors bleibt schrecklich aktuell. NSU-Watch hat den NSU-Prozess beobachtet, jeden Tag protokolliert und der Öffentlichkeit zur Verfügung gestellt. Darüber hinaus haben sich Landesprojekte gegründet, die die parlamentarischen Aufklärungsbemühungen begleiten. Das zentrale Anliegen des Buches von NSU-Watch ist, die rassistischen Strukturen, die den NSU hervorbrachten, ihn wissentlich oder unwissentlich unterstützten und so zehn Morde, drei Sprengstoffanschläge und 15 Raubüberfälle zwischen 1998 und 2011 möglich machten, entlang der Geschehnisse und Akteur*innen des NSU-Prozesses in München aufzuzeigen. Trotz der vielen offen gebliebenen Fragen soll das Buch eine Zwischenbilanz bieten, die antifaschistischer Demokratieförderung zugrunde gelegt werden kann.
 
-## NSU-Watch
+**NSU-Watch**
+
 Das Autor\*innen-Kollektiv NSU-WATCH besteht aus Mitgliedern der unabhängigen Beobachtungsstelle NSU-Watch – Aufklären & Einmischen, die sich im Jahr 2012 gegründet hat, um die Aufklärungsbemühungen zum NSU-Komplex zu unterstützen und kritisch zu begleiten. NSU-Watch wird von einem Bündnis aus rund einem Dutzend antifaschistischer und antirassistischer Gruppen und Einzelpersonen aus dem ganzen Bundesgebiet getragen, die teilweise seit Jahrzehnten zum Themenkomplex Rechter Terror arbeiten. Kern der Arbeit von NSU-Watch war bzw. ist die Beobachtung des NSU-Prozesses am Oberlandesgericht in München sowie der diversen parlamentarischen Untersuchungsausschüsse im Bundestag und in den Ländern.
 
 Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxemburg-Initiative – Die Rosa-Luxemburg-Stiftung in Bremen_.
@@ -1004,10 +1084,10 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				CommonName: "2021-05_out_loud-mareice_kaiser-modernen_mutter",
 				CreatedAt:  time.Date(2021, 5, 5, 19, 0, 0, 0, loc),
 				Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/4fb029d6-063a-4302-9ae8-4c1c6a1542a5/poster.png",
-				Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/4fb029d6-063a-4302-9ae8-4c1c6a1542a5/preview.webm",
+				Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/4fb029d6-063a-4302-9ae8-4c1c6a1542a5/preview.webp",
 				Duration:   time.Hour + 28*time.Minute + 26*time.Second,
 				Public:     true,
-				Listed:     false,
+				Listed:     true,
 				Tags: []*Tag{
 					{ID: testdataTagBuchvorstellung},
 					{ID: testdataTagDiskussion},
