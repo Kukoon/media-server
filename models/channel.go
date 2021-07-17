@@ -69,6 +69,9 @@ func init() {
 				}).Error
 			},
 			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Exec("DELETE FROM user_channels WHERE channel_id = ?", TestChannelID1).Error; err != nil {
+					return err
+				}
 				return tx.Delete(&Channel{
 					ID: TestChannelID1,
 				}).Error
@@ -88,6 +91,9 @@ func init() {
 				}).Error
 			},
 			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Exec("DELETE FROM user_channels WHERE channel_id = ?", TestChannelID2).Error; err != nil {
+					return err
+				}
 				return tx.Delete(&Channel{
 					ID: TestChannelID2,
 				}).Error

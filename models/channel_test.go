@@ -16,15 +16,15 @@ func TestChannelHasPermission(t *testing.T) {
 	assert.NoError(err)
 	assert.Nil(obj)
 
-	obj, err = Channel{}.HasPermission(db.DB, uuid.Nil, testdataChannel1)
+	obj, err = Channel{}.HasPermission(db.DB, uuid.Nil, TestChannelID1)
 	assert.NoError(err)
 	assert.Nil(obj)
 
-	obj, err = Channel{}.HasPermission(db.DB, testdataUser1, uuid.Nil)
+	obj, err = Channel{}.HasPermission(db.DB, TestUserID1, uuid.Nil)
 	assert.NoError(err)
 	assert.Nil(obj)
 
-	obj, err = Channel{}.HasPermission(db.DB, testdataUser1, testdataChannel1)
+	obj, err = Channel{}.HasPermission(db.DB, TestUserID1, TestChannelID1)
 	assert.NoError(err)
 	assert.NotNil(obj)
 }

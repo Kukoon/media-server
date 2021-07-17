@@ -104,7 +104,13 @@ func init() {
 				return tx.AutoMigrate(&Stream{}, &StreamLang{})
 			},
 			Rollback: func(tx *gorm.DB) error {
-				if err := tx.Migrator().DropTable(Stream{}.TableName()); err != nil {
+				if err := tx.Migrator().DropTable("stream_langs"); err != nil {
+					return err
+				}
+				if err := tx.Migrator().DropTable("stream_speakers"); err != nil {
+					return err
+				}
+				if err := tx.Migrator().DropTable("stream_tags"); err != nil {
 					return err
 				}
 				return tx.Migrator().DropTable(Stream{}.TableName())

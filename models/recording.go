@@ -74,6 +74,12 @@ func init() {
 				if err := tx.Migrator().DropTable("recording_langs"); err != nil {
 					return err
 				}
+				if err := tx.Migrator().DropTable("recording_speakers"); err != nil {
+					return err
+				}
+				if err := tx.Migrator().DropTable("recording_tags"); err != nil {
+					return err
+				}
 				return tx.Migrator().DropTable("recordings")
 			},
 		},

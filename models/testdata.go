@@ -11,6 +11,8 @@ import (
 var (
 	loc = time.FixedZone("UTC+2", +2*60*60)
 
+	// stream
+
 	testdataStream1      = uuid.MustParse("dffe2c0e-3713-4399-8ee2-279becbbb06e")
 	testdataStream1Lang1 = uuid.MustParse("3a4f9157-65bf-4d15-a82b-1cd9295d07e0")
 
@@ -30,6 +32,8 @@ var (
 
 	testdataStream6      = uuid.MustParse("1742d9b6-c9c6-45fb-a3a3-4a3e7fac2987")
 	testdataStream6Lang1 = uuid.MustParse("0b7136a6-4c51-49ac-99e9-27ef833169f6")
+
+	// recordings
 
 	testdataRecording1         = uuid.MustParse("542685cb-3693-e720-a957-f008f5dae3ee")
 	testdataRecording1Lang1    = uuid.MustParse("03d33e6a-151f-47d9-be79-a726e0f9a859")
@@ -245,6 +249,12 @@ oder per [Paypal](https://www.paypal.com/donate?hosted_button_id=4BQQNN582WLN6) 
 				}).Error; err != nil {
 					return err
 				}
+				if err := tx.Exec("DELETE FROM recording_speakers WHERE recording_id = ?", testdataRecording1).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM recording_tags WHERE recording_id = ?", testdataRecording1).Error; err != nil {
+					return err
+				}
 				if err := tx.Delete(&Recording{
 					ID: testdataRecording1,
 				}).Error; err != nil {
@@ -379,6 +389,12 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				}).Error; err != nil {
 					return err
 				}
+				if err := tx.Exec("DELETE FROM recording_speakers WHERE recording_id = ?", testdataRecording2).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM recording_tags WHERE recording_id = ?", testdataRecording2).Error; err != nil {
+					return err
+				}
 				if err := tx.Delete(&Recording{
 					ID: testdataRecording2,
 				}).Error; err != nil {
@@ -450,6 +466,12 @@ Eine Veranstaltung des Kulturzentrum Kukoon in Kooperation mit der Rosa-Luxembur
 				if err := tx.Delete(&RecordingLang{
 					ID: testdataRecording3Lang1,
 				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM recording_speakers WHERE recording_id = ?", testdataRecording3).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM recording_tags WHERE recording_id = ?", testdataRecording3).Error; err != nil {
 					return err
 				}
 				if err := tx.Delete(&Recording{
@@ -525,6 +547,12 @@ Geboren 1986 in Basel, hat an der Deutschen Film- und Fernsehakademie in Berlin 
 				}).Error; err != nil {
 					return err
 				}
+				if err := tx.Exec("DELETE FROM recording_speakers WHERE recording_id = ?", testdataRecording4).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM recording_tags WHERE recording_id = ?", testdataRecording4).Error; err != nil {
+					return err
+				}
 				if err := tx.Delete(&Recording{
 					ID: testdataRecording4,
 				}).Error; err != nil {
@@ -588,6 +616,12 @@ Eine Veranstaltung von Erinnerungskultur anstellen. Organisierung freier Mitarbe
 				if err := tx.Delete(&RecordingLang{
 					ID: testdataRecording5Lang1,
 				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM recording_speakers WHERE recording_id = ?", testdataRecording5).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM recording_tags WHERE recording_id = ?", testdataRecording5).Error; err != nil {
 					return err
 				}
 				if err := tx.Delete(&Recording{
@@ -664,6 +698,12 @@ Eine Veranstaltung von [kritisch-lesen.de](https://kritisch-lesen.de) in Koopera
 				if err := tx.Delete(&RecordingLang{
 					ID: testdataRecording6Lang1,
 				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM recording_speakers WHERE recording_id = ?", testdataRecording6).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM recording_tags WHERE recording_id = ?", testdataRecording6).Error; err != nil {
 					return err
 				}
 				if err := tx.Delete(&Recording{
@@ -752,6 +792,12 @@ Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, d
 				}).Error; err != nil {
 					return err
 				}
+				if err := tx.Exec("DELETE FROM recording_speakers WHERE recording_id = ?", testdataRecording7).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM recording_tags WHERE recording_id = ?", testdataRecording7).Error; err != nil {
+					return err
+				}
 				if err := tx.Delete(&Recording{
 					ID: testdataRecording7,
 				}).Error; err != nil {
@@ -824,6 +870,12 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				if err := tx.Delete(&RecordingLang{
 					ID: testdataRecording8Lang1,
 				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM recording_speakers WHERE recording_id = ?", testdataRecording8).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM recording_tags WHERE recording_id = ?", testdataRecording8).Error; err != nil {
 					return err
 				}
 				if err := tx.Delete(&Recording{
@@ -911,6 +963,12 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				}).Error; err != nil {
 					return err
 				}
+				if err := tx.Exec("DELETE FROM recording_speakers WHERE recording_id = ?", testdataRecording9).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM recording_tags WHERE recording_id = ?", testdataRecording9).Error; err != nil {
+					return err
+				}
 				if err := tx.Delete(&Recording{
 					ID: testdataRecording9,
 				}).Error; err != nil {
@@ -976,6 +1034,12 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				}).Error; err != nil {
 					return err
 				}
+				if err := tx.Exec("DELETE FROM recording_speakers WHERE recording_id = ?", testdataRecording10).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM recording_tags WHERE recording_id = ?", testdataRecording10).Error; err != nil {
+					return err
+				}
 				if err := tx.Delete(&Recording{
 					ID: testdataRecording10,
 				}).Error; err != nil {
@@ -1034,6 +1098,12 @@ Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, d
 				}).Error; err != nil {
 					return err
 				}
+				if err := tx.Exec("DELETE FROM stream_speakers WHERE stream_id = ?", testdataStream1).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM stream_tags WHERE stream_id = ?", testdataStream1).Error; err != nil {
+					return err
+				}
 				if err := tx.Delete(&Stream{
 					ID: testdataStream1,
 				}).Error; err != nil {
@@ -1059,6 +1129,12 @@ Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, d
 				return nil
 			},
 			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Exec("DELETE FROM stream_speakers WHERE stream_id = ?", testdataStream2).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM stream_tags WHERE stream_id = ?", testdataStream2).Error; err != nil {
+					return err
+				}
 				if err := tx.Delete(&Stream{
 					ID: testdataStream2,
 				}).Error; err != nil {
@@ -1112,6 +1188,12 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				if err := tx.Delete(&StreamLang{
 					ID: testdataStream3Lang1,
 				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM stream_speakers WHERE stream_id = ?", testdataStream3).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM stream_tags WHERE stream_id = ?", testdataStream3).Error; err != nil {
 					return err
 				}
 				if err := tx.Delete(&Stream{
@@ -1173,6 +1255,12 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				}).Error; err != nil {
 					return err
 				}
+				if err := tx.Exec("DELETE FROM stream_speakers WHERE stream_id = ?", testdataStream4).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM stream_tags WHERE stream_id = ?", testdataStream4).Error; err != nil {
+					return err
+				}
 				if err := tx.Delete(&Stream{
 					ID: testdataStream4,
 				}).Error; err != nil {
@@ -1217,6 +1305,12 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				if err := tx.Delete(&StreamLang{
 					ID: testdataStream5Lang1,
 				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM stream_speakers WHERE stream_id = ?", testdataStream5).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM stream_tags WHERE stream_id = ?", testdataStream5).Error; err != nil {
 					return err
 				}
 				if err := tx.Delete(&Stream{
@@ -1269,6 +1363,12 @@ Mehr Infos unter [direction-f.org](https://direction-f.org/)`,
 				if err := tx.Delete(&StreamLang{
 					ID: testdataStream6Lang1,
 				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM stream_speakers WHERE stream_id = ?", testdataStream6).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM stream_tags WHERE stream_id = ?", testdataStream6).Error; err != nil {
 					return err
 				}
 				if err := tx.Delete(&Stream{
