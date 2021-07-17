@@ -3,12 +3,12 @@ module github.com/Kukoon/media-server
 go 1.16
 
 require (
-	dev.sum7.eu/genofire/golang-lib v0.0.0-20210630135931-d888e277902a
+	dev.sum7.eu/genofire/golang-lib v0.0.0-20210715092105-7923008c9fe3
 	github.com/bdlm/log v0.1.20
 	github.com/chenjiandongx/ginprom v0.0.0-20210617023641-6c809602c38a // indirect
 	github.com/eduncan911/podcast v1.4.2
+	github.com/genofire/gormigrate/v2 v2.0.1-0.20210715085530-7373801d0902
 	github.com/gin-gonic/gin v1.7.2
-	github.com/go-gormigrate/gormigrate/v2 v2.0.0
 	github.com/go-openapi/jsonreference v0.19.6 // indirect
 	github.com/go-openapi/swag v0.19.15 // indirect
 	github.com/go-playground/validator/v10 v10.7.0 // indirect
@@ -36,6 +36,6 @@ require (
 	golang.org/x/time v0.0.0-20210611083556-38a9dc6acbc6 // indirect
 	golang.org/x/tools v0.1.4 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
-	gorm.io/gorm v1.21.11
+	gorm.io/gorm v1.21.12
 	gorm.io/plugin/prometheus v0.0.0-20210614014227-3996fd54c851 // indirect
 )

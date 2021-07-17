@@ -14,11 +14,10 @@ import (
 
 func TestAPIRecordingsList(t *testing.T) {
 	assert := assert.New(t)
-	s, err := webtest.New()
+	s, err := webtest.NewWithDBSetup(models.SetupMigration)
 	assert.NoError(err)
 	defer s.Close()
 	assert.NotNil(s)
-	models.SetupMigration(s.DB)
 
 	list := []*models.Recording{}
 	// GET

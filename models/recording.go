@@ -3,9 +3,12 @@ package models
 import (
 	"time"
 
+	gormigrate "github.com/genofire/gormigrate/v2"
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
+// Recording struct
 type Recording struct {
 	ID        uuid.UUID          `json:"id" gorm:"type:uuid;default:gen_random_uuid()" example:"dffe2c0e-3713-4399-8ee2-279becbbb06e"`
 	CreatedAt time.Time          `json:"created_at" example:"2020-12-10T19:00:00.000000+01:00"`
@@ -27,6 +30,7 @@ type Recording struct {
 	Speakers   []*Speaker     `json:"speakers" gorm:"many2many:recording_speakers;"`
 }
 
+// RecordingFormat struct - for format
 type RecordingFormat struct {
 	ID          uuid.UUID `json:"id" gorm:"type:uuid;default:gen_random_uuid()" example:"3a4f9157-65bf-4d15-a82b-1cd9295d07e0"`
 	Recording   Recording `json:"-" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
@@ -41,6 +45,7 @@ type RecordingFormat struct {
 	Resolution string `json:"resolution" example:"1920x1080"`
 }
 
+// RecordingLang struct - for i18n data of a
 type RecordingLang struct {
 	ID          uuid.UUID `json:"id" gorm:"type:uuid;default:gen_random_uuid()" example:"3a4f9157-65bf-4d15-a82b-1cd9295d07e0"`
 	Recording   Recording `json:"-" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
@@ -51,4 +56,26 @@ type RecordingLang struct {
 	Subtitle string `json:"subtitle" example:"Ein deutsches Problem Diskussionsveranstaltung mit Laila Abdul-Rahman, Greta (Grün-Weiße Hilfe Bremen) und Mathilda (Kampagne für Opfer rassistischer Polizeigewalt - KOP Bremen)"`
 	Short    string `json:"short" example:"Nachdem Mord an George Floyd ist es zu großen Protesten in den Vereinigten Staaten gekommen. Auch in Deutschland sterben schwarze Menschen in Polizeigewahrsam. [...]"`
 	Long     string `json:"long" example:"Nachdem Mord an George Floyd ist es zu großen Protesten in den Vereinigten Staaten gekommen. Auch in Deutschland sterben schwarze Menschen in Polizeigewahrsam.  Ihre Namen sind weitgehend unbekannt: William Tonou-Mbobda, Hussam Fadl, Rooble Warsame, Oury Jalloh, Yaya Diabi, Amed A., Aamir Ageeb, Achidi John, Laya-Alama Condé, Mohamed Idrissi – die Liste ließe sich fortsetzen."`
+}
+
+func init() {
+	migrations = append(migrations, []*gormigrate.Migration{
+		{
+			ID: "01-schema-0020-01-recording",
+			Migrate: func(tx *gorm.DB) error {
+				return tx.AutoMigrate(&Recording{},
+					&RecordingLang{},
+					&RecordingFormat{})
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Migrator().DropTable("recording_formats"); err != nil {
+					return err
+				}
+				if err := tx.Migrator().DropTable("recording_langs"); err != nil {
+					return err
+				}
+				return tx.Migrator().DropTable("recordings")
+			},
+		},
+	}...)
 }

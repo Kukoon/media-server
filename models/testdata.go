@@ -3,22 +3,13 @@ package models
 import (
 	"time"
 
-	gormigrate "github.com/go-gormigrate/gormigrate/v2"
+	gormigrate "github.com/genofire/gormigrate/v2"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
-
-	"dev.sum7.eu/genofire/golang-lib/web/auth"
 )
 
 var (
 	loc = time.FixedZone("UTC+2", +2*60*60)
-
-	testdataUser1 = uuid.MustParse("88078ec0-2135-445f-bf05-632701c77695")
-
-	testdataChannel1 = uuid.MustParse("df1555f5-7046-4f7a-adcc-195b73949723")
-	testdataChannel2 = uuid.MustParse("c4eba06b-1ab3-4367-93e1-da584b96fcc8")
-
-	testdataEvent1 = uuid.MustParse("bff61adc-76d5-4beb-aab0-3ef11b337204")
 
 	testdataStream1      = uuid.MustParse("dffe2c0e-3713-4399-8ee2-279becbbb06e")
 	testdataStream1Lang1 = uuid.MustParse("3a4f9157-65bf-4d15-a82b-1cd9295d07e0")
@@ -39,13 +30,6 @@ var (
 
 	testdataStream6      = uuid.MustParse("1742d9b6-c9c6-45fb-a3a3-4a3e7fac2987")
 	testdataStream6Lang1 = uuid.MustParse("0b7136a6-4c51-49ac-99e9-27ef833169f6")
-
-	testdataTagBuchvorstellung     = uuid.MustParse("0bca0cf4-a9b9-46d7-821f-18c59c08fc1d")
-	testdataTagBuchvorstellungLang = uuid.MustParse("35822fe2-1910-48e7-904f-15c9e6f7ea34")
-	testdataTagDiskussion          = uuid.MustParse("277026b0-b9d6-48d6-bfa1-96dcc7eb3451")
-	testdataTagDiskussionLang      = uuid.MustParse("38722845-beba-4e3d-ad3f-694c029d751f")
-	testdataTagVortrag             = uuid.MustParse("7297a654-71f9-43be-8120-69b8152f01fc")
-	testdataTagVortragLang         = uuid.MustParse("ec784c8e-2673-4870-b219-eb636e4765c8")
 
 	testdataRecording1         = uuid.MustParse("542685cb-3693-e720-a957-f008f5dae3ee")
 	testdataRecording1Lang1    = uuid.MustParse("03d33e6a-151f-47d9-be79-a726e0f9a859")
@@ -109,193 +93,54 @@ var (
 	testdataRecording10Format1 = uuid.MustParse("5473a466-3a71-4be3-8436-a34f92c5ecc6")
 )
 
-var testdata = []*gormigrate.Migration{
-	{
-		ID: "10-data-0008-01-user",
-		Migrate: func(tx *gorm.DB) error {
-			user, err := auth.NewUser("kukoon", "CHANGEME")
-			if err != nil {
-				return err
-			}
-			user.ID = testdataUser1
-			return tx.Create(user).Error
-		},
-		Rollback: func(tx *gorm.DB) error {
-			return tx.Delete(&User{
-				ID: testdataUser1,
-			}).Error
-		},
-	},
-	{
-		ID: "10-data-0010-01-channel",
-		Migrate: func(tx *gorm.DB) error {
-			return tx.Create(&Channel{
-				ID:         testdataChannel1,
-				CommonName: "kukoon",
-				Title:      "Im Kukoon",
-				Logo:       "https://media.kukoon.de/static/css/kukoon/logo.png",
-				Owners: []User{
-					{ID: testdataUser1},
-				},
-			}).Error
-		},
-		Rollback: func(tx *gorm.DB) error {
-			return tx.Delete(&Channel{
-				ID: testdataChannel1,
-			}).Error
-		},
-	},
-	{
-		ID: "10-data-0010-02-channel",
-		Migrate: func(tx *gorm.DB) error {
-			return tx.Create(&Channel{
-				ID:         testdataChannel2,
-				CommonName: "c3woc",
-				Title:      "C3 Waffel Operation Center",
-				Logo:       "https://c3woc.de/images/logo.svg",
-				Owners: []User{
-					{ID: testdataUser1},
-				},
-			}).Error
-		},
-		Rollback: func(tx *gorm.DB) error {
-			return tx.Delete(&Channel{
-				ID: testdataChannel2,
-			}).Error
-		},
-	},
-	{
-		ID: "10-data-0018-01-tag-eg",
-		Migrate: func(tx *gorm.DB) error {
-			// -
-			if err := tx.Create(&Tag{
-				ID: testdataTagBuchvorstellung,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&TagLang{
-				ID:    testdataTagBuchvorstellungLang,
-				TagID: testdataTagBuchvorstellung,
-				Lang:  "de",
-				Name:  "Buchvorstellung",
-			}).Error; err != nil {
-				return err
-			}
-			// -
-			if err := tx.Create(&Tag{
-				ID: testdataTagDiskussion,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&TagLang{
-				ID:    testdataTagDiskussionLang,
-				TagID: testdataTagDiskussion,
-				Lang:  "de",
-				Name:  "Diskussion",
-			}).Error; err != nil {
-				return err
-			}
-			// -
-			if err := tx.Create(&Tag{
-				ID: testdataTagVortrag,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&TagLang{
-				ID:    testdataTagVortragLang,
-				TagID: testdataTagVortrag,
-				Lang:  "de",
-				Name:  "Vortrag",
-			}).Error; err != nil {
-				return err
-			}
-			return nil
-		},
-		Rollback: func(tx *gorm.DB) error {
-			// -
-			if err := tx.Delete(&TagLang{ID: testdataTagVortragLang}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&Tag{ID: testdataTagVortrag}).Error; err != nil {
-				return err
-			}
-			// -
-			if err := tx.Delete(&TagLang{ID: testdataTagDiskussionLang}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&Tag{ID: testdataTagDiskussion}).Error; err != nil {
-				return err
-			}
-			// -
-			if err := tx.Delete(&TagLang{ID: testdataTagBuchvorstellungLang}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&Tag{ID: testdataTagBuchvorstellung}).Error; err != nil {
-				return err
-			}
-			return nil
-		},
-	},
-	{
-		ID: "10-data-0010-01-event-01",
-		Migrate: func(tx *gorm.DB) error {
-			return tx.Create(&Event{
-				ID:          testdataEvent1,
-				Name:        "OUT LOUD",
-				Description: `OUT LOUD ist eine Veranstaltungsreihe des Bremer Literaturkontors und wird gefördert durch den Senator für Kultur der Freien Hansestadt Bremen, die VGH-Stiftung, die Waldemar-Koch-Stiftung, die Karin und Uwe Hollweg Stiftung, unterstützt vom Literaturhaus Bremen und präsentiert von Bremen Zwei.`,
-			}).Error
-		},
-		Rollback: func(tx *gorm.DB) error {
-			return tx.Delete(&Event{
-				ID: testdataEvent1,
-			}).Error
-		},
-	},
-	{
-		ID: "10-data-0020-01-recording-1",
-		Migrate: func(tx *gorm.DB) error {
-			if err := tx.Create(&Recording{
-				ID:         testdataRecording1,
-				ChannelID:  testdataChannel1,
-				CommonName: "2020-12-polizeigewalt",
-				Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/poster.png",
-				Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/preview.webp",
-				CreatedAt:  time.Date(2020, 12, 10, 20, 0, 0, 0, loc),
-				Duration:   time.Hour + 20*time.Minute + 17*time.Second,
-				Public:     true,
-				Listed:     true,
-				Tags:       []*Tag{{ID: testdataTagDiskussion}},
-				Speakers: []*Speaker{
-					{
-						OwnerID:      testdataChannel1,
-						ID:           testdataRecording1Speaker1,
-						Name:         "Leila Abdul-Rahman",
-						Organisation: "Ruhr Universität Bochum",
+func init() {
+
+	testdata = append(testdata, []*gormigrate.Migration{
+		{
+			ID: "10-data-0020-01-recording-1",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.Create(&Recording{
+					ID:         testdataRecording1,
+					ChannelID:  TestChannelID1,
+					CommonName: "2020-12-polizeigewalt",
+					Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/poster.png",
+					Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/preview.webp",
+					CreatedAt:  time.Date(2020, 12, 10, 20, 0, 0, 0, loc),
+					Duration:   time.Hour + 20*time.Minute + 17*time.Second,
+					Public:     true,
+					Listed:     true,
+					Tags:       []*Tag{{ID: TestTagDiskussionID}},
+					Speakers: []*Speaker{
+						{
+							OwnerID:      TestChannelID1,
+							ID:           testdataRecording1Speaker1,
+							Name:         "Leila Abdul-Rahman",
+							Organisation: "Ruhr Universität Bochum",
+						},
+						{
+							OwnerID:      TestChannelID1,
+							ID:           testdataRecording1Speaker2,
+							Name:         "Greta",
+							Organisation: "Grün-Weiße Hilfe",
+						},
+						{
+							OwnerID:      TestChannelID1,
+							ID:           testdataRecording1Speaker3,
+							Name:         "Mathilda",
+							Organisation: "KOP Bremen",
+						},
 					},
-					{
-						OwnerID:      testdataChannel1,
-						ID:           testdataRecording1Speaker2,
-						Name:         "Greta",
-						Organisation: "Grün-Weiße Hilfe",
-					},
-					{
-						OwnerID:      testdataChannel1,
-						ID:           testdataRecording1Speaker3,
-						Name:         "Mathilda",
-						Organisation: "KOP Bremen",
-					},
-				},
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingLang{
-				ID:          testdataRecording1Lang1,
-				RecordingID: testdataRecording1,
-				Lang:        "de",
-				Title:       "Polizeigewalt",
-				Subtitle:    "ein deutsches Problem",
-				Short:       "Nachdem Mord an George Floyd ist es zu großen Protesten in den Vereinigten Staaten gekommen. Auch in Deutschland sterben schwarze Menschen in Polizeigewahrsam. Ihre Namen sind weitgehend unbekannt: William Tonou-Mbobda, Hussam Fadl, Rooble Warsame, Oury Jalloh, Yaya Diabi, Amed A., Aamir Ageeb, Achidi John, Laya-Alama Condé, Mohamed Idrissi – die Liste ließe sich fortsetzen. ...",
-				Long: `Ein deutsches Problem Diskussionsveranstaltung mit Laila Abdul-Rahman, Greta ([Grün-Weiße Hilfe Bremen](https://twitter.com/fanhilfe_bremen?lang=de)) und Mathilda ([Kampagne für Opfer rassistischer Polizeigewalt – KOP Bremen](https://www.facebook.com/KOP-Bremen-Kampagne-f%C3%BCr-Opfer-rassistischer-Polizeigewalt-Bremen-168776953679814/))
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingLang{
+					ID:          testdataRecording1Lang1,
+					RecordingID: testdataRecording1,
+					Lang:        "de",
+					Title:       "Polizeigewalt",
+					Subtitle:    "ein deutsches Problem",
+					Short:       "Nachdem Mord an George Floyd ist es zu großen Protesten in den Vereinigten Staaten gekommen. Auch in Deutschland sterben schwarze Menschen in Polizeigewahrsam. Ihre Namen sind weitgehend unbekannt: William Tonou-Mbobda, Hussam Fadl, Rooble Warsame, Oury Jalloh, Yaya Diabi, Amed A., Aamir Ageeb, Achidi John, Laya-Alama Condé, Mohamed Idrissi – die Liste ließe sich fortsetzen. ...",
+					Long: `Ein deutsches Problem Diskussionsveranstaltung mit Laila Abdul-Rahman, Greta ([Grün-Weiße Hilfe Bremen](https://twitter.com/fanhilfe_bremen?lang=de)) und Mathilda ([Kampagne für Opfer rassistischer Polizeigewalt – KOP Bremen](https://www.facebook.com/KOP-Bremen-Kampagne-f%C3%BCr-Opfer-rassistischer-Polizeigewalt-Bremen-168776953679814/))
 
 Nachdem Mord an George Floyd ist es zu großen Protesten in den Vereinigten Staaten gekommen. Auch in Deutschland sterben schwarze Menschen in Polizeigewahrsam. Ihre Namen sind weitgehend unbekannt: William Tonou-Mbobda, Hussam Fadl, Rooble Warsame, Oury Jalloh, Yaya Diabi, Amed A., Aamir Ageeb, Achidi John, Laya-Alama Condé, Mohamed Idrissi – die Liste ließe sich fortsetzen.
 Gemeinsam mit **Laila Abdul-Rahman** vom [Forschungsprojekt Körperverletzung im Amt an der Ruhr-Universität Bochum](https://kviapol.rub.de/index.php/inhalte/zweiter-zwischenbericht), der Grün-Weißen Hilfe und der Kampagne für Opfer rassistischer Polizeigewalt (KOP-Bremen) wollen wir die Themen Polizeigewalt und rassistische Polizeigewalt beleuchten.
@@ -321,133 +166,133 @@ Wir bitten um eine kleine Spende an den Verein des Kukoon (*Verein für Bunte Ko
 	
 oder per [Paypal](https://www.paypal.com/donate?hosted_button_id=4BQQNN582WLN6) an verein@kukoon.de.
 				`,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingFormat{
-				ID:          testdataRecording1Format1,
-				RecordingID: testdataRecording1,
-				Lang:        "de",
-				Quality:     0,
-				IsVideo:     true,
-				URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/video_best.mp4",
-				Bytes:       3323919713,
-				Resolution:  "1920x1080",
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingFormat{
-				ID:          testdataRecording1Format2,
-				RecordingID: testdataRecording1,
-				Lang:        "de",
-				Quality:     160,
-				IsVideo:     true,
-				URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/video_720.mp4",
-				Bytes:       1149359246,
-				Resolution:  "1280x720",
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingFormat{
-				ID:          testdataRecording1Format3,
-				RecordingID: testdataRecording1,
-				Lang:        "de",
-				Quality:     180,
-				IsVideo:     true,
-				URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/video_480.mp4",
-				Bytes:       654217779,
-				Resolution:  "854x480",
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingFormat{
-				ID:          testdataRecording1Format4,
-				RecordingID: testdataRecording1,
-				Lang:        "de",
-				Quality:     0,
-				IsVideo:     false,
-				URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/audio_best.mp3",
-				Bytes:       130761076,
-				Resolution:  "128kb",
-			}).Error; err != nil {
-				return err
-			}
-			return nil
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingFormat{
+					ID:          testdataRecording1Format1,
+					RecordingID: testdataRecording1,
+					Lang:        "de",
+					Quality:     0,
+					IsVideo:     true,
+					URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/video_best.mp4",
+					Bytes:       3323919713,
+					Resolution:  "1920x1080",
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingFormat{
+					ID:          testdataRecording1Format2,
+					RecordingID: testdataRecording1,
+					Lang:        "de",
+					Quality:     160,
+					IsVideo:     true,
+					URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/video_720.mp4",
+					Bytes:       1149359246,
+					Resolution:  "1280x720",
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingFormat{
+					ID:          testdataRecording1Format3,
+					RecordingID: testdataRecording1,
+					Lang:        "de",
+					Quality:     180,
+					IsVideo:     true,
+					URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/video_480.mp4",
+					Bytes:       654217779,
+					Resolution:  "854x480",
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingFormat{
+					ID:          testdataRecording1Format4,
+					RecordingID: testdataRecording1,
+					Lang:        "de",
+					Quality:     0,
+					IsVideo:     false,
+					URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/542685cb-3693-e720-a957-f008f5dae3ee/audio_best.mp3",
+					Bytes:       130761076,
+					Resolution:  "128kb",
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Delete(&RecordingFormat{
+					ID: testdataRecording1Format4,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&RecordingFormat{
+					ID: testdataRecording1Format3,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&RecordingFormat{
+					ID: testdataRecording1Format2,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&RecordingFormat{
+					ID: testdataRecording1Format1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&RecordingLang{
+					ID: testdataRecording1Lang1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&Recording{
+					ID: testdataRecording1,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
 		},
-		Rollback: func(tx *gorm.DB) error {
-			if err := tx.Delete(&RecordingFormat{
-				ID: testdataRecording1Format4,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&RecordingFormat{
-				ID: testdataRecording1Format3,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&RecordingFormat{
-				ID: testdataRecording1Format2,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&RecordingFormat{
-				ID: testdataRecording1Format1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&RecordingLang{
-				ID: testdataRecording1Lang1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&Recording{
-				ID: testdataRecording1,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
-		},
-	},
-	{
-		ID: "10-data-0020-01-recording-2",
-		Migrate: func(tx *gorm.DB) error {
-			if err := tx.Create(&Recording{
-				ID:         testdataRecording2,
-				ChannelID:  testdataChannel1,
-				CommonName: "2021-01-faschistische_jahrhundert",
-				Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/poster.png",
-				Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/preview.webp",
-				CreatedAt:  time.Date(2021, 01, 29, 20, 0, 0, 0, loc),
-				Duration:   time.Hour + 43*time.Minute + 10*time.Second,
-				Public:     true,
-				Listed:     true,
-				Tags: []*Tag{
-					{ID: testdataTagBuchvorstellung},
-					{ID: testdataTagDiskussion},
-				},
-				Speakers: []*Speaker{
-					{
-						OwnerID: testdataChannel1,
-						ID:      testdataRecording2Speaker1,
-						Name:    "Volkmar Wölk",
+		{
+			ID: "10-data-0020-01-recording-2",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.Create(&Recording{
+					ID:         testdataRecording2,
+					ChannelID:  TestChannelID1,
+					CommonName: "2021-01-faschistische_jahrhundert",
+					Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/poster.png",
+					Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/preview.webp",
+					CreatedAt:  time.Date(2021, 01, 29, 20, 0, 0, 0, loc),
+					Duration:   time.Hour + 43*time.Minute + 10*time.Second,
+					Public:     true,
+					Listed:     true,
+					Tags: []*Tag{
+						{ID: TestTagBuchvorstellungID},
+						{ID: TestTagDiskussionID},
 					},
-					{
-						OwnerID: testdataChannel1,
-						ID:      testdataRecording2Speaker2,
-						Name:    "Felix Schilk",
+					Speakers: []*Speaker{
+						{
+							OwnerID: TestChannelID1,
+							ID:      testdataRecording2Speaker1,
+							Name:    "Volkmar Wölk",
+						},
+						{
+							OwnerID: TestChannelID1,
+							ID:      testdataRecording2Speaker2,
+							Name:    "Felix Schilk",
+						},
 					},
-				},
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingLang{
-				ID:          testdataRecording2Lang1,
-				RecordingID: testdataRecording2,
-				Lang:        "de",
-				Title:       "Das faschistische Jahrhundert",
-				Subtitle:    "Neurechte Diskurse zu Abendland, Identität, Europa, Neoliberalismus",
-				Short:       "„Wer das Wesen des Faschismus erkennen will, muss zurück zu dessen Wurzeln“ ­– so der Faschismusforscher Zeev Sternhell. Gleiches gilt für die europäische Neue Rechte. ...",
-				Long: `## Buchvorstellung: Das faschistische Jahrhundert
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingLang{
+					ID:          testdataRecording2Lang1,
+					RecordingID: testdataRecording2,
+					Lang:        "de",
+					Title:       "Das faschistische Jahrhundert",
+					Subtitle:    "Neurechte Diskurse zu Abendland, Identität, Europa, Neoliberalismus",
+					Short:       "„Wer das Wesen des Faschismus erkennen will, muss zurück zu dessen Wurzeln“ ­– so der Faschismusforscher Zeev Sternhell. Gleiches gilt für die europäische Neue Rechte. ...",
+					Long: `## Buchvorstellung: Das faschistische Jahrhundert
 
 „Wer das Wesen des Faschismus erkennen will, muss zurück zu dessen Wurzeln“ – so der Faschismusforscher Zeev Sternhell. Gleiches gilt für die europäische Neue Rechte. Aus welchen Gründen ist sie wann und wo mit welchen Zielen entstanden? Wo liegen ihre geistigen Wurzeln? Betreiben die „neuen“ Rechten tatsächlich eine ideologische Erneuerung der extremen Rechten, oder handelt es sich lediglich um alten Wein in neuen Schläuchen? **Volkmar Wölk** und **Felix Schilk**, Mitautoren des Bandes _Das faschistische Jahrhundert_, veranschaulichen die Denkwege der Neuen Rechten anhand von zwei zentralen Themenfelder: Einerseits ihre Europakonzeptionen und andererseits ihre wirtschafts- und sozialpolitischen Vorstellungen.
 
@@ -455,422 +300,422 @@ Ein kurzer Beitrag zu dem Buch [hier](https://www.deutschlandfunkkultur.de/fried
 
 Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxemburg-Initiative – Die Rosa-Luxemburg-Stiftung in Bremen_.
 				`,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingFormat{
-				ID:          testdataRecording2Format1,
-				RecordingID: testdataRecording2,
-				Lang:        "de",
-				Quality:     0,
-				IsVideo:     true,
-				URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/video_best.mp4",
-				Bytes:       2878429977,
-				Resolution:  "1920x1080",
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingFormat{
-				ID:          testdataRecording2Format2,
-				RecordingID: testdataRecording2,
-				Lang:        "de",
-				Quality:     160,
-				IsVideo:     true,
-				URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/video_720.mp4",
-				Bytes:       1149359246,
-				Resolution:  "1280x720",
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingFormat{
-				ID:          testdataRecording2Format3,
-				RecordingID: testdataRecording2,
-				Lang:        "de",
-				Quality:     180,
-				IsVideo:     true,
-				URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/video_480.mp4",
-				Bytes:       480268045,
-				Resolution:  "854x480",
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingFormat{
-				ID:          testdataRecording2Format4,
-				RecordingID: testdataRecording2,
-				Lang:        "de",
-				Quality:     0,
-				IsVideo:     false,
-				URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/audio_best.mp3",
-				Bytes:       115967040,
-				Resolution:  "149kb",
-			}).Error; err != nil {
-				return err
-			}
-			return nil
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingFormat{
+					ID:          testdataRecording2Format1,
+					RecordingID: testdataRecording2,
+					Lang:        "de",
+					Quality:     0,
+					IsVideo:     true,
+					URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/video_best.mp4",
+					Bytes:       2878429977,
+					Resolution:  "1920x1080",
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingFormat{
+					ID:          testdataRecording2Format2,
+					RecordingID: testdataRecording2,
+					Lang:        "de",
+					Quality:     160,
+					IsVideo:     true,
+					URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/video_720.mp4",
+					Bytes:       1149359246,
+					Resolution:  "1280x720",
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingFormat{
+					ID:          testdataRecording2Format3,
+					RecordingID: testdataRecording2,
+					Lang:        "de",
+					Quality:     180,
+					IsVideo:     true,
+					URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/video_480.mp4",
+					Bytes:       480268045,
+					Resolution:  "854x480",
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingFormat{
+					ID:          testdataRecording2Format4,
+					RecordingID: testdataRecording2,
+					Lang:        "de",
+					Quality:     0,
+					IsVideo:     false,
+					URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/45da89a7-e5e0-5104-b937-6d4c2d4b6d00/audio_best.mp3",
+					Bytes:       115967040,
+					Resolution:  "149kb",
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Delete(&RecordingFormat{
+					ID: testdataRecording2Format4,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&RecordingFormat{
+					ID: testdataRecording2Format3,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&RecordingFormat{
+					ID: testdataRecording2Format2,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&RecordingFormat{
+					ID: testdataRecording2Format1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&RecordingLang{
+					ID: testdataRecording2Lang1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&Recording{
+					ID: testdataRecording2,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
 		},
-		Rollback: func(tx *gorm.DB) error {
-			if err := tx.Delete(&RecordingFormat{
-				ID: testdataRecording2Format4,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&RecordingFormat{
-				ID: testdataRecording2Format3,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&RecordingFormat{
-				ID: testdataRecording2Format2,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&RecordingFormat{
-				ID: testdataRecording2Format1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&RecordingLang{
-				ID: testdataRecording2Lang1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&Recording{
-				ID: testdataRecording2,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
-		},
-	},
-	{
-		ID: "10-data-0020-01-recording-3",
-		Migrate: func(tx *gorm.DB) error {
-			if err := tx.Create(&Recording{
-				ID:         testdataRecording3,
-				ChannelID:  testdataChannel1,
-				CommonName: "2021-02-pushbacks",
-				Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/edb1cfbb-3476-d639-b3f5-795fabf4ef4d/poster.png",
-				Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/edb1cfbb-3476-d639-b3f5-795fabf4ef4d/preview.webp",
-				CreatedAt:  time.Date(2021, 2, 5, 20, 0, 0, 0, loc),
-				Duration:   time.Hour + 43*time.Minute + 21*time.Second,
-				Public:     true,
-				Listed:     true,
-				Tags:       []*Tag{{ID: testdataTagVortrag}},
-				Speakers: []*Speaker{
-					{
-						OwnerID: testdataChannel1,
-						ID:      testdataRecording3Speaker1,
-						Name:    "Bernd Kasparek",
+		{
+			ID: "10-data-0020-01-recording-3",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.Create(&Recording{
+					ID:         testdataRecording3,
+					ChannelID:  TestChannelID1,
+					CommonName: "2021-02-pushbacks",
+					Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/edb1cfbb-3476-d639-b3f5-795fabf4ef4d/poster.png",
+					Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/edb1cfbb-3476-d639-b3f5-795fabf4ef4d/preview.webp",
+					CreatedAt:  time.Date(2021, 2, 5, 20, 0, 0, 0, loc),
+					Duration:   time.Hour + 43*time.Minute + 21*time.Second,
+					Public:     true,
+					Listed:     true,
+					Tags:       []*Tag{{ID: TestTagVortragID}},
+					Speakers: []*Speaker{
+						{
+							OwnerID: TestChannelID1,
+							ID:      testdataRecording3Speaker1,
+							Name:    "Bernd Kasparek",
+						},
 					},
-				},
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingLang{
-				ID:          testdataRecording3Lang1,
-				RecordingID: testdataRecording3,
-				Lang:        "de",
-				Title:       "Pushbacks, Internierung, Zugangshürden",
-				Subtitle:    "Zum Stand des europäischen Migrations- und Grenzregimes",
-				Short:       "Nach dem katastrophalen Brand des Flüchtlingslagers Moria auf Lesbos hatte die Europäische Kommission erneut einen Neustart in der europäischen Migrations- und Asylpolitik versucht. ...",
-				Long: `Nach dem katastrophalen Brand des Flüchtlingslagers Moria auf Lesbos hatte die Europäische Kommission erneut einen Neustart in der europäischen Migrations- und Asylpolitik versucht. Der Neue Pakt für Asyl und Migration spitzt jedoch vor allem die Entwicklungen zu, die das europäische Asylsystem seit dem Sommer der Migration 2015 kennzeichnen: Zugangshürden zum Asylsystem und massive Internierung. Der Pakt adressiert jedoch nicht die bestehenden Rechtsverletzungen, die das europäische Grenzregime kennzeichnen: illegale Pushbacks sind an vielen Abschnitten der europäischen Außengrenze zur Normalität geworden, und scheinen von der europäischen Grenzschutzagentur Frontex stillschweigend geduldet, oder sogar aktiv unterstützt zu werden. Dies ist vor allem deswegen Besorgnis erregend, da die Agentur bis 2027 über ein eigenes Grenzschutzkorps mit 10.000 Grenzschützern verfügen soll. In der Veranstaltung werden all diese Entwicklungen des letzten Jahres skizziert werden, wobei eine Diskussion um Alternativen und Handlungsmöglichkeiten für ein solidarisches Europa von unten nicht zu kurz kommen sollen.
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingLang{
+					ID:          testdataRecording3Lang1,
+					RecordingID: testdataRecording3,
+					Lang:        "de",
+					Title:       "Pushbacks, Internierung, Zugangshürden",
+					Subtitle:    "Zum Stand des europäischen Migrations- und Grenzregimes",
+					Short:       "Nach dem katastrophalen Brand des Flüchtlingslagers Moria auf Lesbos hatte die Europäische Kommission erneut einen Neustart in der europäischen Migrations- und Asylpolitik versucht. ...",
+					Long: `Nach dem katastrophalen Brand des Flüchtlingslagers Moria auf Lesbos hatte die Europäische Kommission erneut einen Neustart in der europäischen Migrations- und Asylpolitik versucht. Der Neue Pakt für Asyl und Migration spitzt jedoch vor allem die Entwicklungen zu, die das europäische Asylsystem seit dem Sommer der Migration 2015 kennzeichnen: Zugangshürden zum Asylsystem und massive Internierung. Der Pakt adressiert jedoch nicht die bestehenden Rechtsverletzungen, die das europäische Grenzregime kennzeichnen: illegale Pushbacks sind an vielen Abschnitten der europäischen Außengrenze zur Normalität geworden, und scheinen von der europäischen Grenzschutzagentur Frontex stillschweigend geduldet, oder sogar aktiv unterstützt zu werden. Dies ist vor allem deswegen Besorgnis erregend, da die Agentur bis 2027 über ein eigenes Grenzschutzkorps mit 10.000 Grenzschützern verfügen soll. In der Veranstaltung werden all diese Entwicklungen des letzten Jahres skizziert werden, wobei eine Diskussion um Alternativen und Handlungsmöglichkeiten für ein solidarisches Europa von unten nicht zu kurz kommen sollen.
 
 **Bernd Kasparek** ist seit vielen Jahren Aktivist und Grenzregimeforscher. Sein Buch „Europa als Grenze. Eine Ethnographie der Grenzschutz-Agentur Frontex“ wird im Mai bei transcript erscheinen. Er ist Mitglied des Netzwerks für Kritische Migrations- und Grenzregimeforschung und der Forschungsassoziation [bordermonitoring.eu](http://bordermonitoring.eu/) e.V.
 
 Eine Veranstaltung des Kulturzentrum Kukoon in Kooperation mit der Rosa-Luxemburg-Initiative – Die Rosa-Luxemburg-Stiftung in Bremen.
 				`,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingFormat{
-				ID:          testdataRecording3Format1,
-				RecordingID: testdataRecording3,
-				Lang:        "de",
-				Quality:     0,
-				IsVideo:     true,
-				URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/edb1cfbb-3476-d639-b3f5-795fabf4ef4d/video_best.mp4",
-				Bytes:       1092701356,
-				Resolution:  "1920x1080",
-			}).Error; err != nil {
-				return err
-			}
-			return nil
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingFormat{
+					ID:          testdataRecording3Format1,
+					RecordingID: testdataRecording3,
+					Lang:        "de",
+					Quality:     0,
+					IsVideo:     true,
+					URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/edb1cfbb-3476-d639-b3f5-795fabf4ef4d/video_best.mp4",
+					Bytes:       1092701356,
+					Resolution:  "1920x1080",
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Delete(&RecordingFormat{
+					ID: testdataRecording3Format1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&RecordingLang{
+					ID: testdataRecording3Lang1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&Recording{
+					ID: testdataRecording3,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
 		},
-		Rollback: func(tx *gorm.DB) error {
-			if err := tx.Delete(&RecordingFormat{
-				ID: testdataRecording3Format1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&RecordingLang{
-				ID: testdataRecording3Lang1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&Recording{
-				ID: testdataRecording3,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
-		},
-	},
-	{
-		ID: "10-data-0020-01-recording-4",
-		Migrate: func(tx *gorm.DB) error {
-			if err := tx.Create(&Recording{
-				ID:         testdataRecording4,
-				ChannelID:  testdataChannel1,
-				CommonName: "2021-02-der_berg_der_nackten_wahrheiten",
-				Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/13a70ec7-6e74-5114-021f-4d7910752df1/poster.png",
-				Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/13a70ec7-6e74-5114-021f-4d7910752df1/preview.webp",
-				CreatedAt:  time.Date(2021, 2, 11, 19, 0, 0, 0, loc),
-				Duration:   29*time.Minute + 56*time.Second,
-				Public:     true,
-				Listed:     true,
-				Tags:       []*Tag{{ID: testdataTagBuchvorstellung}},
-				Speakers: []*Speaker{
-					{
-						OwnerID: testdataChannel1,
-						ID:      testdataRecording4Speaker1,
-						Name:    "Jan Backmann",
+		{
+			ID: "10-data-0020-01-recording-4",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.Create(&Recording{
+					ID:         testdataRecording4,
+					ChannelID:  TestChannelID1,
+					CommonName: "2021-02-der_berg_der_nackten_wahrheiten",
+					Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/13a70ec7-6e74-5114-021f-4d7910752df1/poster.png",
+					Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/13a70ec7-6e74-5114-021f-4d7910752df1/preview.webp",
+					CreatedAt:  time.Date(2021, 2, 11, 19, 0, 0, 0, loc),
+					Duration:   29*time.Minute + 56*time.Second,
+					Public:     true,
+					Listed:     true,
+					Tags:       []*Tag{{ID: TestTagBuchvorstellungID}},
+					Speakers: []*Speaker{
+						{
+							OwnerID: TestChannelID1,
+							ID:      testdataRecording4Speaker1,
+							Name:    "Jan Backmann",
+						},
 					},
-				},
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingLang{
-				ID:          testdataRecording4Lang1,
-				RecordingID: testdataRecording4,
-				Lang:        "de",
-				Title:       "Der Berg der nackten Wahrheiten",
-				Subtitle:    "Die Geschichte des legendären Monte Verità aus der Sicht einer Ziege erzählt",
-				Short:       `Gusto verbringt sein Leben auf dem Monte Verità im Tessin. Doch nicht alles verläuft so sorgenlos, wie der Hippie-Vorläufer es sich in seiner Traumwelt vorstellt hatte: Das Geld der vegetarisch-kommunistischen FKK-Gemeinschaft wird langsam knapp und als Gusto auch noch eine Ziege aus dem Dorfe bei sich aufnimmt, wächst die Wut der Bewohner\*innen von Ascona auf die Aussteiger\*innen.  ...`,
-				Long: `
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingLang{
+					ID:          testdataRecording4Lang1,
+					RecordingID: testdataRecording4,
+					Lang:        "de",
+					Title:       "Der Berg der nackten Wahrheiten",
+					Subtitle:    "Die Geschichte des legendären Monte Verità aus der Sicht einer Ziege erzählt",
+					Short:       `Gusto verbringt sein Leben auf dem Monte Verità im Tessin. Doch nicht alles verläuft so sorgenlos, wie der Hippie-Vorläufer es sich in seiner Traumwelt vorstellt hatte: Das Geld der vegetarisch-kommunistischen FKK-Gemeinschaft wird langsam knapp und als Gusto auch noch eine Ziege aus dem Dorfe bei sich aufnimmt, wächst die Wut der Bewohner\*innen von Ascona auf die Aussteiger\*innen.  ...`,
+					Long: `
 Gusto verbringt sein Leben auf dem Monte Verità im Tessin. Doch nicht alles verläuft so sorgenlos, wie der Hippie-Vorläufer es sich in seiner Traumwelt vorstellt hatte: Das Geld der vegetarisch-kommunistischen FKK-Gemeinschaft wird langsam knapp und als Gusto auch noch eine Ziege aus dem Dorfe bei sich aufnimmt, wächst die Wut der Bewohner\*innen von Ascona auf die Aussteiger\*innen. Nichtsdestotrotz schmiedet Gusto einen irrwitzigen Plan, wie er seine geliebte Ziege weiterhin bei sich behalten kann. Nach seinem ersten, sehr erfolgreichen Comic *Mühsam, Anarchist in Anführungsstrichen*, veröffentlicht der Autor nun eine Erzählung, die zehn Jahre früher spielt, vor dem Hintergrund der Aktivitäten auf dem Monte Verità, dem Treffpunkt der ersten Aussteiger\*innen im 20. Jahrhundert. Auch dieses Mal zapft Bachmann historische Quellen an, um daraus eine pointierte und bissige politische Komödie zu machen. Im Mittelpunkt steht nun allerdings eine Ziege, die Ziege der Vegetarier\*innen. Eine Leseprobe findet sich [hier](https://www.editionmoderne.ch/buch/der-berg-der-nackten-wahrheiten/).
 
 **Jan Bachmann**
 Geboren 1986 in Basel, hat an der Deutschen Film- und Fernsehakademie in Berlin studiert. 2013 bis 2015 war er Mitglied in einem brandenburgischen FKK-Verein. Sein erster Comic *Mühsam, Anarchist in Anführungsstrichen* ist 2018 bei der Edition Moderne erschienen und wurde unter anderem für den Max und Moritz-Preis nominiert. Aktuell arbeitet er an einem Buch zum Exil von Kaiser Wilhelm II in Holland.
 				`,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingFormat{
-				ID:          testdataRecording4Format1,
-				RecordingID: testdataRecording4,
-				Lang:        "de",
-				Quality:     0,
-				IsVideo:     true,
-				URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/13a70ec7-6e74-5114-021f-4d7910752df1/video_best.mp4",
-				Bytes:       2020856776,
-				Resolution:  "1920x1080",
-			}).Error; err != nil {
-				return err
-			}
-			return nil
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingFormat{
+					ID:          testdataRecording4Format1,
+					RecordingID: testdataRecording4,
+					Lang:        "de",
+					Quality:     0,
+					IsVideo:     true,
+					URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/13a70ec7-6e74-5114-021f-4d7910752df1/video_best.mp4",
+					Bytes:       2020856776,
+					Resolution:  "1920x1080",
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Delete(&RecordingFormat{
+					ID: testdataRecording4Format1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&RecordingLang{
+					ID: testdataRecording4Lang1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&Recording{
+					ID: testdataRecording4,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
 		},
-		Rollback: func(tx *gorm.DB) error {
-			if err := tx.Delete(&RecordingFormat{
-				ID: testdataRecording4Format1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&RecordingLang{
-				ID: testdataRecording4Lang1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&Recording{
-				ID: testdataRecording4,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
-		},
-	},
-	{
-		ID: "10-data-0020-01-recording-5",
-		Migrate: func(tx *gorm.DB) error {
-			if err := tx.Create(&Recording{
-				ID:         testdataRecording5,
-				ChannelID:  testdataChannel1,
-				CommonName: "2021-02-geschichte_wird_gemacht",
-				Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/27efbfff-d66c-c935-b308-9b1ee2bf78c8/poster.png",
-				Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/27efbfff-d66c-c935-b308-9b1ee2bf78c8/preview.webp",
-				CreatedAt:  time.Date(2021, 2, 26, 19, 0, 0, 0, loc),
-				Duration:   time.Hour + 12*time.Minute + 33*time.Second,
-				Public:     true,
-				Listed:     true,
-				Tags:       []*Tag{{ID: testdataTagDiskussion}},
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingLang{
-				ID:          testdataRecording5Lang1,
-				RecordingID: testdataRecording5,
-				Lang:        "de",
-				Title:       "Geschichte wird gemacht",
-				Subtitle:    "aber wie und von wem?",
-				Short:       "Das Erinnern an die Verbrechen und ein würdiges Gedenken an die Opfer des Nationalsozialismus ist und bleibt wichtig. Darin sind sich ein großer Teil der Bremer:innen und auch viele Politiker:innen einig. Doch wie sollten diese Erinnerung(en) eigentlich gestaltet sein? ...",
-				Long: `
+		{
+			ID: "10-data-0020-01-recording-5",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.Create(&Recording{
+					ID:         testdataRecording5,
+					ChannelID:  TestChannelID1,
+					CommonName: "2021-02-geschichte_wird_gemacht",
+					Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/27efbfff-d66c-c935-b308-9b1ee2bf78c8/poster.png",
+					Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/27efbfff-d66c-c935-b308-9b1ee2bf78c8/preview.webp",
+					CreatedAt:  time.Date(2021, 2, 26, 19, 0, 0, 0, loc),
+					Duration:   time.Hour + 12*time.Minute + 33*time.Second,
+					Public:     true,
+					Listed:     true,
+					Tags:       []*Tag{{ID: TestTagDiskussionID}},
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingLang{
+					ID:          testdataRecording5Lang1,
+					RecordingID: testdataRecording5,
+					Lang:        "de",
+					Title:       "Geschichte wird gemacht",
+					Subtitle:    "aber wie und von wem?",
+					Short:       "Das Erinnern an die Verbrechen und ein würdiges Gedenken an die Opfer des Nationalsozialismus ist und bleibt wichtig. Darin sind sich ein großer Teil der Bremer:innen und auch viele Politiker:innen einig. Doch wie sollten diese Erinnerung(en) eigentlich gestaltet sein? ...",
+					Long: `
 Das Erinnern an die Verbrechen und ein würdiges Gedenken an die Opfer des Nationalsozialismus ist und bleibt wichtig. Darin sind sich ein großer Teil der Bremer:innen und auch viele Politiker:innen einig. Doch wie sollten diese Erinnerung(en) eigentlich gestaltet sein? Wie sollten die heutigen Kenntnisse und die geschichtlichen Perspektiven vermittelt werden? Wie können die Auseinandersetzungen um die historischen Orte in unserer unmittelbaren Umgebung aktuell bleiben? Diese und andere Fragen wollen wir als ein Zusammenschluß freier Mitarbeiter:innen am Denkort Bunker Valentin in einem digitalen Forum mit den Gästen diskutieren. Bewusst wollen wir damit die Konvention einer starren Frontalveranstaltung aufbrechen und miteinander ins Gespräch kommen. In einer anschließenden Podiumsdiskussion wollen wir dann abgleichen, wie es um die „gesellschaftliche Verantwortung“ in Bremen und anderswo praktisch bestellt ist. Wer macht diese Arbeit und unter welchen Bedingungen? Wir diskutieren mit einer Aktiven des „Arisierungs“-Mahnmals in Bremen und der Initiative „Geschichte wird gemacht“ aus Berlin. Gemeinsam sollen Grenzen und Chancen einer Geschichtsvermittlung diskutiert werden, die eine lebendige Erinnerungskultur nicht nur beredet sondern umsetzt. Alle Interessierten sind herzlich willkommen!
 
 Eine Veranstaltung von Erinnerungskultur anstellen. Organisierung freier Mitarbeitender am Denkort Bunker Valentin in kooperation mit dem Kulturzentrum Kukoon und Erinnern für die Zukunft e.V. sowie der Rosa-Luxemburg-Initiative – Die Rosa-Luxemburg-Stiftung in Bremen. 
 				`,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingFormat{
-				ID:          testdataRecording5Format1,
-				RecordingID: testdataRecording5,
-				Lang:        "de",
-				Quality:     0,
-				IsVideo:     true,
-				URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/27efbfff-d66c-c935-b308-9b1ee2bf78c8/video_best.mp4",
-				Bytes:       862470450,
-				Resolution:  "1920x1080",
-			}).Error; err != nil {
-				return err
-			}
-			return nil
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingFormat{
+					ID:          testdataRecording5Format1,
+					RecordingID: testdataRecording5,
+					Lang:        "de",
+					Quality:     0,
+					IsVideo:     true,
+					URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/27efbfff-d66c-c935-b308-9b1ee2bf78c8/video_best.mp4",
+					Bytes:       862470450,
+					Resolution:  "1920x1080",
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Delete(&RecordingFormat{
+					ID: testdataRecording5Format1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&RecordingLang{
+					ID: testdataRecording5Lang1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&Recording{
+					ID: testdataRecording5,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
 		},
-		Rollback: func(tx *gorm.DB) error {
-			if err := tx.Delete(&RecordingFormat{
-				ID: testdataRecording5Format1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&RecordingLang{
-				ID: testdataRecording5Lang1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&Recording{
-				ID: testdataRecording5,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
-		},
-	},
-	{
-		ID: "10-data-0020-01-recording-6",
-		Migrate: func(tx *gorm.DB) error {
-			if err := tx.Create(&Recording{
-				ID:         testdataRecording6,
-				ChannelID:  testdataChannel1,
-				CommonName: "2021-03-verschwoerungserzaehlung",
-				Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/poster.png",
-				Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/preview.webp",
-				CreatedAt:  time.Date(2021, 3, 3, 19, 0, 0, 0, loc),
-				Duration:   time.Hour + 14*time.Minute + 17*time.Second,
-				Public:     true,
-				Listed:     true,
-				Tags:       []*Tag{{ID: testdataTagVortrag}, {ID: testdataTagDiskussion}},
-				Speakers: []*Speaker{
-					{
-						OwnerID: testdataChannel1,
-						ID:      testdataRecording6Speaker1,
-						Name:    "Johanna Bröse",
+		{
+			ID: "10-data-0020-01-recording-6",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.Create(&Recording{
+					ID:         testdataRecording6,
+					ChannelID:  TestChannelID1,
+					CommonName: "2021-03-verschwoerungserzaehlung",
+					Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/poster.png",
+					Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/preview.webp",
+					CreatedAt:  time.Date(2021, 3, 3, 19, 0, 0, 0, loc),
+					Duration:   time.Hour + 14*time.Minute + 17*time.Second,
+					Public:     true,
+					Listed:     true,
+					Tags:       []*Tag{{ID: TestTagVortragID}, {ID: TestTagDiskussionID}},
+					Speakers: []*Speaker{
+						{
+							OwnerID: TestChannelID1,
+							ID:      testdataRecording6Speaker1,
+							Name:    "Johanna Bröse",
+						},
+						{
+							OwnerID: TestChannelID1,
+							ID:      testdataRecording6Speaker2,
+							Name:    "Andrea Strübe",
+						},
 					},
-					{
-						OwnerID: testdataChannel1,
-						ID:      testdataRecording6Speaker2,
-						Name:    "Andrea Strübe",
-					},
-				},
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingLang{
-				ID:          testdataRecording6Lang1,
-				RecordingID: testdataRecording6,
-				Lang:        "de",
-				Title:       "Welche Funktion haben Verschwörungserzählungen?",
-				Subtitle:    "Warum der Glaube an einen Kapitalismus mit menschlichem Antlitz letztlich die größte Verschwörungsideologie ist.",
-				Short:       "Verschwörungen – es gibt sie wirklich. Sie sind ein wichtiges Instrument zur Sicherung der politischen und gesellschaftlichen Macht in der Klassengesellschaft, aber auch bei Machtkämpfen unterschiedlicher Interessensgruppen untereinander oder im Kampf gegen Systemalternativen. Der Kapitalismus als Klassengesellschaft ist darauf angewiesen, den Antagonismus zwischen Kapitalisten und Lohnabhängigen aufrecht zu erhalten, und die Arbeiter*innenklasse auch durch Strategien der Verschleierung der Ausbeutungsverhältnisse von einer weitreichenden Organisierung abzuhalten. ...",
-				Long: `Verschwörungen – es gibt sie wirklich. Sie sind ein wichtiges Instrument zur Sicherung der politischen und gesellschaftlichen Macht in der Klassengesellschaft, aber auch bei Machtkämpfen unterschiedlicher Interessensgruppen untereinander oder im Kampf gegen Systemalternativen. Der Kapitalismus als Klassengesellschaft ist darauf angewiesen, den Antagonismus zwischen Kapitalisten und Lohnabhängigen aufrecht zu erhalten, und die Arbeiter\*innenklasse auch durch Strategien der Verschleierung der Ausbeutungsverhältnisse von einer weitreichenden Organisierung abzuhalten. Viele der realen Verschwörungen wurden früher oder später aufgedeckt – durch kritische Journalist\*innen, Forscher\*innen, Aktivist\*innen.  Wiederum andere Verschwörungserzählungen – wie die, dass US-Eliten einen grausamen Handel mit Kindern aus einer Pizzeria heraus organisierten, konnten nie bewiesen werden. Warum? Weil sie schlicht und ergreifend falsch sind. Es gibt natürlich von vielen Menschen ein berechtigtes Unbehagen bis hin zum offenen Widerstand gegenüber dem gesellschaftlichen System, in dem wir leben. Ausbeutung, Ungleichheit, Klassenverhältnisse, struktureller Rassismus und Sexismus – um nur einige zu nennen – sind Erscheinungen eines globalen Kapitalismus. Aber nicht nur fortschrittliche Linke haben diesem den Kampf angesagt. Die Wut der Anhänger\*innen von Verschwörungserzählungen richtet sich gegen „die Multimilliardäre“, „das Establishment“ oder gegen „die Regierung“ –  ihre Macht wird aber mit einem Potpourri aus antisemitischen, rassistischen, antikommunistischen, antifeministischen und öfter auch esoterisch-wissenschaftsfeindlichen Versatzstücken erklärt. Verschwörungsanhänger\*innen versuchen also, grob gesagt, reale politische und gesellschaftliche Konflikte durch Machenschaften einer geheimen Gruppe zu erklären. Wie aber sollte man diesen Theorien und ihren Anhänger\*innen begegnen? Wie hängen Verschwörungstheorien und rechte Gesinnung zusammen? Und wie können wir produktiv mit der Erkenntnis umgehen, dass ein Kapitalismus mit menschlichem Antlitz letztlich die virulenteste Verschwörungserzählung ist?
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingLang{
+					ID:          testdataRecording6Lang1,
+					RecordingID: testdataRecording6,
+					Lang:        "de",
+					Title:       "Welche Funktion haben Verschwörungserzählungen?",
+					Subtitle:    "Warum der Glaube an einen Kapitalismus mit menschlichem Antlitz letztlich die größte Verschwörungsideologie ist.",
+					Short:       "Verschwörungen – es gibt sie wirklich. Sie sind ein wichtiges Instrument zur Sicherung der politischen und gesellschaftlichen Macht in der Klassengesellschaft, aber auch bei Machtkämpfen unterschiedlicher Interessensgruppen untereinander oder im Kampf gegen Systemalternativen. Der Kapitalismus als Klassengesellschaft ist darauf angewiesen, den Antagonismus zwischen Kapitalisten und Lohnabhängigen aufrecht zu erhalten, und die Arbeiter*innenklasse auch durch Strategien der Verschleierung der Ausbeutungsverhältnisse von einer weitreichenden Organisierung abzuhalten. ...",
+					Long: `Verschwörungen – es gibt sie wirklich. Sie sind ein wichtiges Instrument zur Sicherung der politischen und gesellschaftlichen Macht in der Klassengesellschaft, aber auch bei Machtkämpfen unterschiedlicher Interessensgruppen untereinander oder im Kampf gegen Systemalternativen. Der Kapitalismus als Klassengesellschaft ist darauf angewiesen, den Antagonismus zwischen Kapitalisten und Lohnabhängigen aufrecht zu erhalten, und die Arbeiter\*innenklasse auch durch Strategien der Verschleierung der Ausbeutungsverhältnisse von einer weitreichenden Organisierung abzuhalten. Viele der realen Verschwörungen wurden früher oder später aufgedeckt – durch kritische Journalist\*innen, Forscher\*innen, Aktivist\*innen.  Wiederum andere Verschwörungserzählungen – wie die, dass US-Eliten einen grausamen Handel mit Kindern aus einer Pizzeria heraus organisierten, konnten nie bewiesen werden. Warum? Weil sie schlicht und ergreifend falsch sind. Es gibt natürlich von vielen Menschen ein berechtigtes Unbehagen bis hin zum offenen Widerstand gegenüber dem gesellschaftlichen System, in dem wir leben. Ausbeutung, Ungleichheit, Klassenverhältnisse, struktureller Rassismus und Sexismus – um nur einige zu nennen – sind Erscheinungen eines globalen Kapitalismus. Aber nicht nur fortschrittliche Linke haben diesem den Kampf angesagt. Die Wut der Anhänger\*innen von Verschwörungserzählungen richtet sich gegen „die Multimilliardäre“, „das Establishment“ oder gegen „die Regierung“ –  ihre Macht wird aber mit einem Potpourri aus antisemitischen, rassistischen, antikommunistischen, antifeministischen und öfter auch esoterisch-wissenschaftsfeindlichen Versatzstücken erklärt. Verschwörungsanhänger\*innen versuchen also, grob gesagt, reale politische und gesellschaftliche Konflikte durch Machenschaften einer geheimen Gruppe zu erklären. Wie aber sollte man diesen Theorien und ihren Anhänger\*innen begegnen? Wie hängen Verschwörungstheorien und rechte Gesinnung zusammen? Und wie können wir produktiv mit der Erkenntnis umgehen, dass ein Kapitalismus mit menschlichem Antlitz letztlich die virulenteste Verschwörungserzählung ist?
 
 Eine Veranstaltung von [kritisch-lesen.de](https://kritisch-lesen.de) in Kooperation mit dem Kulturzentrum Kukoon.
 				`,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingFormat{
-				ID:          testdataRecording6Format1,
-				RecordingID: testdataRecording6,
-				Lang:        "de",
-				Quality:     0,
-				IsVideo:     true,
-				URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/video_best.mp4",
-				Bytes:       1426234816,
-				Resolution:  "1920x1080",
-			}).Error; err != nil {
-				return err
-			}
-			return nil
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingFormat{
+					ID:          testdataRecording6Format1,
+					RecordingID: testdataRecording6,
+					Lang:        "de",
+					Quality:     0,
+					IsVideo:     true,
+					URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/81b262e9-e010-1fa2-84a5-d8cee1a94835/video_best.mp4",
+					Bytes:       1426234816,
+					Resolution:  "1920x1080",
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Delete(&RecordingFormat{
+					ID: testdataRecording6Format1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&RecordingLang{
+					ID: testdataRecording6Lang1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&Recording{
+					ID: testdataRecording6,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
 		},
-		Rollback: func(tx *gorm.DB) error {
-			if err := tx.Delete(&RecordingFormat{
-				ID: testdataRecording6Format1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&RecordingLang{
-				ID: testdataRecording6Lang1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&Recording{
-				ID: testdataRecording6,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
-		},
-	},
-	{
-		ID: "10-data-0020-01-recording-7",
-		Migrate: func(tx *gorm.DB) error {
-			if err := tx.Create(&Recording{
-				ID:         testdataRecording7,
-				ChannelID:  testdataChannel1,
-				CommonName: "2021-03-kriegsgefanngende_in_bremen",
-				Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/poster.png",
-				Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/preview.webp",
-				CreatedAt:  time.Date(2021, 3, 4, 19, 0, 0, 0, loc),
-				Duration:   time.Hour + 4*time.Minute + 25*time.Second,
-				Public:     true,
-				Listed:     true,
-				Tags:       []*Tag{{ID: testdataTagVortrag}},
-				Speakers: []*Speaker{
-					{
-						OwnerID: testdataChannel1,
-						ID:      testdataRecording7Speaker1,
-						Name:    "Andreas Ehresmann",
+		{
+			ID: "10-data-0020-01-recording-7",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.Create(&Recording{
+					ID:         testdataRecording7,
+					ChannelID:  TestChannelID1,
+					CommonName: "2021-03-kriegsgefanngende_in_bremen",
+					Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/poster.png",
+					Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/preview.webp",
+					CreatedAt:  time.Date(2021, 3, 4, 19, 0, 0, 0, loc),
+					Duration:   time.Hour + 4*time.Minute + 25*time.Second,
+					Public:     true,
+					Listed:     true,
+					Tags:       []*Tag{{ID: TestTagVortragID}},
+					Speakers: []*Speaker{
+						{
+							OwnerID: TestChannelID1,
+							ID:      testdataRecording7Speaker1,
+							Name:    "Andreas Ehresmann",
+						},
+						{
+							OwnerID: TestChannelID1,
+							ID:      testdataRecording7Speaker2,
+							Name:    "Ronald Sperling",
+						},
+						{
+							OwnerID: TestChannelID1,
+							ID:      testdataRecording7Speaker3,
+							Name:    "Ines Dirolf",
+						},
 					},
-					{
-						OwnerID: testdataChannel1,
-						ID:      testdataRecording7Speaker2,
-						Name:    "Ronald Sperling",
-					},
-					{
-						OwnerID: testdataChannel1,
-						ID:      testdataRecording7Speaker3,
-						Name:    "Ines Dirolf",
-					},
-				},
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingLang{
-				ID:          testdataRecording7Lang1,
-				RecordingID: testdataRecording7,
-				Lang:        "de",
-				Title:       "„Die mir von der Wehrmacht angebotenen Kriegsgefangenen sind derart entkräftet“",
-				Subtitle:    "Sowjetische Kriegsgefangene in Bremer Arbeitskommandos 1941-1945",
-				Short:       `Sowjetische Kriegsgefangene bildeten eine der größten Opfergruppen des Nationalsozialismus. Die Wehrmacht brachte Millionen sowjetische Soldat\*innen zum Arbeitseinsatz ins Deutsche Reich. ...`,
-				Long: `
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingLang{
+					ID:          testdataRecording7Lang1,
+					RecordingID: testdataRecording7,
+					Lang:        "de",
+					Title:       "„Die mir von der Wehrmacht angebotenen Kriegsgefangenen sind derart entkräftet“",
+					Subtitle:    "Sowjetische Kriegsgefangene in Bremer Arbeitskommandos 1941-1945",
+					Short:       `Sowjetische Kriegsgefangene bildeten eine der größten Opfergruppen des Nationalsozialismus. Die Wehrmacht brachte Millionen sowjetische Soldat\*innen zum Arbeitseinsatz ins Deutsche Reich. ...`,
+					Long: `
 Sowjetische Kriegsgefangene bildeten eine der größten Opfergruppen des Nationalsozialismus. Die Wehrmacht brachte Millionen sowjetische Soldat\*innen zum Arbeitseinsatz ins Deutsche Reich. Mehr als die Hälfte von ihnen überlebte die Kriegsgefangenschaft in den Kriegsgefangenenlagern wie dem Stalag X B Sandbostel und den Außenkommandos nicht. Auch in Bremen setzten Firmen und Behörden die kriegsgefangenen Rotarmisten zur Arbeit ein, vornehmlich in der Rüstungsindustrie. Im unserem Vortrag wollen wir die ökonomischen und ideologischen Hintergründe und Widersprüche dieser Arbeitseinsätze aufzeigen. Anhand einzelner exemplarischer Arbeitskommandos beleuchten wir die Lebens- und Arbeitsbedingungen von sowjetischen Kriegsgefangenen in Bremen. Der Vortrag lädt alle Interessierte zum Austausch über dieses lange verdrängte Thema ein.
 
 Online-Vortrag mit Andreas Ehresmann, Ronald Sperling und Ines Dirolf.
@@ -879,158 +724,158 @@ Eine Veranstaltung der Gedenkstätte Lager Sandbostel in Kooperation mit dem Kul
 
 Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, der am 15.09.1942 in das Arbeitskommando der Bremer Francke-Werke eingesetzt wurde und am 11.03.1942 an Tuberkulose starb, Quelle [https://obd-memorial.ru/html/info.htm?id=300643349](https://obd-memorial.ru/html/info.htm?id=300643349)
 `,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingFormat{
-				ID:          testdataRecording7Format1,
-				RecordingID: testdataRecording7,
-				Lang:        "de",
-				Quality:     0,
-				IsVideo:     true,
-				URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/video_best.mp4",
-				Bytes:       958856106,
-				Resolution:  "1920x1080",
-			}).Error; err != nil {
-				return err
-			}
-			return nil
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingFormat{
+					ID:          testdataRecording7Format1,
+					RecordingID: testdataRecording7,
+					Lang:        "de",
+					Quality:     0,
+					IsVideo:     true,
+					URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/video_best.mp4",
+					Bytes:       958856106,
+					Resolution:  "1920x1080",
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Delete(&RecordingFormat{
+					ID: testdataRecording7Format1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&RecordingLang{
+					ID: testdataRecording7Lang1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&Recording{
+					ID: testdataRecording7,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
 		},
-		Rollback: func(tx *gorm.DB) error {
-			if err := tx.Delete(&RecordingFormat{
-				ID: testdataRecording7Format1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&RecordingLang{
-				ID: testdataRecording7Lang1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&Recording{
-				ID: testdataRecording7,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
-		},
-	},
-	{
-		ID: "10-data-0020-01-recording-8",
-		Migrate: func(tx *gorm.DB) error {
-			if err := tx.Create(&Recording{
-				ID:         testdataRecording8,
-				ChannelID:  testdataChannel1,
-				CommonName: "2021-03-kriegsgefanngende_in_bremen",
-				Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/06e3a71e-581d-4735-9647-3e4a49b5caa8/poster.png",
-				Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/06e3a71e-581d-4735-9647-3e4a49b5caa8/preview.webp",
-				CreatedAt:  time.Date(2021, 4, 15, 19, 0, 0, 0, loc),
-				Duration:   time.Hour + 8*time.Minute,
-				Public:     true,
-				Listed:     true,
-				Tags: []*Tag{
-					{ID: testdataTagBuchvorstellung},
-					{ID: testdataTagDiskussion},
-				},
-				Speakers: []*Speaker{
-					{
-						OwnerID: testdataChannel1,
-						ID:      testdataRecording8Speaker1,
-						Name:    "Andreas Speit",
+		{
+			ID: "10-data-0020-01-recording-8",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.Create(&Recording{
+					ID:         testdataRecording8,
+					ChannelID:  TestChannelID1,
+					CommonName: "2021-03-kriegsgefanngende_in_bremen",
+					Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/06e3a71e-581d-4735-9647-3e4a49b5caa8/poster.png",
+					Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/06e3a71e-581d-4735-9647-3e4a49b5caa8/preview.webp",
+					CreatedAt:  time.Date(2021, 4, 15, 19, 0, 0, 0, loc),
+					Duration:   time.Hour + 8*time.Minute,
+					Public:     true,
+					Listed:     true,
+					Tags: []*Tag{
+						{ID: TestTagBuchvorstellungID},
+						{ID: TestTagDiskussionID},
 					},
-				},
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingLang{
-				ID:          testdataRecording8Lang1,
-				RecordingID: testdataRecording8,
-				Lang:        "de",
-				Title:       "Rechte Egoshooter",
-				Subtitle:    "Von der virtuellen Hetze zum Livestream-Attentat",
-				Short:       `Weltweit gibt es rechtsterroristische Attentate eines neuen Typs. In Halle (Saale) verhinderte nur eine verschlossene Holztür der Synagoge ein größeres Massaker. ...`,
-				Long: `Weltweit gibt es rechtsterroristische Attentate eines neuen Typs. In Halle (Saale) verhinderte nur eine verschlossene Holztür der Synagoge ein größeres Massaker. Am 9. Oktober 2019 wollte dort ein Rechtsextremist die versammelten Juden hinrichten. Mit selbstgebauten Waffen schoss er auf die Tür und warf eigens hergestellte Sprengsätze. Online konnten Gleichgesinnte zusehen, wie er zwei Menschen ermordete: Seine Tat verbreitete er per Videokamera auf einem Portal für Computerspiel-Videos. Er ahmte damit andere »Egoshooter« nach – wie einen Rechtsextremisten, der in Neuseeland wenige Monate zuvor die Tötung von 51 Menschen live im Internet übertragen hatte. Was treibt Menschen vom Bildschirm zur realen Gewalt auf der Straße? Die Beiträge des Buches gehen den Spuren der Attentäter nach und zeigen die speziellen Radikalisierungsmechanismen im Netz auf. Sie erklären die Hintergründe und Motive dieser Männer, die in ihren rechten Online-Gemeinden Antisemitismus, Rassismus und Antifeminismus verbreiten. Das Buch gibt Einblicke in eine Welt, die vielen unbekannt ist.
+					Speakers: []*Speaker{
+						{
+							OwnerID: TestChannelID1,
+							ID:      testdataRecording8Speaker1,
+							Name:    "Andreas Speit",
+						},
+					},
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingLang{
+					ID:          testdataRecording8Lang1,
+					RecordingID: testdataRecording8,
+					Lang:        "de",
+					Title:       "Rechte Egoshooter",
+					Subtitle:    "Von der virtuellen Hetze zum Livestream-Attentat",
+					Short:       `Weltweit gibt es rechtsterroristische Attentate eines neuen Typs. In Halle (Saale) verhinderte nur eine verschlossene Holztür der Synagoge ein größeres Massaker. ...`,
+					Long: `Weltweit gibt es rechtsterroristische Attentate eines neuen Typs. In Halle (Saale) verhinderte nur eine verschlossene Holztür der Synagoge ein größeres Massaker. Am 9. Oktober 2019 wollte dort ein Rechtsextremist die versammelten Juden hinrichten. Mit selbstgebauten Waffen schoss er auf die Tür und warf eigens hergestellte Sprengsätze. Online konnten Gleichgesinnte zusehen, wie er zwei Menschen ermordete: Seine Tat verbreitete er per Videokamera auf einem Portal für Computerspiel-Videos. Er ahmte damit andere »Egoshooter« nach – wie einen Rechtsextremisten, der in Neuseeland wenige Monate zuvor die Tötung von 51 Menschen live im Internet übertragen hatte. Was treibt Menschen vom Bildschirm zur realen Gewalt auf der Straße? Die Beiträge des Buches gehen den Spuren der Attentäter nach und zeigen die speziellen Radikalisierungsmechanismen im Netz auf. Sie erklären die Hintergründe und Motive dieser Männer, die in ihren rechten Online-Gemeinden Antisemitismus, Rassismus und Antifeminismus verbreiten. Das Buch gibt Einblicke in eine Welt, die vielen unbekannt ist.
 
 Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxemburg-Initiative – Die Rosa-Luxemburg-Stiftung in Bremen_.
 				`,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingFormat{
-				ID:          testdataRecording8Format1,
-				RecordingID: testdataRecording8,
-				Lang:        "de",
-				Quality:     0,
-				IsVideo:     true,
-				URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/06e3a71e-581d-4735-9647-3e4a49b5caa8/video_best.mp4",
-				Bytes:       995280142,
-				Resolution:  "1920x1080",
-			}).Error; err != nil {
-				return err
-			}
-			return nil
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingFormat{
+					ID:          testdataRecording8Format1,
+					RecordingID: testdataRecording8,
+					Lang:        "de",
+					Quality:     0,
+					IsVideo:     true,
+					URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/06e3a71e-581d-4735-9647-3e4a49b5caa8/video_best.mp4",
+					Bytes:       995280142,
+					Resolution:  "1920x1080",
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Delete(&RecordingFormat{
+					ID: testdataRecording8Format1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&RecordingLang{
+					ID: testdataRecording8Lang1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&Recording{
+					ID: testdataRecording8,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
 		},
-		Rollback: func(tx *gorm.DB) error {
-			if err := tx.Delete(&RecordingFormat{
-				ID: testdataRecording8Format1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&RecordingLang{
-				ID: testdataRecording8Lang1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&Recording{
-				ID: testdataRecording8,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
-		},
-	},
-	{
-		ID: "10-data-0020-01-recording-9",
-		Migrate: func(tx *gorm.DB) error {
-			if err := tx.Create(&Recording{
-				ID:         testdataRecording9,
-				ChannelID:  testdataChannel1,
-				CommonName: "2021-04_nsu-watch",
-				CreatedAt:  time.Date(2021, 4, 22, 19, 0, 0, 0, loc),
-				Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/57de7dfd-c060-4da1-8f57-f0880c1f2e5e/poster.png",
-				Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/57de7dfd-c060-4da1-8f57-f0880c1f2e5e/preview.webp",
-				Duration:   2*time.Hour + 18*time.Minute + 41*time.Second,
-				Public:     true,
-				Listed:     true,
-				Tags: []*Tag{
-					{ID: testdataTagBuchvorstellung},
-					{ID: testdataTagDiskussion},
-				},
-				Speakers: []*Speaker{
-					{
-						OwnerID:      testdataChannel1,
-						ID:           testdataRecording9Speaker1,
-						Name:         "Caro Keller",
-						Organisation: "NSU-Watch",
+		{
+			ID: "10-data-0020-01-recording-9",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.Create(&Recording{
+					ID:         testdataRecording9,
+					ChannelID:  TestChannelID1,
+					CommonName: "2021-04_nsu-watch",
+					CreatedAt:  time.Date(2021, 4, 22, 19, 0, 0, 0, loc),
+					Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/57de7dfd-c060-4da1-8f57-f0880c1f2e5e/poster.png",
+					Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/57de7dfd-c060-4da1-8f57-f0880c1f2e5e/preview.webp",
+					Duration:   2*time.Hour + 18*time.Minute + 41*time.Second,
+					Public:     true,
+					Listed:     true,
+					Tags: []*Tag{
+						{ID: TestTagBuchvorstellungID},
+						{ID: TestTagDiskussionID},
 					},
-					{
-						OwnerID:      testdataChannel1,
-						ID:           testdataRecording9Speaker2,
-						Name:         "Lee Hielscher",
-						Organisation: "Initiative in Gedenken an Nguyễn Ngọc Châu und Đỗ Anh Lân",
+					Speakers: []*Speaker{
+						{
+							OwnerID:      TestChannelID1,
+							ID:           testdataRecording9Speaker1,
+							Name:         "Caro Keller",
+							Organisation: "NSU-Watch",
+						},
+						{
+							OwnerID:      TestChannelID1,
+							ID:           testdataRecording9Speaker2,
+							Name:         "Lee Hielscher",
+							Organisation: "Initiative in Gedenken an Nguyễn Ngọc Châu und Đỗ Anh Lân",
+						},
 					},
-				},
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingLang{
-				ID:          testdataRecording9Lang1,
-				RecordingID: testdataRecording9,
-				Lang:        "de",
-				Title:       "Aufklären und Einmischen",
-				Subtitle:    "Der NSU-Komplex und der Münchner Prozess - Buchvorstellung mit NSU-Watch",
-				Short:       `Im November 2011 kam eine rechtsterroristische Mord- und Anschlagsserie des sogenannten Nationalsozialistischen Untergrunds (NSU) ans Licht, die in ihrer Dimension neu war. In den folgenden Untersuchungen formte sich ein erstes Bild des NSU-Komplexes. ...`,
-				Long: `Im November 2011 kam eine rechtsterroristische Mord- und Anschlagsserie des sogenannten Nationalsozialistischen Untergrunds (NSU) ans Licht, die in ihrer Dimension neu war. In den folgenden Untersuchungen formte sich ein erstes Bild des NSU-Komplexes. Dabei wurde deutlich, dass eine noch umfassendere juristische und gesellschaftliche Aufarbeitung anstand. So beschlossen antifaschistische Initiativen und Einzelpersonen, die Arbeit am NSU-Komplex zu verstetigen, und gründeten »NSU-Watch«. Neun Jahre später ist die Aufarbeitung des NSU-Komplexes noch lange nicht abgeschlossen, die Gefahr des rechten Terrors bleibt schrecklich aktuell. NSU-Watch hat den NSU-Prozess beobachtet, jeden Tag protokolliert und der Öffentlichkeit zur Verfügung gestellt. Darüber hinaus haben sich Landesprojekte gegründet, die die parlamentarischen Aufklärungsbemühungen begleiten. Das zentrale Anliegen des Buches von NSU-Watch ist, die rassistischen Strukturen, die den NSU hervorbrachten, ihn wissentlich oder unwissentlich unterstützten und so zehn Morde, drei Sprengstoffanschläge und 15 Raubüberfälle zwischen 1998 und 2011 möglich machten, entlang der Geschehnisse und Akteur*innen des NSU-Prozesses in München aufzuzeigen. Trotz der vielen offen gebliebenen Fragen soll das Buch eine Zwischenbilanz bieten, die antifaschistischer Demokratieförderung zugrunde gelegt werden kann.
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingLang{
+					ID:          testdataRecording9Lang1,
+					RecordingID: testdataRecording9,
+					Lang:        "de",
+					Title:       "Aufklären und Einmischen",
+					Subtitle:    "Der NSU-Komplex und der Münchner Prozess - Buchvorstellung mit NSU-Watch",
+					Short:       `Im November 2011 kam eine rechtsterroristische Mord- und Anschlagsserie des sogenannten Nationalsozialistischen Untergrunds (NSU) ans Licht, die in ihrer Dimension neu war. In den folgenden Untersuchungen formte sich ein erstes Bild des NSU-Komplexes. ...`,
+					Long: `Im November 2011 kam eine rechtsterroristische Mord- und Anschlagsserie des sogenannten Nationalsozialistischen Untergrunds (NSU) ans Licht, die in ihrer Dimension neu war. In den folgenden Untersuchungen formte sich ein erstes Bild des NSU-Komplexes. Dabei wurde deutlich, dass eine noch umfassendere juristische und gesellschaftliche Aufarbeitung anstand. So beschlossen antifaschistische Initiativen und Einzelpersonen, die Arbeit am NSU-Komplex zu verstetigen, und gründeten »NSU-Watch«. Neun Jahre später ist die Aufarbeitung des NSU-Komplexes noch lange nicht abgeschlossen, die Gefahr des rechten Terrors bleibt schrecklich aktuell. NSU-Watch hat den NSU-Prozess beobachtet, jeden Tag protokolliert und der Öffentlichkeit zur Verfügung gestellt. Darüber hinaus haben sich Landesprojekte gegründet, die die parlamentarischen Aufklärungsbemühungen begleiten. Das zentrale Anliegen des Buches von NSU-Watch ist, die rassistischen Strukturen, die den NSU hervorbrachten, ihn wissentlich oder unwissentlich unterstützten und so zehn Morde, drei Sprengstoffanschläge und 15 Raubüberfälle zwischen 1998 und 2011 möglich machten, entlang der Geschehnisse und Akteur*innen des NSU-Prozesses in München aufzuzeigen. Trotz der vielen offen gebliebenen Fragen soll das Buch eine Zwischenbilanz bieten, die antifaschistischer Demokratieförderung zugrunde gelegt werden kann.
 
 **NSU-Watch**
 
@@ -1038,400 +883,401 @@ Das Autor\*innen-Kollektiv NSU-WATCH besteht aus Mitgliedern der unabhängigen B
 
 Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxemburg-Initiative – Die Rosa-Luxemburg-Stiftung in Bremen_.
 				`,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingFormat{
-				ID:          testdataRecording9Format1,
-				RecordingID: testdataRecording9,
-				Lang:        "de",
-				Quality:     0,
-				IsVideo:     true,
-				URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/57de7dfd-c060-4da1-8f57-f0880c1f2e5e/video_best.mp4",
-				Bytes:       2186863051,
-				Resolution:  "1920x1080",
-			}).Error; err != nil {
-				return err
-			}
-			return nil
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingFormat{
+					ID:          testdataRecording9Format1,
+					RecordingID: testdataRecording9,
+					Lang:        "de",
+					Quality:     0,
+					IsVideo:     true,
+					URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/57de7dfd-c060-4da1-8f57-f0880c1f2e5e/video_best.mp4",
+					Bytes:       2186863051,
+					Resolution:  "1920x1080",
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Delete(&RecordingFormat{
+					ID: testdataRecording9Format1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&RecordingLang{
+					ID: testdataRecording9Lang1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&Recording{
+					ID: testdataRecording9,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
 		},
-		Rollback: func(tx *gorm.DB) error {
-			if err := tx.Delete(&RecordingFormat{
-				ID: testdataRecording9Format1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&RecordingLang{
-				ID: testdataRecording9Lang1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&Recording{
-				ID: testdataRecording9,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
-		},
-	},
-	{
-		ID: "10-data-0020-01-recording-10",
-		Migrate: func(tx *gorm.DB) error {
-			if err := tx.Create(&Recording{
-				ID:         testdataRecording10,
-				ChannelID:  testdataChannel1,
-				EventID:    &testdataEvent1,
-				CommonName: "2021-05_out_loud-mareice_kaiser-modernen_mutter",
-				CreatedAt:  time.Date(2021, 5, 5, 19, 0, 0, 0, loc),
-				Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/4fb029d6-063a-4302-9ae8-4c1c6a1542a5/poster.png",
-				Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/4fb029d6-063a-4302-9ae8-4c1c6a1542a5/preview.webp",
-				Duration:   time.Hour + 28*time.Minute + 26*time.Second,
-				Public:     true,
-				Listed:     true,
-				Tags: []*Tag{
-					{ID: testdataTagBuchvorstellung},
-					{ID: testdataTagDiskussion},
-				},
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingLang{
-				ID:          testdataRecording10Lang1,
-				RecordingID: testdataRecording10,
-				Lang:        "de",
-				Title:       "Mareice Kaiser",
-				Subtitle:    "Das Unwohlsein der modernen Mutter",
-				Short:       `Mütter sollen heute alles sein: Versorgerin, Businesswoman, Mom I'd like to fuck. Dass darunter ihr Wohlbefinden leidet, ist kein Wunder. Mareice Kaiser, Journalistin und selbst Mutter, stellt dabei immer wieder fest: ...`,
-				Long:        `Mütter sollen heute alles sein: Versorgerin, Businesswoman, Mom I'd like to fuck. Dass darunter ihr Wohlbefinden leidet, ist kein Wunder. Mareice Kaiser, Journalistin und selbst Mutter, stellt dabei immer wieder fest: Das Mutterideal ist unerreichbar und voller Widersprüche. Nichts kann man richtig machen und niemandem etwas recht. Mutterschaft berührt dabei, natürlich, jeden Lebensbereich: Denn egal, ob es um Arbeit, Geld, Sex, Körper, Psyche oder Liebe geht – Stereotype, Klischees und gesellschaftlichen Druck gibt es überall, auf Instagram, im Bett und im Büro. In ihrem Buch "Das Unwohlsein der modernen Mutter" (Rowohlt, 2021) zeigt die Autorin, wo Mütter heute stehen: noch immer öfter am Herd als in den Chefetagen. Und, wo sie stehen sollten: Dort, wo sie selbst sich sehen – frei und selbstbestimmt. Bei OUT LOUD liest Mareice Kaiser aus ihrem Buch und spricht mit uns über Frausein, Mutterschaft und Selbstbestimmung.`,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&RecordingFormat{
-				ID:          testdataRecording10Format1,
-				RecordingID: testdataRecording10,
-				Lang:        "de",
-				Quality:     0,
-				IsVideo:     true,
-				URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/4fb029d6-063a-4302-9ae8-4c1c6a1542a5/video_best.mp4",
-				Bytes:       2443666130,
-				Resolution:  "1920x1080",
-			}).Error; err != nil {
-				return err
-			}
-			return nil
-		},
-		Rollback: func(tx *gorm.DB) error {
-			if err := tx.Delete(&RecordingFormat{
-				ID: testdataRecording10Format1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&RecordingLang{
-				ID: testdataRecording10Lang1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&Recording{
-				ID: testdataRecording10,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
-		},
-	},
-	{
-		ID: "10-data-0030-01-stream-1",
-		Migrate: func(tx *gorm.DB) error {
-			if err := tx.Create(&Stream{
-				ID:        testdataStream1,
-				ChannelID: testdataChannel1,
-				Chat:      false,
-				Running:   true,
-				StartAt:   time.Date(2021, 3, 4, 18, 30, 0, 0, loc),
-				ListenAt:  time.Date(2021, 3, 4, 18, 30, 0, 0, loc),
-				Poster:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/poster.png",
-				Preview:   "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/preview.webp",
-				Tags:      []*Tag{{ID: testdataTagVortrag}},
-				Speakers: []*Speaker{
-					{
-						ID: testdataRecording7Speaker1,
+		{
+			ID: "10-data-0020-01-recording-10",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.Create(&Recording{
+					ID:         testdataRecording10,
+					ChannelID:  TestChannelID1,
+					EventID:    &TestEventID1,
+					CommonName: "2021-05_out_loud-mareice_kaiser-modernen_mutter",
+					CreatedAt:  time.Date(2021, 5, 5, 19, 0, 0, 0, loc),
+					Poster:     "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/4fb029d6-063a-4302-9ae8-4c1c6a1542a5/poster.png",
+					Preview:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/4fb029d6-063a-4302-9ae8-4c1c6a1542a5/preview.webp",
+					Duration:   time.Hour + 28*time.Minute + 26*time.Second,
+					Public:     true,
+					Listed:     true,
+					Tags: []*Tag{
+						{ID: TestTagBuchvorstellungID},
+						{ID: TestTagDiskussionID},
 					},
-					{
-						ID: testdataRecording7Speaker2,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingLang{
+					ID:          testdataRecording10Lang1,
+					RecordingID: testdataRecording10,
+					Lang:        "de",
+					Title:       "Mareice Kaiser",
+					Subtitle:    "Das Unwohlsein der modernen Mutter",
+					Short:       `Mütter sollen heute alles sein: Versorgerin, Businesswoman, Mom I'd like to fuck. Dass darunter ihr Wohlbefinden leidet, ist kein Wunder. Mareice Kaiser, Journalistin und selbst Mutter, stellt dabei immer wieder fest: ...`,
+					Long:        `Mütter sollen heute alles sein: Versorgerin, Businesswoman, Mom I'd like to fuck. Dass darunter ihr Wohlbefinden leidet, ist kein Wunder. Mareice Kaiser, Journalistin und selbst Mutter, stellt dabei immer wieder fest: Das Mutterideal ist unerreichbar und voller Widersprüche. Nichts kann man richtig machen und niemandem etwas recht. Mutterschaft berührt dabei, natürlich, jeden Lebensbereich: Denn egal, ob es um Arbeit, Geld, Sex, Körper, Psyche oder Liebe geht – Stereotype, Klischees und gesellschaftlichen Druck gibt es überall, auf Instagram, im Bett und im Büro. In ihrem Buch "Das Unwohlsein der modernen Mutter" (Rowohlt, 2021) zeigt die Autorin, wo Mütter heute stehen: noch immer öfter am Herd als in den Chefetagen. Und, wo sie stehen sollten: Dort, wo sie selbst sich sehen – frei und selbstbestimmt. Bei OUT LOUD liest Mareice Kaiser aus ihrem Buch und spricht mit uns über Frausein, Mutterschaft und Selbstbestimmung.`,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&RecordingFormat{
+					ID:          testdataRecording10Format1,
+					RecordingID: testdataRecording10,
+					Lang:        "de",
+					Quality:     0,
+					IsVideo:     true,
+					URL:         "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/4fb029d6-063a-4302-9ae8-4c1c6a1542a5/video_best.mp4",
+					Bytes:       2443666130,
+					Resolution:  "1920x1080",
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Delete(&RecordingFormat{
+					ID: testdataRecording10Format1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&RecordingLang{
+					ID: testdataRecording10Lang1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&Recording{
+					ID: testdataRecording10,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+		},
+		{
+			ID: "10-data-0030-01-stream-1",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.Create(&Stream{
+					ID:        testdataStream1,
+					ChannelID: TestChannelID1,
+					Chat:      false,
+					Running:   true,
+					StartAt:   time.Date(2021, 3, 4, 18, 30, 0, 0, loc),
+					ListenAt:  time.Date(2021, 3, 4, 18, 30, 0, 0, loc),
+					Poster:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/poster.png",
+					Preview:   "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/preview.webp",
+					Tags:      []*Tag{{ID: TestTagVortragID}},
+					Speakers: []*Speaker{
+						{
+							ID: testdataRecording7Speaker1,
+						},
+						{
+							ID: testdataRecording7Speaker2,
+						},
+						{
+							ID: testdataRecording7Speaker3,
+						},
 					},
-					{
-						ID: testdataRecording7Speaker3,
-					},
-				},
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&StreamLang{
-				ID:       testdataStream1Lang1,
-				StreamID: testdataStream1,
-				Lang:     "de",
-				Title:    "„Die mir von der Wehrmacht angebotenen Kriegsgefangenen sind derart entkräftet“",
-				Subtitle: "Sowjetische Kriegsgefangene in Bremer Arbeitskommandos 1941-1945",
-				Short:    `Sowjetische Kriegsgefangene bildeten eine der größten Opfergruppen des Nationalsozialismus. Die Wehrmacht brachte Millionen sowjetische Soldat\*innen zum Arbeitseinsatz ins Deutsche Reich. Mehr als die Hälfte von ihnen überlebte die Kriegsgefangenschaft in den Kriegsgefangenenlagern wie dem Stalag X B Sandbostel und den Außenkommandos nicht. Auch in Bremen setzten Firmen und Behörden die kriegsgefangenen Rotarmisten zur Arbeit ein, vornehmlich in der Rüstungsindustrie. Im unserem Vortrag wollen wir die ökonomischen und ideologischen Hintergründe und Widersprüche dieser Arbeitseinsätze aufzeigen. ...`,
-				Long: `Sowjetische Kriegsgefangene bildeten eine der größten Opfergruppen des Nationalsozialismus. Die Wehrmacht brachte Millionen sowjetische Soldat\*innen zum Arbeitseinsatz ins Deutsche Reich. Mehr als die Hälfte von ihnen überlebte die Kriegsgefangenschaft in den Kriegsgefangenenlagern wie dem Stalag X B Sandbostel und den Außenkommandos nicht. Auch in Bremen setzten Firmen und Behörden die kriegsgefangenen Rotarmisten zur Arbeit ein, vornehmlich in der Rüstungsindustrie. Im unserem Vortrag wollen wir die ökonomischen und ideologischen Hintergründe und Widersprüche dieser Arbeitseinsätze aufzeigen. Anhand einzelner exemplarischer Arbeitskommandos beleuchten wir die Lebens- und Arbeitsbedingungen von sowjetischen Kriegsgefangenen in Bremen. Der Vortrag lädt alle Interessierte zum Austausch über dieses lange verdrängte Thema ein.
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&StreamLang{
+					ID:       testdataStream1Lang1,
+					StreamID: testdataStream1,
+					Lang:     "de",
+					Title:    "„Die mir von der Wehrmacht angebotenen Kriegsgefangenen sind derart entkräftet“",
+					Subtitle: "Sowjetische Kriegsgefangene in Bremer Arbeitskommandos 1941-1945",
+					Short:    `Sowjetische Kriegsgefangene bildeten eine der größten Opfergruppen des Nationalsozialismus. Die Wehrmacht brachte Millionen sowjetische Soldat\*innen zum Arbeitseinsatz ins Deutsche Reich. Mehr als die Hälfte von ihnen überlebte die Kriegsgefangenschaft in den Kriegsgefangenenlagern wie dem Stalag X B Sandbostel und den Außenkommandos nicht. Auch in Bremen setzten Firmen und Behörden die kriegsgefangenen Rotarmisten zur Arbeit ein, vornehmlich in der Rüstungsindustrie. Im unserem Vortrag wollen wir die ökonomischen und ideologischen Hintergründe und Widersprüche dieser Arbeitseinsätze aufzeigen. ...`,
+					Long: `Sowjetische Kriegsgefangene bildeten eine der größten Opfergruppen des Nationalsozialismus. Die Wehrmacht brachte Millionen sowjetische Soldat\*innen zum Arbeitseinsatz ins Deutsche Reich. Mehr als die Hälfte von ihnen überlebte die Kriegsgefangenschaft in den Kriegsgefangenenlagern wie dem Stalag X B Sandbostel und den Außenkommandos nicht. Auch in Bremen setzten Firmen und Behörden die kriegsgefangenen Rotarmisten zur Arbeit ein, vornehmlich in der Rüstungsindustrie. Im unserem Vortrag wollen wir die ökonomischen und ideologischen Hintergründe und Widersprüche dieser Arbeitseinsätze aufzeigen. Anhand einzelner exemplarischer Arbeitskommandos beleuchten wir die Lebens- und Arbeitsbedingungen von sowjetischen Kriegsgefangenen in Bremen. Der Vortrag lädt alle Interessierte zum Austausch über dieses lange verdrängte Thema ein.
 
 Eine Veranstaltung der Gedenkstätte Lager Sandbostel in Kooperation mit dem Kulturzentrum Kukoon.
 
 Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, der am 15.09.1942 in das Arbeitskommando der Bremer Francke-Werke eingesetzt wurde und am 11.03.1942 an Tuberkulose starb, Quelle [https://obd-memorial.ru/html/info.htm?id=300643349](https://obd-memorial.ru/html/info.htm?id=300643349)`,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Delete(&StreamLang{
+					ID: testdataStream1Lang1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&Stream{
+					ID: testdataStream1,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
 		},
-		Rollback: func(tx *gorm.DB) error {
-			if err := tx.Delete(&StreamLang{
-				ID: testdataStream1Lang1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&Stream{
-				ID: testdataStream1,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
+		{
+			ID: "10-data-0030-01-stream-2",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.Create(&Stream{
+					ID:        testdataStream2,
+					ChannelID: TestChannelID2,
+					Chat:      false,
+					Running:   true,
+					StartAt:   time.Date(2021, 3, 4, 18, 30, 0, 0, loc),
+					ListenAt:  time.Date(2021, 3, 4, 18, 30, 0, 0, loc),
+					Poster:    "https://c3woc.de/images/banner.jpg",
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Delete(&Stream{
+					ID: testdataStream2,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
 		},
-	},
-	{
-		ID: "10-data-0030-01-stream-2",
-		Migrate: func(tx *gorm.DB) error {
-			if err := tx.Create(&Stream{
-				ID:        testdataStream2,
-				ChannelID: testdataChannel2,
-				Chat:      false,
-				Running:   true,
-				StartAt:   time.Date(2021, 3, 4, 18, 30, 0, 0, loc),
-				ListenAt:  time.Date(2021, 3, 4, 18, 30, 0, 0, loc),
-				Poster:    "https://c3woc.de/images/banner.jpg",
-			}).Error; err != nil {
-				return err
-			}
-			return nil
-		},
-		Rollback: func(tx *gorm.DB) error {
-			if err := tx.Delete(&Stream{
-				ID: testdataStream2,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
-		},
-	},
-	{
-		ID: "10-data-0030-01-stream-3",
-		Migrate: func(tx *gorm.DB) error {
-			if err := tx.Create(&Stream{
-				ID:        testdataStream3,
-				ChannelID: testdataChannel1,
-				Chat:      true,
-				Running:   true,
-				StartAt:   time.Date(2021, 4, 15, 0, 0, 0, 0, loc),
-				ListenAt:  time.Date(2021, 4, 15, 0, 0, 0, 0, loc),
-				Poster:    "https://media.kukoon.de/images/41185fa4-3e22-44bb-9020-1d824e12ede3.jpg",
-				Tags: []*Tag{
-					{ID: testdataTagBuchvorstellung},
-					{ID: testdataTagDiskussion},
-				},
-				Speakers: []*Speaker{
-					{
-						OwnerID: testdataChannel1,
-						ID:      testdataStream3Speaker1,
-						Name:    "Andreas Speit",
+		{
+			ID: "10-data-0030-01-stream-3",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.Create(&Stream{
+					ID:        testdataStream3,
+					ChannelID: TestChannelID1,
+					Chat:      true,
+					Running:   true,
+					StartAt:   time.Date(2021, 4, 15, 0, 0, 0, 0, loc),
+					ListenAt:  time.Date(2021, 4, 15, 0, 0, 0, 0, loc),
+					Poster:    "https://media.kukoon.de/images/41185fa4-3e22-44bb-9020-1d824e12ede3.jpg",
+					Tags: []*Tag{
+						{ID: TestTagBuchvorstellungID},
+						{ID: TestTagDiskussionID},
 					},
-				},
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&StreamLang{
-				ID:       testdataStream3Lang1,
-				StreamID: testdataStream3,
-				Lang:     "de",
-				Title:    "Rechte Egoshooter",
-				Subtitle: "Von der virtuellen Hetze zum Livestream-Attentat",
-				Short:    `Weltweit gibt es rechtsterroristische Attentate eines neuen Typs. In Halle (Saale) verhinderte nur eine verschlossene Holztür der Synagoge ein größeres Massaker. ...`,
-				Long: `Weltweit gibt es rechtsterroristische Attentate eines neuen Typs. In Halle (Saale) verhinderte nur eine verschlossene Holztür der Synagoge ein größeres Massaker. Am 9. Oktober 2019 wollte dort ein Rechtsextremist die versammelten Juden hinrichten. Mit selbstgebauten Waffen schoss er auf die Tür und warf eigens hergestellte Sprengsätze. Online konnten Gleichgesinnte zusehen, wie er zwei Menschen ermordete: Seine Tat verbreitete er per Videokamera auf einem Portal für Computerspiel-Videos. Er ahmte damit andere »Egoshooter« nach – wie einen Rechtsextremisten, der in Neuseeland wenige Monate zuvor die Tötung von 51 Menschen live im Internet übertragen hatte. Was treibt Menschen vom Bildschirm zur realen Gewalt auf der Straße? Die Beiträge des Buches gehen den Spuren der Attentäter nach und zeigen die speziellen Radikalisierungsmechanismen im Netz auf. Sie erklären die Hintergründe und Motive dieser Männer, die in ihren rechten Online-Gemeinden Antisemitismus, Rassismus und Antifeminismus verbreiten. Das Buch gibt Einblicke in eine Welt, die vielen unbekannt ist.
+					Speakers: []*Speaker{
+						{
+							OwnerID: TestChannelID1,
+							ID:      testdataStream3Speaker1,
+							Name:    "Andreas Speit",
+						},
+					},
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&StreamLang{
+					ID:       testdataStream3Lang1,
+					StreamID: testdataStream3,
+					Lang:     "de",
+					Title:    "Rechte Egoshooter",
+					Subtitle: "Von der virtuellen Hetze zum Livestream-Attentat",
+					Short:    `Weltweit gibt es rechtsterroristische Attentate eines neuen Typs. In Halle (Saale) verhinderte nur eine verschlossene Holztür der Synagoge ein größeres Massaker. ...`,
+					Long: `Weltweit gibt es rechtsterroristische Attentate eines neuen Typs. In Halle (Saale) verhinderte nur eine verschlossene Holztür der Synagoge ein größeres Massaker. Am 9. Oktober 2019 wollte dort ein Rechtsextremist die versammelten Juden hinrichten. Mit selbstgebauten Waffen schoss er auf die Tür und warf eigens hergestellte Sprengsätze. Online konnten Gleichgesinnte zusehen, wie er zwei Menschen ermordete: Seine Tat verbreitete er per Videokamera auf einem Portal für Computerspiel-Videos. Er ahmte damit andere »Egoshooter« nach – wie einen Rechtsextremisten, der in Neuseeland wenige Monate zuvor die Tötung von 51 Menschen live im Internet übertragen hatte. Was treibt Menschen vom Bildschirm zur realen Gewalt auf der Straße? Die Beiträge des Buches gehen den Spuren der Attentäter nach und zeigen die speziellen Radikalisierungsmechanismen im Netz auf. Sie erklären die Hintergründe und Motive dieser Männer, die in ihren rechten Online-Gemeinden Antisemitismus, Rassismus und Antifeminismus verbreiten. Das Buch gibt Einblicke in eine Welt, die vielen unbekannt ist.
 
 Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxemburg-Initiative – Die Rosa-Luxemburg-Stiftung in Bremen_.
 				`,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Delete(&StreamLang{
+					ID: testdataStream3Lang1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&Stream{
+					ID: testdataStream3,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
 		},
-		Rollback: func(tx *gorm.DB) error {
-			if err := tx.Delete(&StreamLang{
-				ID: testdataStream3Lang1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&Stream{
-				ID: testdataStream3,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
-		},
-	},
-	{
-		ID: "10-data-0030-01-stream-4",
-		Migrate: func(tx *gorm.DB) error {
-			if err := tx.Create(&Stream{
-				ID:        testdataStream4,
-				ChannelID: testdataChannel1,
-				Chat:      true,
-				Running:   true,
-				StartAt:   time.Date(2021, 4, 22, 0, 0, 0, 0, loc),
-				ListenAt:  time.Date(2021, 4, 22, 0, 0, 0, 0, loc),
-				Poster:    "https://media.kukoon.de/images/f61fa2de-72d3-4a1e-98b2-65b13d8ecb01.jpg",
-				Tags: []*Tag{
-					{ID: testdataTagBuchvorstellung},
-					{ID: testdataTagDiskussion},
-				},
-				Speakers: []*Speaker{
-					{
-						ID: testdataStream4Speaker1,
+		{
+			ID: "10-data-0030-01-stream-4",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.Create(&Stream{
+					ID:        testdataStream4,
+					ChannelID: TestChannelID1,
+					Chat:      true,
+					Running:   true,
+					StartAt:   time.Date(2021, 4, 22, 0, 0, 0, 0, loc),
+					ListenAt:  time.Date(2021, 4, 22, 0, 0, 0, 0, loc),
+					Poster:    "https://media.kukoon.de/images/f61fa2de-72d3-4a1e-98b2-65b13d8ecb01.jpg",
+					Tags: []*Tag{
+						{ID: TestTagBuchvorstellungID},
+						{ID: TestTagDiskussionID},
 					},
-					{
-						ID: testdataStream4Speaker2,
+					Speakers: []*Speaker{
+						{
+							ID: testdataStream4Speaker1,
+						},
+						{
+							ID: testdataStream4Speaker2,
+						},
 					},
-				},
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&StreamLang{
-				ID:       testdataStream4Lang1,
-				StreamID: testdataStream4,
-				Lang:     "de",
-				Title:    "Aufklären und Einmischen",
-				Subtitle: "Der NSU-Komplex und der Münchner Prozess - Buchvorstellung mit NSU-Watch",
-				Short:    `Im November 2011 kam eine rechtsterroristische Mord- und Anschlagsserie des sogenannten Nationalsozialistischen Untergrunds (NSU) ans Licht, die in ihrer Dimension neu war. In den folgenden Untersuchungen formte sich ein erstes Bild des NSU-Komplexes. ...`,
-				Long: `Im November 2011 kam eine rechtsterroristische Mord- und Anschlagsserie des sogenannten Nationalsozialistischen Untergrunds (NSU) ans Licht, die in ihrer Dimension neu war. In den folgenden Untersuchungen formte sich ein erstes Bild des NSU-Komplexes. Dabei wurde deutlich, dass eine noch umfassendere juristische und gesellschaftliche Aufarbeitung anstand. So beschlossen antifaschistische Initiativen und Einzelpersonen, die Arbeit am NSU-Komplex zu verstetigen, und gründeten »NSU-Watch«. Neun Jahre später ist die Aufarbeitung des NSU-Komplexes noch lange nicht abgeschlossen, die Gefahr des rechten Terrors bleibt schrecklich aktuell. NSU-Watch hat den NSU-Prozess beobachtet, jeden Tag protokolliert und der Öffentlichkeit zur Verfügung gestellt. Darüber hinaus haben sich Landesprojekte gegründet, die die parlamentarischen Aufklärungsbemühungen begleiten. Das zentrale Anliegen des Buches von NSU-Watch ist, die rassistischen Strukturen, die den NSU hervorbrachten, ihn wissentlich oder unwissentlich unterstützten und so zehn Morde, drei Sprengstoffanschläge und 15 Raubüberfälle zwischen 1998 und 2011 möglich machten, entlang der Geschehnisse und Akteur*innen des NSU-Prozesses in München aufzuzeigen. Trotz der vielen offen gebliebenen Fragen soll das Buch eine Zwischenbilanz bieten, die antifaschistischer Demokratieförderung zugrunde gelegt werden kann.
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&StreamLang{
+					ID:       testdataStream4Lang1,
+					StreamID: testdataStream4,
+					Lang:     "de",
+					Title:    "Aufklären und Einmischen",
+					Subtitle: "Der NSU-Komplex und der Münchner Prozess - Buchvorstellung mit NSU-Watch",
+					Short:    `Im November 2011 kam eine rechtsterroristische Mord- und Anschlagsserie des sogenannten Nationalsozialistischen Untergrunds (NSU) ans Licht, die in ihrer Dimension neu war. In den folgenden Untersuchungen formte sich ein erstes Bild des NSU-Komplexes. ...`,
+					Long: `Im November 2011 kam eine rechtsterroristische Mord- und Anschlagsserie des sogenannten Nationalsozialistischen Untergrunds (NSU) ans Licht, die in ihrer Dimension neu war. In den folgenden Untersuchungen formte sich ein erstes Bild des NSU-Komplexes. Dabei wurde deutlich, dass eine noch umfassendere juristische und gesellschaftliche Aufarbeitung anstand. So beschlossen antifaschistische Initiativen und Einzelpersonen, die Arbeit am NSU-Komplex zu verstetigen, und gründeten »NSU-Watch«. Neun Jahre später ist die Aufarbeitung des NSU-Komplexes noch lange nicht abgeschlossen, die Gefahr des rechten Terrors bleibt schrecklich aktuell. NSU-Watch hat den NSU-Prozess beobachtet, jeden Tag protokolliert und der Öffentlichkeit zur Verfügung gestellt. Darüber hinaus haben sich Landesprojekte gegründet, die die parlamentarischen Aufklärungsbemühungen begleiten. Das zentrale Anliegen des Buches von NSU-Watch ist, die rassistischen Strukturen, die den NSU hervorbrachten, ihn wissentlich oder unwissentlich unterstützten und so zehn Morde, drei Sprengstoffanschläge und 15 Raubüberfälle zwischen 1998 und 2011 möglich machten, entlang der Geschehnisse und Akteur*innen des NSU-Prozesses in München aufzuzeigen. Trotz der vielen offen gebliebenen Fragen soll das Buch eine Zwischenbilanz bieten, die antifaschistischer Demokratieförderung zugrunde gelegt werden kann.
 
 ## NSU-Watch
 Das Autor\*innen-Kollektiv NSU-WATCH besteht aus Mitgliedern der unabhängigen Beobachtungsstelle NSU-Watch – Aufklären & Einmischen, die sich im Jahr 2012 gegründet hat, um die Aufklärungsbemühungen zum NSU-Komplex zu unterstützen und kritisch zu begleiten. NSU-Watch wird von einem Bündnis aus rund einem Dutzend antifaschistischer und antirassistischer Gruppen und Einzelpersonen aus dem ganzen Bundesgebiet getragen, die teilweise seit Jahrzehnten zum Themenkomplex Rechter Terror arbeiten. Kern der Arbeit von NSU-Watch war bzw. ist die Beobachtung des NSU-Prozesses am Oberlandesgericht in München sowie der diversen parlamentarischen Untersuchungsausschüsse im Bundestag und in den Ländern.
 
 Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxemburg-Initiative – Die Rosa-Luxemburg-Stiftung in Bremen_.
 				`,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Delete(&StreamLang{
+					ID: testdataStream4Lang1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&Stream{
+					ID: testdataStream4,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
 		},
-		Rollback: func(tx *gorm.DB) error {
-			if err := tx.Delete(&StreamLang{
-				ID: testdataStream4Lang1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&Stream{
-				ID: testdataStream4,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
+		{
+			ID: "10-data-0030-01-stream-5",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.Create(&Stream{
+					ID:        testdataStream5,
+					ChannelID: TestChannelID1,
+					EventID:   &TestEventID1,
+					Chat:      true,
+					Running:   true,
+					StartAt:   time.Date(2021, 5, 5, 0, 0, 0, 0, loc),
+					ListenAt:  time.Date(2021, 5, 5, 0, 0, 0, 0, loc),
+					Poster:    "https://media.kukoon.de/images/67bd5c4c-81d6-47c8-adb9-458a9da58dbd.jpg",
+					Tags: []*Tag{
+						{ID: TestTagBuchvorstellungID},
+						{ID: TestTagDiskussionID},
+					},
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&StreamLang{
+					ID:       testdataStream5Lang1,
+					StreamID: testdataStream5,
+					Lang:     "de",
+					Title:    "Mareice Kaiser",
+					Subtitle: "Das Unwohlsein der modernen Mutter",
+					Short:    `Mütter sollen heute alles sein: Versorgerin, Businesswoman, Mom I'd like to fuck. Dass darunter ihr Wohlbefinden leidet, ist kein Wunder. Mareice Kaiser, Journalistin und selbst Mutter, stellt dabei immer wieder fest: ...`,
+					Long:     `Mütter sollen heute alles sein: Versorgerin, Businesswoman, Mom I'd like to fuck. Dass darunter ihr Wohlbefinden leidet, ist kein Wunder. Mareice Kaiser, Journalistin und selbst Mutter, stellt dabei immer wieder fest: Das Mutterideal ist unerreichbar und voller Widersprüche. Nichts kann man richtig machen und niemandem etwas recht. Mutterschaft berührt dabei, natürlich, jeden Lebensbereich: Denn egal, ob es um Arbeit, Geld, Sex, Körper, Psyche oder Liebe geht – Stereotype, Klischees und gesellschaftlichen Druck gibt es überall, auf Instagram, im Bett und im Büro. In ihrem Buch "Das Unwohlsein der modernen Mutter" (Rowohlt, 2021) zeigt die Autorin, wo Mütter heute stehen: noch immer öfter am Herd als in den Chefetagen. Und, wo sie stehen sollten: Dort, wo sie selbst sich sehen – frei und selbstbestimmt. Bei OUT LOUD liest Mareice Kaiser aus ihrem Buch und spricht mit uns über Frausein, Mutterschaft und Selbstbestimmung.`,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Delete(&StreamLang{
+					ID: testdataStream5Lang1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&Stream{
+					ID: testdataStream5,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
 		},
-	},
-	{
-		ID: "10-data-0030-01-stream-5",
-		Migrate: func(tx *gorm.DB) error {
-			if err := tx.Create(&Stream{
-				ID:        testdataStream5,
-				ChannelID: testdataChannel1,
-				EventID:   &testdataEvent1,
-				Chat:      true,
-				Running:   true,
-				StartAt:   time.Date(2021, 5, 5, 0, 0, 0, 0, loc),
-				ListenAt:  time.Date(2021, 5, 5, 0, 0, 0, 0, loc),
-				Poster:    "https://media.kukoon.de/images/67bd5c4c-81d6-47c8-adb9-458a9da58dbd.jpg",
-				Tags: []*Tag{
-					{ID: testdataTagBuchvorstellung},
-					{ID: testdataTagDiskussion},
-				},
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&StreamLang{
-				ID:       testdataStream5Lang1,
-				StreamID: testdataStream5,
-				Lang:     "de",
-				Title:    "Mareice Kaiser",
-				Subtitle: "Das Unwohlsein der modernen Mutter",
-				Short:    `Mütter sollen heute alles sein: Versorgerin, Businesswoman, Mom I'd like to fuck. Dass darunter ihr Wohlbefinden leidet, ist kein Wunder. Mareice Kaiser, Journalistin und selbst Mutter, stellt dabei immer wieder fest: ...`,
-				Long:     `Mütter sollen heute alles sein: Versorgerin, Businesswoman, Mom I'd like to fuck. Dass darunter ihr Wohlbefinden leidet, ist kein Wunder. Mareice Kaiser, Journalistin und selbst Mutter, stellt dabei immer wieder fest: Das Mutterideal ist unerreichbar und voller Widersprüche. Nichts kann man richtig machen und niemandem etwas recht. Mutterschaft berührt dabei, natürlich, jeden Lebensbereich: Denn egal, ob es um Arbeit, Geld, Sex, Körper, Psyche oder Liebe geht – Stereotype, Klischees und gesellschaftlichen Druck gibt es überall, auf Instagram, im Bett und im Büro. In ihrem Buch "Das Unwohlsein der modernen Mutter" (Rowohlt, 2021) zeigt die Autorin, wo Mütter heute stehen: noch immer öfter am Herd als in den Chefetagen. Und, wo sie stehen sollten: Dort, wo sie selbst sich sehen – frei und selbstbestimmt. Bei OUT LOUD liest Mareice Kaiser aus ihrem Buch und spricht mit uns über Frausein, Mutterschaft und Selbstbestimmung.`,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
-		},
-		Rollback: func(tx *gorm.DB) error {
-			if err := tx.Delete(&StreamLang{
-				ID: testdataStream5Lang1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&Stream{
-				ID: testdataStream5,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
-		},
-	},
-	{
-		ID: "10-data-0030-01-stream-6",
-		Migrate: func(tx *gorm.DB) error {
-			if err := tx.Create(&Stream{
-				ID:        testdataStream6,
-				ChannelID: testdataChannel1,
-				Chat:      true,
-				Running:   true,
-				StartAt:   time.Date(2021, 6, 24, 0, 0, 0, 0, loc),
-				ListenAt:  time.Date(2021, 6, 24, 0, 0, 0, 0, loc),
-				Poster:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/1742d9b6-c9c6-45fb-a3a3-4a3e7fac2987/poster.png",
-				Tags: []*Tag{
-					{ID: testdataTagDiskussion},
-				},
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&StreamLang{
-				ID:       testdataStream6Lang1,
-				StreamID: testdataStream6,
-				Lang:     "de",
-				Title:    "System Change not Climate Change!",
-				Subtitle: "Einführung zu Klimakrise und Kapitalismuskritik",
-				Short: `Diskussionsveranstaltung mit der Gruppe **direction f** (Hannover)
+		{
+			ID: "10-data-0030-01-stream-6",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.Create(&Stream{
+					ID:        testdataStream6,
+					ChannelID: TestChannelID1,
+					Chat:      true,
+					Running:   true,
+					StartAt:   time.Date(2021, 6, 24, 0, 0, 0, 0, loc),
+					ListenAt:  time.Date(2021, 6, 24, 0, 0, 0, 0, loc),
+					Poster:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/1742d9b6-c9c6-45fb-a3a3-4a3e7fac2987/poster.png",
+					Tags: []*Tag{
+						{ID: TestTagDiskussionID},
+					},
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&StreamLang{
+					ID:       testdataStream6Lang1,
+					StreamID: testdataStream6,
+					Lang:     "de",
+					Title:    "System Change not Climate Change!",
+					Subtitle: "Einführung zu Klimakrise und Kapitalismuskritik",
+					Short: `Diskussionsveranstaltung mit der Gruppe **direction f** (Hannover)
 
 **Kukoon im Park** oder hier`,
-				Long: `Diskussionsveranstaltung mit der Gruppe **direction f** (Hannover)
+					Long: `Diskussionsveranstaltung mit der Gruppe **direction f** (Hannover)
 
 **Kukoon im Park** oder hier
 
 Zwar verblasst die Klimakrise seit einem Jahr im medialen Schatten der Corona-Pandemie, die Dringlichkeit zum Handeln bleibt jedoch unverändert. Klar ist, dass die Klimakrise kein rein ökologisches Phänomen sondern ebenso sehr eine soziale Krise ist. Als »direction f« haben wir uns bisher vorrangig mit den Zusammenhängen von Klimakrise und Kapitalismus befasst. Im Rahmen der Veranstaltung wollen wir kurz auf den Ist-Zustand und bestehende Zusammenhänge eingehen. Davon ausgehend würden wir gerne darüber diskutieren, was (un)taugliche Strategien gegen die drohende Klimakatstrophe sein können und welche Rolle und Aufgaben dabei einer (radikalen) Linken zukämen. direction f ist ein Zusammenschluss von Menschen in Hannover, der sich bisher schwerpunktmäßig mit dem Zusammenhang von Klimakrise und Kapitalismus befasst hat.
 
 Mehr Infos unter [direction-f.org](https://direction-f.org/)`,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Delete(&StreamLang{
+					ID: testdataStream6Lang1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&Stream{
+					ID: testdataStream6,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
 		},
-		Rollback: func(tx *gorm.DB) error {
-			if err := tx.Delete(&StreamLang{
-				ID: testdataStream6Lang1,
-			}).Error; err != nil {
-				return err
-			}
-			if err := tx.Delete(&Stream{
-				ID: testdataStream6,
-			}).Error; err != nil {
-				return err
-			}
-			return nil
-		},
-	},
+	}...)
 }
