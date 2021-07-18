@@ -27,7 +27,8 @@ func init() {
 				return
 			}
 
-			c.JSON(http.StatusOK, &list)
+			//c.JSON(http.StatusOK, &list)
+			c.HTML(http.StatusOK, "channel_index.html", &list)
 		})
 	})
 }

@@ -1,0 +1,13 @@
+{{ define "replace"}}
+ Channels
+{{ end }}
+{{ template "00-part_head.html" }}
+
+
+	<h1>Channels</h1>
+	<ul>
+		{{ range . }}
+		<li><a herf="{{ .ID }}">{{ .Title }}</a></li>
+		{{ end }}
+	</ul>
+{{ template "00-part_tail.html" }}

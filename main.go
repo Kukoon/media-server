@@ -1,9 +1,13 @@
 package main
 
 import (
+	"embed"
 	"flag"
+	"fmt"
+	"html/template"
 
 	"github.com/bdlm/log"
+	"github.com/gin-gonic/gin"
 
 	"dev.sum7.eu/genofire/golang-lib/database"
 	"dev.sum7.eu/genofire/golang-lib/file"
@@ -20,6 +24,9 @@ type configData struct {
 	Database  database.Database `toml:"database"`
 	Webserver web.Service       `toml:"webserver"`
 }
+
+//go:embed templates/*
+var templateFS embed.FS
 
 func main() {
 	webM.VERSION = VERSION
@@ -56,7 +63,12 @@ func main() {
 	}
 	apiStatus.VERSION = webM.VERSION
 	apiStatus.UP = webM.UP
-
+	web.ModuleRegister(func(r *gin.Engine, ws *web.Service) {
+		templ := template.Must(template.New("").Funcs(r.FuncMap).ParseFS(templateFS, "templates/partials/*"))
+		templ = template.Must(templ.ParseFS(templateFS, "templates/views/**/*"))
+		fmt.Println(templ.DefinedTemplates())
+		r.SetHTMLTemplate(templ)
+	})
 	if err := config.Webserver.Run(); err != nil {
 		log.Fatal(err)
 	}

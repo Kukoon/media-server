@@ -50,7 +50,8 @@ func init() {
 				return
 			}
 
-			c.JSON(http.StatusOK, &obj)
+			// c.JSON(http.StatusOK, &obj)
+			c.HTML(http.StatusOK, "channel_single.html", &obj)
 		})
 	})
 }
