@@ -53,7 +53,8 @@ func init() {
 					ID: TestEventID1,
 				}).Error
 			},
-		}, {
+		},
+		{
 			ID: "10-data-0010-01-event-02",
 			Migrate: func(tx *gorm.DB) error {
 				return tx.Create(&Event{
