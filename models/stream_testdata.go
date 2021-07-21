@@ -35,6 +35,19 @@ var (
 	testdataStream7         = uuid.MustParse("7fc21416-5d68-4ecf-bd4b-e8a89f7c31f2")
 	testdataStream7Lang1    = uuid.MustParse("45bb0727-4812-40a2-8ac2-12422dfb42f1")
 	testdataStream7Speaker1 = uuid.MustParse("976010a0-c19f-4d22-a4d6-9553b460adfe")
+
+	// Grand Piano: Lucia Cadotsch
+	testdataStream8         = uuid.MustParse("7ff58740-8c3a-4e09-8fc1-1eeb39c2a9d4")
+	testdataStream8Lang1    = uuid.MustParse("b7be68f2-a109-4e28-8744-bfc6c8f03f9f")
+	testdataStream8Speaker1 = uuid.MustParse("dfa0ff16-8cb0-46e2-a56a-e44dcde1868e")
+	testdataStream8Speaker2 = uuid.MustParse("bd72ee71-6e0f-4ba6-9d3d-eb6b7ba589e3")
+	testdataStream8Speaker3 = uuid.MustParse("96c157f1-10d3-4ae1-af59-81ccece5d4fc")
+
+	/* Grand Piano: -
+	testdataStream9         = uuid.MustParse("")
+	testdataStream9Lang1    = uuid.MustParse("")
+	testdataStream9Speaker1 = uuid.MustParse("")
+	*/
 )
 
 func init() {
@@ -401,7 +414,7 @@ Mehr Infos unter [direction-f.org](https://direction-f.org/)`,
 					StreamID: testdataStream7,
 					Lang:     "de",
 					Title:    "Martin Kohlstedt",
-					Subtitle: "Das Unwohlsein der modernen Mutter",
+					Subtitle: "Mittwoch ab 18:00",
 					Short:    `Kein geringerer als **Martin Kohlstedt** wird den wunderbaren Auftakt machen und den Park auf die kommenden Konzerte perfekt einstimmen.`,
 					Long: `Kein geringerer als **Martin Kohlstedt** wird den wunderbaren Auftakt machen und den Park auf die kommenden Konzerte perfekt einstimmen.
 Das neue Martin Kohlstedt Album »FLUR« erschien im November 2020 auf Warner Classics. Das besondere Setup aus Flügel, Synthesizern und Electronika, kombiniert mit Kohlstedts Ansatz jedes Konzert von Grund auf neu zu verhandeln macht seine Konzerte zu einem Erlebnis.
@@ -428,6 +441,82 @@ Das neue Martin Kohlstedt Album »FLUR« erschien im November 2020 auf Warner Cl
 				}
 				if err := tx.Delete(&Stream{
 					ID: testdataStream7,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+		},
+		{
+			ID: "10-data-0030-01-stream-8",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.Create(&Stream{
+					ID:        testdataStream8,
+					ChannelID: TestChannelID1,
+					EventID:   &TestEventID2,
+					Chat:      false,
+					Running:   true,
+					StartAt:   time.Date(2021, 7, 21, 18, 15, 0, 0, loc),
+					ListenAt:  time.Date(2021, 7, 21, 18, 15, 0, 0, loc),
+					Poster:    "https://kukoon.de/images/8/6/7/e/5/767e5a264900c670ff18777ee9d5e67466c2a185-martin-kohlstedt.jpg",
+					Tags: []*Tag{
+						{ID: TestTagKonzertID},
+					},
+					Speakers: []*Speaker{
+						{
+							OwnerID: TestChannelID1,
+							ID:      testdataStream8Speaker1,
+							Name:    "Lucia Cadotsch",
+						},
+						{
+							OwnerID: TestChannelID1,
+							ID:      testdataStream8Speaker2,
+							Name:    "Ronny Graupe",
+						},
+						{
+							OwnerID: TestChannelID1,
+							ID:      testdataStream8Speaker3,
+							Name:    "Clara Vetter",
+						},
+					},
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&StreamLang{
+					ID:       testdataStream8Lang1,
+					StreamID: testdataStream8,
+					Lang:     "de",
+					Title:    "Lucia Cadotsch",
+					Subtitle: "Mittwoch ab 20:30",
+					Short: `Hierzu ziteren wir den Deutschlandfunk:
+__Sie hat dem Jazzgesang neuen Atem eingehaucht und experimentiert ständig weiter.__ (deutschlandfunk.de)`,
+					Long: `Am ersten Abend wird uns **Lucia Cadotsch** begleitet von **Ronny Graupe** (Gitarre) in die Nacht begleiten. Dabei werden sie von **Clara Vetter** unterstützt.
+
+Hierzu ziteren wir den Deutschlandfunk:
+__Sie hat dem Jazzgesang neuen Atem eingehaucht und experimentiert ständig weiter.__ (deutschlandfunk.de)
+
+1984 wurde **Lucia Cadotsch** in Zürich geboren. Mit 14 entdeckte sie ihre Liebe zum Jazz: Die Plattensammlung ihres Vaters begeisterte sie, vor allem Aufnahmen mit Miles Davis, John Coltrane, Nina Simone und Billie Holiday.
+**Lucia Cadotsch** bekam Klavier- und Gesangsunterricht und ging mit 18 Jahren an die Universität der Künste Berlin, um Jazzgesang zu studieren. Sie begründete diverse Ensembles, zum Beispiel das Popquartett Schneeweiss + Rosenrot, mit dem sie 2012 den Neuen Deutschen Jazzpreis gewann.
+2016 gelang **Lucia Cadotsch** der internationale Durchbruch mit dem Album »Speak Low«. Ein Jahr später erhielt sie den ECHO Jazz als Sängerin des Jahres. Heute lebt sie in Berlin. `,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Delete(&StreamLang{
+					ID: testdataStream8Lang1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM stream_speakers WHERE stream_id = ?", testdataStream8).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM stream_tags WHERE stream_id = ?", testdataStream8).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&Stream{
+					ID: testdataStream8,
 				}).Error; err != nil {
 					return err
 				}
