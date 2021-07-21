@@ -43,6 +43,11 @@ var (
 	testdataStream8Speaker2 = uuid.MustParse("bd72ee71-6e0f-4ba6-9d3d-eb6b7ba589e3")
 	testdataStream8Speaker3 = uuid.MustParse("96c157f1-10d3-4ae1-af59-81ccece5d4fc")
 
+	// Grand Piano: Pablo Ortega
+	testdataStream9         = uuid.MustParse("36ba6bfe-2b40-425d-8cc7-d7de5ec4b67a")
+	testdataStream9Lang1    = uuid.MustParse("c6720db6-9d62-483d-a6ec-5cd1137b4dac")
+	testdataStream9Speaker1 = uuid.MustParse("e7e6eb6b-8188-4169-ae4e-8144d559a592")
+
 	/* Grand Piano: -
 	testdataStream9         = uuid.MustParse("")
 	testdataStream9Lang1    = uuid.MustParse("")
@@ -458,7 +463,7 @@ Das neue Martin Kohlstedt Album »FLUR« erschien im November 2020 auf Warner Cl
 					Running:   true,
 					StartAt:   time.Date(2021, 7, 21, 18, 15, 0, 0, loc),
 					ListenAt:  time.Date(2021, 7, 21, 18, 15, 0, 0, loc),
-					Poster:    "https://kukoon.de/images/8/6/7/e/5/767e5a264900c670ff18777ee9d5e67466c2a185-martin-kohlstedt.jpg",
+					Poster:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/7ff58740-8c3a-4e09-8fc1-1eeb39c2a9d4/poster.png",
 					Tags: []*Tag{
 						{ID: TestTagKonzertID},
 					},
@@ -517,6 +522,68 @@ __Sie hat dem Jazzgesang neuen Atem eingehaucht und experimentiert ständig weit
 				}
 				if err := tx.Delete(&Stream{
 					ID: testdataStream8,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+		},
+		{
+			ID: "10-data-0030-01-stream-9",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.Create(&Stream{
+					ID:        testdataStream9,
+					ChannelID: TestChannelID1,
+					EventID:   &TestEventID2,
+					Chat:      false,
+					Running:   true,
+					StartAt:   time.Date(2021, 7, 22, 17, 0, 0, 0, loc),
+					ListenAt:  time.Date(2021, 7, 22, 17, 9, 0, 0, loc),
+					Poster:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/36ba6bfe-2b40-425d-8cc7-d7de5ec4b67a/poster.png",
+					Tags: []*Tag{
+						{ID: TestTagKonzertID},
+					},
+					Speakers: []*Speaker{
+						{
+							OwnerID: TestChannelID1,
+							ID:      testdataStream9Speaker1,
+							Name:    "Pablo Ortega",
+						},
+					},
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Create(&StreamLang{
+					ID:       testdataStream9Lang1,
+					StreamID: testdataStream9,
+					Lang:     "de",
+					Title:    "Pablo Ortega",
+					Subtitle: "Donnerstag ab 18:00",
+					Short:    `Pablo Ortega ist ein spanischer Cellist und Komponist. Er lebt in Bremen, wo er aktuell als multidisziplinarischer Musiker aktiv ist.`,
+					Long: `Den zweiten Abend wird **Pablo Ortega** eröffnen.
+
+**Pablo Ortega** ist ein spanischer Cellist und Komponist. Er lebt in Bremen, wo er aktuell als multidisziplinarischer Musiker aktiv ist. In seinen Werken verbindet er Elemente moderner klassischer Musik – wie z.B. intime Cellomelodien – mit elektronischen Beats und organischen, atmosphärischen Klangtexturen mit dem Synthesizer. Damit schafft er eine Mischung von Genres, die von filmischer akustischer Musik bis zu energetischer Electronica reicht.
+
+Seine erste EP »Still Waters Run Deep« erschien im Februar 2020. `,
+				}).Error; err != nil {
+					return err
+				}
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Delete(&StreamLang{
+					ID: testdataStream9Lang1,
+				}).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM stream_speakers WHERE stream_id = ?", testdataStream9).Error; err != nil {
+					return err
+				}
+				if err := tx.Exec("DELETE FROM stream_tags WHERE stream_id = ?", testdataStream9).Error; err != nil {
+					return err
+				}
+				if err := tx.Delete(&Stream{
+					ID: testdataStream9,
 				}).Error; err != nil {
 					return err
 				}
