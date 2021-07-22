@@ -34,8 +34,11 @@ dev.sum7.eu/genofire/golang-lib v0.0.0-20210630135931-d888e277902a h1:keOezyr307
 dev.sum7.eu/genofire/golang-lib v0.0.0-20210630135931-d888e277902a/go.mod h1:KeHFit+zWh8apLBJUOm14UJxZvefYPF6RZ5LVlBuH2s=
 dev.sum7.eu/genofire/golang-lib v0.0.0-20210715092105-7923008c9fe3 h1:j56/QF6NJwTVCfr0FbBvy/bax0FMvRAaQzK9xZwI+5s=
 dev.sum7.eu/genofire/golang-lib v0.0.0-20210715092105-7923008c9fe3/go.mod h1:lgni+6D1ZPDBGEhOnGGf9iCrs+spTzeqwUFX5cvHPyo=
+dev.sum7.eu/genofire/golang-lib v0.0.0-20210719163544-fb766ca32b7c/go.mod h1:lgni+6D1ZPDBGEhOnGGf9iCrs+spTzeqwUFX5cvHPyo=
 dev.sum7.eu/genofire/golang-lib v0.0.0-20210722161605-32f0d844271f h1:iqBoDLM3Vp7cuNcca9vFFoy4BuNrUcZ8PajJEMzg+sA=
 dev.sum7.eu/genofire/golang-lib v0.0.0-20210722161605-32f0d844271f/go.mod h1:8fBNwMOpKq6bWHISrivkcs65mUBHiO44THbqhjeOoas=
+dev.sum7.eu/genofire/oven-exporter v0.0.1 h1:BmxZQw1io8K45GkeG4mpoq6JsdxE5tYXq945gWBpoWk=
+dev.sum7.eu/genofire/oven-exporter v0.0.1/go.mod h1:93pHJhAkeap1tHkaUu+1ysQlYxX55H6HiX4gbRC7bbA=
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
