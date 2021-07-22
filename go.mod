@@ -3,7 +3,7 @@ module github.com/Kukoon/media-server
 go 1.16
 
 require (
-	dev.sum7.eu/genofire/golang-lib v0.0.0-20210715092105-7923008c9fe3
+	dev.sum7.eu/genofire/golang-lib v0.0.0-20210722161605-32f0d844271f
 	github.com/bdlm/log v0.1.20
 	github.com/chenjiandongx/ginprom v0.0.0-20210617023641-6c809602c38a // indirect
 	github.com/eduncan911/podcast v1.4.2

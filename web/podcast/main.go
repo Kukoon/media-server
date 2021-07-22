@@ -75,129 +75,128 @@ func (p PodcastFormat) BeautifulString() string {
 	return "ERROR"
 }
 
-func init() {
-	web.ModuleRegister(func(r *gin.Engine, ws *web.Service) {
-		r.GET("/rss/:slug/:lang/:format", func(c *gin.Context) {
-			slug := c.Params.ByName("slug")
-			language := c.Params.ByName("lang")
-			formatStr := PodcastFormat(c.Params.ByName("format"))
+// Bind to webservice
+func Bind(r *gin.Engine, ws *web.Service) {
+	r.GET("/rss/:slug/:lang/:format", func(c *gin.Context) {
+		slug := c.Params.ByName("slug")
+		language := c.Params.ByName("lang")
+		formatStr := PodcastFormat(c.Params.ByName("format"))
 
-			db := ws.DB
+		db := ws.DB
 
-			obj := models.Channel{}
+		obj := models.Channel{}
 
-			if !formatStr.IsValid() {
-				c.String(http.StatusBadRequest, "no valid file format for podcasts")
-				return
-			}
+		if !formatStr.IsValid() {
+			c.String(http.StatusBadRequest, "no valid file format for podcasts")
+			return
+		}
 
-			isVideo := formatStr.IsVideo()
-			format := podcast.MP4
-			if !formatStr.IsVideo() {
-				format = podcast.MP3
-			}
+		isVideo := formatStr.IsVideo()
+		format := podcast.MP4
+		if !formatStr.IsVideo() {
+			format = podcast.MP3
+		}
 
-			// by name or id
-			uuid, err := uuid.Parse(slug)
-			if err != nil {
-				db = db.Where("common_name", slug)
-				obj.CommonName = slug
-			} else {
-				obj.ID = uuid
-			}
+		// by name or id
+		uuid, err := uuid.Parse(slug)
+		if err != nil {
+			db = db.Where("common_name", slug)
+			obj.CommonName = slug
+		} else {
+			obj.ID = uuid
+		}
 
-			// just check current time
+		// just check current time
 
-			if err := db.Preload("Recordings", func(db *gorm.DB) *gorm.DB {
-				return db.Order("updated_at DESC")
-			}).First(&obj).Error; err != nil {
-				if errors.Is(err, gorm.ErrRecordNotFound) {
-					c.JSON(http.StatusNotFound, web.HTTPError{
-						Message: web.APIErrorNotFound,
-						Error:   err.Error(),
-					})
-					c.JSON(http.StatusNotFound, err.Error())
-					return
-				}
-				c.JSON(http.StatusInternalServerError, web.HTTPError{
-					Message: web.APIErrorInternalDatabase,
+		if err := db.Preload("Recordings", func(db *gorm.DB) *gorm.DB {
+			return db.Order("updated_at DESC")
+		}).First(&obj).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				c.JSON(http.StatusNotFound, web.HTTPError{
+					Message: web.ErrAPINotFound.Error(),
 					Error:   err.Error(),
 				})
+				c.JSON(http.StatusNotFound, err.Error())
 				return
 			}
+			c.JSON(http.StatusInternalServerError, web.HTTPError{
+				Message: web.ErrAPIInternalDatabase.Error(),
+				Error:   err.Error(),
+			})
+			return
+		}
 
-			pubTime := obj.Recordings[0].UpdatedAt
+		pubTime := obj.Recordings[0].UpdatedAt
 
-			// fetch every recording
+		// fetch every recording
 
-			if err := db.Preload("Recordings.Lang", func(db *gorm.DB) *gorm.DB {
-				return db.Where("lang", language)
-			}).Preload("Recordings", func(db *gorm.DB) *gorm.DB {
-				return db.Order("created_at DESC")
-			}).Preload("Recordings.Formats", func(db *gorm.DB) *gorm.DB {
-				return db.Where("is_video", isVideo).Where("quality >= ?", formatStr.MinQuality()).Order("quality ASC")
-			}).First(&obj).Error; err != nil {
-				if errors.Is(err, gorm.ErrRecordNotFound) {
-					c.JSON(http.StatusNotFound, web.HTTPError{
-						Message: web.APIErrorNotFound,
-						Error:   err.Error(),
-					})
-					c.JSON(http.StatusNotFound, err.Error())
-					return
-				}
-				c.JSON(http.StatusInternalServerError, web.HTTPError{
-					Message: web.APIErrorInternalDatabase,
+		if err := db.Preload("Recordings.Lang", func(db *gorm.DB) *gorm.DB {
+			return db.Where("lang", language)
+		}).Preload("Recordings", func(db *gorm.DB) *gorm.DB {
+			return db.Order("created_at DESC")
+		}).Preload("Recordings.Formats", func(db *gorm.DB) *gorm.DB {
+			return db.Where("is_video", isVideo).Where("quality >= ?", formatStr.MinQuality()).Order("quality ASC")
+		}).First(&obj).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				c.JSON(http.StatusNotFound, web.HTTPError{
+					Message: web.ErrAPINotFound.Error(),
 					Error:   err.Error(),
 				})
+				c.JSON(http.StatusNotFound, err.Error())
 				return
 			}
-			p := podcast.New(obj.Title+" ("+formatStr.BeautifulString()+")", "", "", &pubTime, &pubTime)
-			p.AddImage(obj.Logo)
-			p.Language = language
+			c.JSON(http.StatusInternalServerError, web.HTTPError{
+				Message: web.ErrAPIInternalDatabase.Error(),
+				Error:   err.Error(),
+			})
+			return
+		}
+		p := podcast.New(obj.Title+" ("+formatStr.BeautifulString()+")", "", "", &pubTime, &pubTime)
+		p.AddImage(obj.Logo)
+		p.Language = language
 
-			for _, recording := range obj.Recordings {
+		for _, recording := range obj.Recordings {
 
-				if recording.Lang == nil || len(recording.Formats) == 0 {
-					continue
-				}
-
-				recordingFormat := recording.Formats[0]
-				description := markdown.ToHTML([]byte(recording.Lang.Long), nil, nil)
-
-				// create an Item
-				item := podcast.Item{
-					GUID:        recording.ID.String(),
-					Title:       recording.Lang.Title,
-					ISubtitle:   recording.Lang.Subtitle,
-					Link:        recordingFormat.URL,
-					Description: string(description),
-					PubDate:     &recording.CreatedAt,
-				}
-				item.AddSummary(recording.Lang.Short)
-				item.AddImage(recording.Poster)
-				// add a Download to the Item
-				item.AddEnclosure(recordingFormat.URL, format, recordingFormat.Bytes)
-
-				item.AddPubDate(&recording.CreatedAt)
-
-				// add the Item and check for validation errors
-				if _, err := p.AddItem(item); err != nil {
-					c.JSON(http.StatusInternalServerError, web.HTTPError{
-						Message: "Podcast Rendering Error",
-						Error:   err.Error(),
-					})
-					return
-				}
+			if recording.Lang == nil || len(recording.Formats) == 0 {
+				continue
 			}
 
-			c.Writer.Header().Set("Content-Type", "application/xml")
+			recordingFormat := recording.Formats[0]
+			description := markdown.ToHTML([]byte(recording.Lang.Long), nil, nil)
 
-			if err := p.Encode(c.Writer); err != nil {
+			// create an Item
+			item := podcast.Item{
+				GUID:        recording.ID.String(),
+				Title:       recording.Lang.Title,
+				ISubtitle:   recording.Lang.Subtitle,
+				Link:        recordingFormat.URL,
+				Description: string(description),
+				PubDate:     &recording.CreatedAt,
+			}
+			item.AddSummary(recording.Lang.Short)
+			item.AddImage(recording.Poster)
+			// add a Download to the Item
+			item.AddEnclosure(recordingFormat.URL, format, recordingFormat.Bytes)
+
+			item.AddPubDate(&recording.CreatedAt)
+
+			// add the Item and check for validation errors
+			if _, err := p.AddItem(item); err != nil {
 				c.JSON(http.StatusInternalServerError, web.HTTPError{
 					Message: "Podcast Rendering Error",
 					Error:   err.Error(),
 				})
+				return
 			}
-		})
+		}
+
+		c.Writer.Header().Set("Content-Type", "application/xml")
+
+		if err := p.Encode(c.Writer); err != nil {
+			c.JSON(http.StatusInternalServerError, web.HTTPError{
+				Message: "Podcast Rendering Error",
+				Error:   err.Error(),
+			})
+		}
 	})
 }

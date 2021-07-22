@@ -1,10 +1,28 @@
 package web
 
 import (
-	_ "dev.sum7.eu/genofire/golang-lib/web/api/status"
-	_ "github.com/Kukoon/media-server/web/api/channel"
-	_ "github.com/Kukoon/media-server/web/api/recording"
-	_ "github.com/Kukoon/media-server/web/api/stream"
-	_ "github.com/Kukoon/media-server/web/podcast"
-	_ "github.com/Kukoon/media-server/web/ws/stream"
+	"dev.sum7.eu/genofire/golang-lib/web"
+	"dev.sum7.eu/genofire/golang-lib/web/api/status"
+	"dev.sum7.eu/genofire/golang-lib/web/metrics"
+	"github.com/gin-gonic/gin"
+
+	"github.com/Kukoon/media-server/web/api/channel"
+	"github.com/Kukoon/media-server/web/api/recording"
+	"github.com/Kukoon/media-server/web/api/stream"
+	"github.com/Kukoon/media-server/web/podcast"
+	wsStream "github.com/Kukoon/media-server/web/ws/stream"
 )
+
+// Bind to webservice
+func Bind(r *gin.Engine, ws *web.Service) {
+	status.Register(r, ws)
+	metrics.Register(r, ws)
+
+	channel.Bind(r, ws)
+	recording.Bind(r, ws)
+	stream.Bind(r, ws)
+
+	podcast.Bind(r, ws)
+
+	wsStream.Bind(r, ws)
+}

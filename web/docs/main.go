@@ -8,8 +8,7 @@ import (
 	"dev.sum7.eu/genofire/golang-lib/web"
 )
 
-func init() {
-	web.ModuleRegister(func(r *gin.Engine, ws *web.Service) {
-		r.GET("/api/help/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	})
+// Bind to webservice
+func Bind(r *gin.Engine, ws *web.Service) {
+	r.GET("/api/help/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }

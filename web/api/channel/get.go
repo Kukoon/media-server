@@ -20,37 +20,35 @@ import (
 // @Failure 404 {object} web.HTTPError
 // @Router /api/v1/channel/{slug} [get]
 // @Param slug path string false "slug or uuid of channel"
-func init() {
-	web.ModuleRegister(func(r *gin.Engine, ws *web.Service) {
-		r.GET("/api/v1/channel/:slug", func(c *gin.Context) {
-			slug := c.Params.ByName("slug")
-			db := ws.DB
-			obj := models.Channel{}
+func apiGet(r *gin.Engine, ws *web.Service) {
+	r.GET("/api/v1/channel/:slug", func(c *gin.Context) {
+		slug := c.Params.ByName("slug")
+		db := ws.DB
+		obj := models.Channel{}
 
-			uuid, err := uuid.Parse(slug)
-			if err != nil {
-				db = db.Where("common_name", slug)
-				obj.CommonName = slug
-			} else {
-				obj.ID = uuid
-			}
-			if err := db.First(&obj).Error; err != nil {
-				if errors.Is(err, gorm.ErrRecordNotFound) {
-					c.JSON(http.StatusNotFound, web.HTTPError{
-						Message: web.APIErrorNotFound,
-						Error:   err.Error(),
-					})
-					c.JSON(http.StatusNotFound, err.Error())
-					return
-				}
-				c.JSON(http.StatusInternalServerError, web.HTTPError{
-					Message: web.APIErrorInternalDatabase,
+		uuid, err := uuid.Parse(slug)
+		if err != nil {
+			db = db.Where("common_name", slug)
+			obj.CommonName = slug
+		} else {
+			obj.ID = uuid
+		}
+		if err := db.First(&obj).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				c.JSON(http.StatusNotFound, web.HTTPError{
+					Message: web.ErrAPINotFound.Error(),
 					Error:   err.Error(),
 				})
+				c.JSON(http.StatusNotFound, err.Error())
 				return
 			}
+			c.JSON(http.StatusInternalServerError, web.HTTPError{
+				Message: web.ErrAPIInternalDatabase.Error(),
+				Error:   err.Error(),
+			})
+			return
+		}
 
-			c.JSON(http.StatusOK, &obj)
-		})
+		c.JSON(http.StatusOK, &obj)
 	})
 }

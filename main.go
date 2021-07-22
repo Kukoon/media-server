@@ -11,7 +11,7 @@ import (
 	apiStatus "dev.sum7.eu/genofire/golang-lib/web/api/status"
 	webM "dev.sum7.eu/genofire/golang-lib/web/metrics"
 	"github.com/Kukoon/media-server/models"
-	_ "github.com/Kukoon/media-server/web"
+	webOWN "github.com/Kukoon/media-server/web"
 )
 
 var VERSION = "development"
@@ -56,6 +56,8 @@ func main() {
 	}
 	apiStatus.VERSION = webM.VERSION
 	apiStatus.UP = webM.UP
+
+	config.Webserver.ModuleRegister(webOWN.Bind)
 
 	if err := config.Webserver.Run(); err != nil {
 		log.Fatal(err)

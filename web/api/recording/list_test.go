@@ -14,7 +14,7 @@ import (
 
 func TestAPIRecordingsList(t *testing.T) {
 	assert := assert.New(t)
-	s, err := webtest.NewWithDBSetup(models.SetupMigration)
+	s, err := webtest.NewWithDBSetup(apiList, models.SetupMigration)
 	assert.NoError(err)
 	defer s.Close()
 	assert.NotNil(s)
