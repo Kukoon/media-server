@@ -74,7 +74,7 @@ func init() {
 
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
-			ID: "10-data-0030-01-stream-1",
+			ID: "10-data-0030-01-stream-01",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
 					ID:        testdataStream1,
@@ -118,27 +118,13 @@ Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, d
 				return nil
 			},
 			Rollback: func(tx *gorm.DB) error {
-				if err := tx.Delete(&StreamLang{
-					ID: testdataStream1Lang1,
-				}).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_speakers WHERE stream_id = ?", testdataStream1).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_tags WHERE stream_id = ?", testdataStream1).Error; err != nil {
-					return err
-				}
-				if err := tx.Delete(&Stream{
+				return tx.Delete(&Stream{
 					ID: testdataStream1,
-				}).Error; err != nil {
-					return err
-				}
-				return nil
+				}).Error
 			},
 		},
 		{
-			ID: "10-data-0030-01-stream-2",
+			ID: "10-data-0030-01-stream-02",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
 					ID:        testdataStream2,
@@ -154,22 +140,13 @@ Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, d
 				return nil
 			},
 			Rollback: func(tx *gorm.DB) error {
-				if err := tx.Exec("DELETE FROM stream_speakers WHERE stream_id = ?", testdataStream2).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_tags WHERE stream_id = ?", testdataStream2).Error; err != nil {
-					return err
-				}
-				if err := tx.Delete(&Stream{
+				return tx.Delete(&Stream{
 					ID: testdataStream2,
-				}).Error; err != nil {
-					return err
-				}
-				return nil
+				}).Error
 			},
 		},
 		{
-			ID: "10-data-0030-01-stream-3",
+			ID: "10-data-0030-01-stream-03",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
 					ID:        testdataStream3,
@@ -210,27 +187,13 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				return nil
 			},
 			Rollback: func(tx *gorm.DB) error {
-				if err := tx.Delete(&StreamLang{
-					ID: testdataStream3Lang1,
-				}).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_speakers WHERE stream_id = ?", testdataStream3).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_tags WHERE stream_id = ?", testdataStream3).Error; err != nil {
-					return err
-				}
-				if err := tx.Delete(&Stream{
+				return tx.Delete(&Stream{
 					ID: testdataStream3,
-				}).Error; err != nil {
-					return err
-				}
-				return nil
+				}).Error
 			},
 		},
 		{
-			ID: "10-data-0030-01-stream-4",
+			ID: "10-data-0030-01-stream-04",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
 					ID:        testdataStream4,
@@ -275,27 +238,13 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				return nil
 			},
 			Rollback: func(tx *gorm.DB) error {
-				if err := tx.Delete(&StreamLang{
-					ID: testdataStream4Lang1,
-				}).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_speakers WHERE stream_id = ?", testdataStream4).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_tags WHERE stream_id = ?", testdataStream4).Error; err != nil {
-					return err
-				}
-				if err := tx.Delete(&Stream{
+				return tx.Delete(&Stream{
 					ID: testdataStream4,
-				}).Error; err != nil {
-					return err
-				}
-				return nil
+				}).Error
 			},
 		},
 		{
-			ID: "10-data-0030-01-stream-5",
+			ID: "10-data-0030-01-stream-05",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
 					ID:        testdataStream5,
@@ -327,27 +276,13 @@ Eine Veranstaltung des _Kulturzentrum Kukoon_ in Kooperation mit der _Rosa-Luxem
 				return nil
 			},
 			Rollback: func(tx *gorm.DB) error {
-				if err := tx.Delete(&StreamLang{
-					ID: testdataStream5Lang1,
-				}).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_speakers WHERE stream_id = ?", testdataStream5).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_tags WHERE stream_id = ?", testdataStream5).Error; err != nil {
-					return err
-				}
-				if err := tx.Delete(&Stream{
+				return tx.Delete(&Stream{
 					ID: testdataStream5,
-				}).Error; err != nil {
-					return err
-				}
-				return nil
+				}).Error
 			},
 		},
 		{
-			ID: "10-data-0030-01-stream-6",
+			ID: "10-data-0030-01-stream-06",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
 					ID:        testdataStream6,
@@ -385,27 +320,13 @@ Mehr Infos unter [direction-f.org](https://direction-f.org/)`,
 				return nil
 			},
 			Rollback: func(tx *gorm.DB) error {
-				if err := tx.Delete(&StreamLang{
-					ID: testdataStream6Lang1,
-				}).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_speakers WHERE stream_id = ?", testdataStream6).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_tags WHERE stream_id = ?", testdataStream6).Error; err != nil {
-					return err
-				}
-				if err := tx.Delete(&Stream{
+				return tx.Delete(&Stream{
 					ID: testdataStream6,
-				}).Error; err != nil {
-					return err
-				}
-				return nil
+				}).Error
 			},
 		},
 		{
-			ID: "10-data-0030-01-stream-7",
+			ID: "10-data-0030-01-stream-07",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
 					ID:        testdataStream7,
@@ -448,27 +369,13 @@ Das neue Martin Kohlstedt Album »FLUR« erschien im November 2020 auf Warner Cl
 				return nil
 			},
 			Rollback: func(tx *gorm.DB) error {
-				if err := tx.Delete(&StreamLang{
-					ID: testdataStream7Lang1,
-				}).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_speakers WHERE stream_id = ?", testdataStream7).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_tags WHERE stream_id = ?", testdataStream7).Error; err != nil {
-					return err
-				}
-				if err := tx.Delete(&Stream{
+				return tx.Delete(&Stream{
 					ID: testdataStream7,
-				}).Error; err != nil {
-					return err
-				}
-				return nil
+				}).Error
 			},
 		},
 		{
-			ID: "10-data-0030-01-stream-8",
+			ID: "10-data-0030-01-stream-08",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
 					ID:        testdataStream8,
@@ -524,27 +431,13 @@ __Sie hat dem Jazzgesang neuen Atem eingehaucht und experimentiert ständig weit
 				return nil
 			},
 			Rollback: func(tx *gorm.DB) error {
-				if err := tx.Delete(&StreamLang{
-					ID: testdataStream8Lang1,
-				}).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_speakers WHERE stream_id = ?", testdataStream8).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_tags WHERE stream_id = ?", testdataStream8).Error; err != nil {
-					return err
-				}
-				if err := tx.Delete(&Stream{
+				return tx.Delete(&Stream{
 					ID: testdataStream8,
-				}).Error; err != nil {
-					return err
-				}
-				return nil
+				}).Error
 			},
 		},
 		{
-			ID: "10-data-0030-01-stream-9",
+			ID: "10-data-0030-01-stream-09",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
 					ID:        testdataStream9,
@@ -586,23 +479,9 @@ Seine erste EP »Still Waters Run Deep« erschien im Februar 2020. `,
 				return nil
 			},
 			Rollback: func(tx *gorm.DB) error {
-				if err := tx.Delete(&StreamLang{
-					ID: testdataStream9Lang1,
-				}).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_speakers WHERE stream_id = ?", testdataStream9).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_tags WHERE stream_id = ?", testdataStream9).Error; err != nil {
-					return err
-				}
-				if err := tx.Delete(&Stream{
+				return tx.Delete(&Stream{
 					ID: testdataStream9,
-				}).Error; err != nil {
-					return err
-				}
-				return nil
+				}).Error
 			},
 		},
 		{
@@ -644,23 +523,9 @@ Seine erste EP »Still Waters Run Deep« erschien im Februar 2020. `,
 				return nil
 			},
 			Rollback: func(tx *gorm.DB) error {
-				if err := tx.Delete(&StreamLang{
-					ID: testdataStream10Lang1,
-				}).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_speakers WHERE stream_id = ?", testdataStream10).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_tags WHERE stream_id = ?", testdataStream10).Error; err != nil {
-					return err
-				}
-				if err := tx.Delete(&Stream{
+				return tx.Delete(&Stream{
 					ID: testdataStream10,
-				}).Error; err != nil {
-					return err
-				}
-				return nil
+				}).Error
 			},
 		},
 		{
@@ -706,23 +571,9 @@ David erweckt Rhythmen zum Leben, die vorab auf Drumcomputern konzipiert wurden 
 				return nil
 			},
 			Rollback: func(tx *gorm.DB) error {
-				if err := tx.Delete(&StreamLang{
-					ID: testdataStream11Lang1,
-				}).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_speakers WHERE stream_id = ?", testdataStream11).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_tags WHERE stream_id = ?", testdataStream11).Error; err != nil {
-					return err
-				}
-				if err := tx.Delete(&Stream{
+				return tx.Delete(&Stream{
 					ID: testdataStream11,
-				}).Error; err != nil {
-					return err
-				}
-				return nil
+				}).Error
 			},
 		},
 		{
@@ -767,23 +618,9 @@ Niklas’ Gebrauch des Klaviers, elektronischer Elemente (Synth und Computer) so
 				return nil
 			},
 			Rollback: func(tx *gorm.DB) error {
-				if err := tx.Delete(&StreamLang{
-					ID: testdataStream12Lang1,
-				}).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_speakers WHERE stream_id = ?", testdataStream12).Error; err != nil {
-					return err
-				}
-				if err := tx.Exec("DELETE FROM stream_tags WHERE stream_id = ?", testdataStream12).Error; err != nil {
-					return err
-				}
-				if err := tx.Delete(&Stream{
+				return tx.Delete(&Stream{
 					ID: testdataStream12,
-				}).Error; err != nil {
-					return err
-				}
-				return nil
+				}).Error
 			},
 		},
 	}...)
