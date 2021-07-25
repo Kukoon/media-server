@@ -26,7 +26,7 @@ func init() {
 					Running:   true,
 					StartAt:   time.Date(2021, 7, 25, 20, 30, 0, 0, loc),
 					ListenAt:  time.Date(2021, 7, 25, 20, 00, 0, 0, loc),
-					Poster:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/84bc85bf-b304-4518-af66-afb17d8cbb54/poster.png",
+					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataStream.String() + "/poster.png",
 					Tags: []*Tag{
 						{ID: TestTagKonzertID},
 					},
@@ -46,8 +46,12 @@ func init() {
 					Lang:     "de",
 					Title:    "Kid be Kid",
 					Subtitle: "Sonntag ab 20:30",
-					Short:    `Pianistin und Komponistin **Clara Vetter** (*1996) widmet sich beinahe lebenslang der Musik und anderen kreativen Schaffensprozessen.`,
-					Long:     `Pianistin und Komponistin **Clara Vetter** (*1996) widmet sich beinahe lebenslang der Musik und anderen kreativen Schaffensprozessen. An der Hochschule für Musik und Darstellende Kunst Stuttgart absolvierte sie 2018 ihr Bachelorstudium in Jazz Klavier und wurde im selben Jahr mit dem Stuttgarter Steinway&Sons Förderpreis ausgezeichnet. Im Juni 2021 schloss sie ihr Masterstudium in Music Performance am Kopenhagener Rytmisk Musikkonservatorium ab. Natürlichkeit - "organisch sein" - ist, was sie an Kunst am meisten fasziniert und somit geht ihre Musik stets einer komplexen, dennoch fließenden Lebendigkeit entgegen.`,
+					Short:    `Gleich mit ihrem Debüt »Sold Out« hat sich **KID BE KID** schnurstracks auf die großen Festivals gebeamt und dort dem Publikum berauschende Konzerte geliefert.`,
+					Long: `Den Abschluss unseres Konzertflügelfestivals legt **Kid be Kid** hin.
+
+Gleich mit ihrem Debüt »Sold Out« hat sich **KID BE KID** schnurstracks auf die großen Festivals gebeamt und dort dem Publikum berauschende Konzerte geliefert. Ob beim Elbjazz in Hamburg, dem legendären Fusion Festival oder im bedeutenden Monument National im Rahmen des Festival International de Jazz de Montréal, eine der prominentesten Bühnen der Welt – **KID BE KID** fasziniert das Publikum mit bedingungsloser Hingabe und unglaublichem Können.
+Mit ihrer neuen EP »Lovely Genders« etabliert **KID BE KID** ihren Platz zwischen den großen Neo Soul KünstlerInnen unserer Zeit. Klangliche Tiefe und inhaltliche Reife zeichnen ihre Songs aus. Ihr einzigartiges Skillset aus Beatboxing, Gesang, Klavier und Synthesizer trifft auf poetische Lyrics und rhythmische Virtuosität.
+An **KID BE KID** ist einfach alles besonders. Vor ihr war eine Künstlerin kaum vorstellbar, die gleichzeitig vier Instrumente ganz ohne Loop Station spielt, dabei groovt und berührt bis zum Abwinken und oben drauf ihre Stimme in mehrere Töne spaltet. Sie verkörpert Coolness und Verletzlichkeit, Struktur und Freiheit, Hip Hop und Jazz gleichermaßen und lässt alles im Raum lebendig werden.`,
 				}).Error; err != nil {
 					return err
 				}

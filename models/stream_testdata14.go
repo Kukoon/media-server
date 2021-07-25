@@ -26,7 +26,7 @@ func init() {
 					Running:   true,
 					StartAt:   time.Date(2021, 7, 24, 18, 0, 0, 0, loc),
 					ListenAt:  time.Date(2021, 7, 24, 17, 0, 0, 0, loc),
-					Poster:    "https://cdn.media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/bd2cb25e-6f17-453d-b947-370cd51beb18/poster.png",
+					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataStream.String() + "/poster.png",
 					Tags: []*Tag{
 						{ID: TestTagKonzertID},
 					},
