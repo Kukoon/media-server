@@ -13,21 +13,31 @@ func init() {
 	testdataID := uuid.MustParse("e446cfa4-9df2-4965-8491-b0d24a573585")
 	testdataIDLang1 := uuid.MustParse("622f5adf-9d4d-4bef-8098-247c4180c6d7")
 	testdataIDSpeaker1 := uuid.MustParse("e9d2cb0a-abc6-4ac8-ae8f-d462f87aad43")
+	testdataIDFormat1 := uuid.MustParse("035fb6fb-1e89-4bc5-97f9-a0f63fffdf03")
+
+	// see stream 17
+
+	/* WARNING unreleased:
+	- Public
+	- Private
+	- Duration
+	- Bytes
+	*/
 
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
-			ID: "10-data-0020-01-stream-17",
+			ID: "10-data-0030-01-recording-22",
 			Migrate: func(tx *gorm.DB) error {
-				if err := tx.Create(&Stream{
+				if err := tx.Create(&Recording{
 					ID:        testdataID,
 					ChannelID: TestChannelID1,
 					EventID:   &TestEventID2,
-					Chat:      false,
-					Running:   true,
-					StartAt:   time.Date(2021, 7, 25, 18, 0, 0, 0, loc),
-					ListenAt:  time.Date(2021, 7, 25, 17, 0, 0, 0, loc),
 					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
 					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
+					CreatedAt: time.Date(2021, 7, 25, 18, 0, 0, 0, loc),
+					Duration:  time.Hour,
+					Public:    false,
+					Listed:    false,
 					Tags: []*Tag{
 						{ID: TestTagKonzertID},
 					},
@@ -41,13 +51,13 @@ func init() {
 				}).Error; err != nil {
 					return err
 				}
-				if err := tx.Create(&StreamLang{
-					ID:       testdataIDLang1,
-					StreamID: testdataID,
-					Lang:     "de",
-					Title:    "Julia Kadel",
-					Subtitle: "Sonntag ab 18:00",
-					Short:    `**Julia Kadel** wurde 1986 in Berlin geboren und begann im Alter von sieben Jahren Klavier zu spielen. Nach Jahren der klassischen Ausbildung entdeckte sie mit Fünfzehn ihre Leidenschaft für den Jazz.`,
+				if err := tx.Create(&RecordingLang{
+					ID:          testdataIDLang1,
+					RecordingID: testdataID,
+					Lang:        "de",
+					Title:       "Julia Kadel",
+					Subtitle:    "Sonntag ab 18:00",
+					Short:       `**Julia Kadel** wurde 1986 in Berlin geboren und begann im Alter von sieben Jahren Klavier zu spielen. Nach Jahren der klassischen Ausbildung entdeckte sie mit Fünfzehn ihre Leidenschaft für den Jazz.`,
 					Long: `**Julia Kadel** wurde 1986 in Berlin geboren und begann im Alter von sieben Jahren Klavier zu spielen. Nach Jahren der klassischen Ausbildung entdeckte sie mit Fünfzehn ihre Leidenschaft für den Jazz. Bis 2016 studierte sie Jazzklavier an der Hochschule für Musik Carl Maria von Weber Dresden. Seither zählt **Kadel** zu den starken neuen Stimmen innerhalb der europäischen Musikszene.
 Im Frühjahr 2013 erhielt sie das einjährige Deutschlandstipendium ihrer Hochschule zur Förderung ihrer künstlerischen Tätigkeiten. Im Herbst gewann ihr Trio den HfM-Jazzpreis 2013, verliehen von der Hochschule für Musik Saar. Das Debütalbum des **Julia Kadel Trios** »Im Vertrauen« erschien am 29. August 2014 bei Blue Note/Universal. Damit nominierten sich **Kadel** und ihr Klaviertrio für den deutschen Echo Jazz 2015 in zwei Kategorien – **Kadel** als “Instrumentalist des Jahres national Piano” und das Trio als “Newcomer des Jahres”. 2016 erschien das zweite Album des Trios »Über und Unter«, ebenfalls bei Blue Note unter dem Dach von Universal Music.
 
@@ -61,10 +71,24 @@ Deutschlandstipendium 2013, Winner of HfM-Jazzpreis 2013, 2 Nominations for Germ
 				}).Error; err != nil {
 					return err
 				}
+				if err := tx.Create(&[]*RecordingFormat{
+					{
+						ID:          testdataIDFormat1,
+						RecordingID: testdataID,
+						Lang:        "de",
+						Quality:     0,
+						IsVideo:     true,
+						URL:         "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/video_best.mp4",
+						Bytes:       0,
+						Resolution:  "1920x1080",
+					},
+				}).Error; err != nil {
+					return err
+				}
 				return nil
 			},
 			Rollback: func(tx *gorm.DB) error {
-				return tx.Delete(&Stream{
+				return tx.Delete(&Recording{
 					ID: testdataID,
 				}).Error
 			},

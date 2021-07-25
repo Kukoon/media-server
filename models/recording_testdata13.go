@@ -15,21 +15,31 @@ func init() {
 	testdataIDSpeaker1 := uuid.MustParse("dfa0ff16-8cb0-46e2-a56a-e44dcde1868e")
 	testdataIDSpeaker2 := uuid.MustParse("bd72ee71-6e0f-4ba6-9d3d-eb6b7ba589e3")
 	testdataIDSpeaker3 := testdataSpeakerClaraVetter
+	testdataIDFormat1 := uuid.MustParse("1532e87f-3666-4c35-afc9-c1ca5a855495")
+
+	// see stream 08
+
+	/* WARNING unreleased:
+	- Public
+	- Private
+	- Duration
+	- Bytes
+	*/
 
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
-			ID: "10-data-0020-01-stream-08",
+			ID: "10-data-0030-01-recording-13",
 			Migrate: func(tx *gorm.DB) error {
-				if err := tx.Create(&Stream{
+				if err := tx.Create(&Recording{
 					ID:        testdataID,
 					ChannelID: TestChannelID1,
 					EventID:   &TestEventID2,
-					Chat:      false,
-					Running:   true,
-					StartAt:   time.Date(2021, 7, 21, 20, 30, 0, 0, loc),
-					ListenAt:  time.Date(2021, 7, 21, 18, 15, 0, 0, loc),
 					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
 					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
+					CreatedAt: time.Date(2021, 7, 21, 20, 30, 0, 0, loc),
+					Duration:  time.Hour,
+					Public:    false,
+					Listed:    false,
 					Tags: []*Tag{
 						{ID: TestTagKonzertID},
 					},
@@ -53,12 +63,12 @@ func init() {
 				}).Error; err != nil {
 					return err
 				}
-				if err := tx.Create(&StreamLang{
-					ID:       testdataIDLang1,
-					StreamID: testdataID,
-					Lang:     "de",
-					Title:    "Lucia Cadotsch",
-					Subtitle: "Mittwoch ab 20:30",
+				if err := tx.Create(&RecordingLang{
+					ID:          testdataIDLang1,
+					RecordingID: testdataID,
+					Lang:        "de",
+					Title:       "Lucia Cadotsch",
+					Subtitle:    "Mittwoch ab 20:30",
 					Short: `Hierzu ziteren wir den Deutschlandfunk:
 __Sie hat dem Jazzgesang neuen Atem eingehaucht und experimentiert ständig weiter.__ (deutschlandfunk.de)`,
 					Long: `Am ersten Abend wird uns **Lucia Cadotsch** begleitet von **Ronny Graupe** (Gitarre) in die Nacht begleiten. Dabei werden sie von **Clara Vetter** unterstützt.
@@ -72,10 +82,24 @@ __Sie hat dem Jazzgesang neuen Atem eingehaucht und experimentiert ständig weit
 				}).Error; err != nil {
 					return err
 				}
+				if err := tx.Create(&[]*RecordingFormat{
+					{
+						ID:          testdataIDFormat1,
+						RecordingID: testdataID,
+						Lang:        "de",
+						Quality:     0,
+						IsVideo:     true,
+						URL:         "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/video_best.mp4",
+						Bytes:       0,
+						Resolution:  "1920x1080",
+					},
+				}).Error; err != nil {
+					return err
+				}
 				return nil
 			},
 			Rollback: func(tx *gorm.DB) error {
-				return tx.Delete(&Stream{
+				return tx.Delete(&Recording{
 					ID: testdataID,
 				}).Error
 			},

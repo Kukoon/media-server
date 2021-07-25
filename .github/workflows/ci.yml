@@ -20,7 +20,7 @@ jobs:
       env:
         GOPATH: /home/runner/go
     - name: Check misspell
-      run: find . -type f | grep -v webroot/assets | grep -v "models/stream_testdata.*.go" | xargs /home/runner/go/bin/misspell -error -i "autor,esoterisch"
+      run: find . -type f | grep -v webroot/assets | grep -v "models/.*_testdata.*.go" | xargs /home/runner/go/bin/misspell -error
     - name: Check if format is correct
       run: .ci/check-gofmt
     - name: Check that every package has a testfiles

@@ -16,7 +16,7 @@ func init() {
 
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
-			ID: "10-data-0030-01-stream-15",
+			ID: "10-data-0020-01-stream-15",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
 					ID:        testdataID,
@@ -27,6 +27,7 @@ func init() {
 					StartAt:   time.Date(2021, 7, 24, 20, 30, 0, 0, loc),
 					ListenAt:  time.Date(2021, 7, 24, 20, 00, 0, 0, loc),
 					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
+					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
 					Tags: []*Tag{
 						{ID: TestTagKonzertID},
 					},

@@ -17,7 +17,7 @@ func init() {
 
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
-			ID: "10-data-0030-01-stream-04",
+			ID: "10-data-0020-01-stream-04",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
 					ID:        testdataID,
