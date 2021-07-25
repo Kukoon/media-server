@@ -15,7 +15,7 @@ type Recording struct {
 	UpdatedAt time.Time          `json:"updated_at" example:"2020-12-10T22:00:00.000000+01:00"`
 	Channel   Channel            `json:"channel" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	ChannelID uuid.UUID          `json:"-" gorm:"type:uuid;unique_index:idx_recording_channel"`
-	Formats   []*RecordingFormat `json:"formats,omitempty" swaggerignore:"true"`
+	Formats   []*RecordingFormat `json:"formats,omitempty" gorm:"constraint:OnDelete:CASCADE" swaggerignore:"true"`
 	// attributes
 	CommonName string         `json:"common_name" gorm:"unique_index:idx_recording_channel" example:"2020-12-polizeigewalt"`
 	Poster     string         `json:"poster" example:"https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/poster.png"`
@@ -23,11 +23,11 @@ type Recording struct {
 	Duration   time.Duration  `json:"duration" swaggertype:"primitive,integer"`
 	Public     bool           `json:"public"`
 	Listed     bool           `json:"listed"`
-	Lang       *RecordingLang `json:"lang"`
+	Lang       *RecordingLang `json:"lang" gorm:"constraint:OnDelete:CASCADE"`
 	EventID    *uuid.UUID     `json:"-" gorm:"type:uuid"`
 	Event      *Event         `json:"event"`
-	Tags       []*Tag         `json:"tags" gorm:"many2many:recording_tags;"`
-	Speakers   []*Speaker     `json:"speakers" gorm:"many2many:recording_speakers;"`
+	Tags       []*Tag         `json:"tags" gorm:"many2many:recording_tags;constraint:OnDelete:CASCADE"`
+	Speakers   []*Speaker     `json:"speakers" gorm:"many2many:recording_speakers;constraint:OnDelete:CASCADE"`
 }
 
 // RecordingFormat struct - for format
