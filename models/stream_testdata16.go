@@ -10,30 +10,30 @@ import (
 
 func init() {
 	// Grand Piano: Kat Kit
-	testdataStream := uuid.MustParse("88b00ee3-e528-423c-91d4-21b9cb724c04")
-	testdataStreamLang1 := uuid.MustParse("fd9da8c0-3ac8-49ed-b915-b6a76c2f5ccb")
-	testdataStreamSpeaker1 := uuid.MustParse("36ff226f-42d6-4d48-9cce-4f504ba2d0b5")
+	testdataID := uuid.MustParse("88b00ee3-e528-423c-91d4-21b9cb724c04")
+	testdataIDLang1 := uuid.MustParse("fd9da8c0-3ac8-49ed-b915-b6a76c2f5ccb")
+	testdataIDSpeaker1 := uuid.MustParse("36ff226f-42d6-4d48-9cce-4f504ba2d0b5")
 
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
 			ID: "10-data-0030-01-stream-16",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
-					ID:        testdataStream,
+					ID:        testdataID,
 					ChannelID: TestChannelID1,
 					EventID:   &TestEventID2,
 					Chat:      false,
 					Running:   true,
 					StartAt:   time.Date(2021, 7, 25, 16, 0, 0, 0, loc),
 					ListenAt:  time.Date(2021, 7, 25, 12, 0, 0, 0, loc),
-					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataStream.String() + "/poster.png",
+					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
 					Tags: []*Tag{
 						{ID: TestTagKonzertID},
 					},
 					Speakers: []*Speaker{
 						{
 							OwnerID: TestChannelID1,
-							ID:      testdataStreamSpeaker1,
+							ID:      testdataIDSpeaker1,
 							Name:    "Kat Kit",
 						},
 					},
@@ -41,8 +41,8 @@ func init() {
 					return err
 				}
 				if err := tx.Create(&StreamLang{
-					ID:       testdataStreamLang1,
-					StreamID: testdataStream,
+					ID:       testdataIDLang1,
+					StreamID: testdataID,
 					Lang:     "de",
 					Title:    "Kat Kit",
 					Subtitle: "Sonntag ab 16:00",
@@ -57,7 +57,7 @@ Sie hat durch Peer Pressure mit der Musik angefangen - im Kinderchor gab es näm
 			},
 			Rollback: func(tx *gorm.DB) error {
 				return tx.Delete(&Stream{
-					ID: testdataStream,
+					ID: testdataID,
 				}).Error
 			},
 		},

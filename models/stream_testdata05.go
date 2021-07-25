@@ -9,23 +9,24 @@ import (
 )
 
 func init() {
-	testdataStream := uuid.MustParse("4fb029d6-063a-4302-9ae8-4c1c6a1542a5")
-	testdataStreamLang1 := uuid.MustParse("d5262bb7-378b-456f-9e91-34f63b174c48")
+	// see recording 10
+	testdataID := uuid.MustParse("4fb029d6-063a-4302-9ae8-4c1c6a1542a5")
+	testdataIDLang1 := uuid.MustParse("d5262bb7-378b-456f-9e91-34f63b174c48")
 
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
 			ID: "10-data-0030-01-stream-05",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
-					ID:        testdataStream,
+					ID:        testdataID,
 					ChannelID: TestChannelID1,
 					EventID:   &TestEventID1,
 					Chat:      true,
 					Running:   true,
 					StartAt:   time.Date(2021, 5, 5, 0, 0, 0, 0, loc),
 					ListenAt:  time.Date(2021, 5, 5, 0, 0, 0, 0, loc),
-					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataStream.String() + "/poster.png",
-					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataStream.String() + "/preview.webp",
+					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
+					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
 					Tags: []*Tag{
 						{ID: TestTagBuchvorstellungID},
 						{ID: TestTagDiskussionID},
@@ -34,8 +35,8 @@ func init() {
 					return err
 				}
 				if err := tx.Create(&StreamLang{
-					ID:       testdataStreamLang1,
-					StreamID: testdataStream,
+					ID:       testdataIDLang1,
+					StreamID: testdataID,
 					Lang:     "de",
 					Title:    "Mareice Kaiser",
 					Subtitle: "Das Unwohlsein der modernen Mutter",
@@ -48,7 +49,7 @@ func init() {
 			},
 			Rollback: func(tx *gorm.DB) error {
 				return tx.Delete(&Stream{
-					ID: testdataStream,
+					ID: testdataID,
 				}).Error
 			},
 		},

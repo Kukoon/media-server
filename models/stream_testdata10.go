@@ -10,31 +10,31 @@ import (
 
 func init() {
 	// Grand Piano: Pulsar Trio
-	testdataStream := uuid.MustParse("f4d8d0e2-47bf-412c-a5e1-80c0f85a9e4c")
-	testdataStreamLang1 := uuid.MustParse("619e61ea-a6de-42e3-b48f-6b5e52f8d920")
-	testdataStreamSpeaker1 := uuid.MustParse("09120c00-acb6-4865-b1b5-6bf39963e47f")
+	testdataID := uuid.MustParse("f4d8d0e2-47bf-412c-a5e1-80c0f85a9e4c")
+	testdataIDLang1 := uuid.MustParse("619e61ea-a6de-42e3-b48f-6b5e52f8d920")
+	testdataIDSpeaker1 := uuid.MustParse("09120c00-acb6-4865-b1b5-6bf39963e47f")
 
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
 			ID: "10-data-0030-01-stream-10",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
-					ID:        testdataStream,
+					ID:        testdataID,
 					ChannelID: TestChannelID1,
 					EventID:   &TestEventID2,
 					Chat:      false,
 					Running:   true,
 					StartAt:   time.Date(2021, 7, 22, 20, 15, 0, 0, loc),
 					ListenAt:  time.Date(2021, 7, 22, 20, 15, 0, 0, loc),
-					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataStream.String() + "/poster.png",
-					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataStream.String() + "/preview.webp",
+					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
+					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
 					Tags: []*Tag{
 						{ID: TestTagKonzertID},
 					},
 					Speakers: []*Speaker{
 						{
 							OwnerID: TestChannelID1,
-							ID:      testdataStreamSpeaker1,
+							ID:      testdataIDSpeaker1,
 							Name:    "Pulsar Trio",
 						},
 					},
@@ -42,8 +42,8 @@ func init() {
 					return err
 				}
 				if err := tx.Create(&StreamLang{
-					ID:       testdataStreamLang1,
-					StreamID: testdataStream,
+					ID:       testdataIDLang1,
+					StreamID: testdataID,
 					Lang:     "de",
 					Title:    "Pulsar Trio",
 					Subtitle: "Donnerstag ab 20:30",
@@ -56,7 +56,7 @@ func init() {
 			},
 			Rollback: func(tx *gorm.DB) error {
 				return tx.Delete(&Stream{
-					ID: testdataStream,
+					ID: testdataID,
 				}).Error
 			},
 		},

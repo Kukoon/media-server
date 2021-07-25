@@ -10,14 +10,14 @@ import (
 
 func init() {
 
-	testdataStream := uuid.MustParse("0801a547-59f1-4a63-946f-2ab03f62e6ee")
+	testdataID := uuid.MustParse("0801a547-59f1-4a63-946f-2ab03f62e6ee")
 
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
 			ID: "10-data-0030-01-stream-02",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
-					ID:        testdataStream,
+					ID:        testdataID,
 					ChannelID: TestChannelID2,
 					Chat:      false,
 					Running:   true,
@@ -31,7 +31,7 @@ func init() {
 			},
 			Rollback: func(tx *gorm.DB) error {
 				return tx.Delete(&Stream{
-					ID: testdataStream,
+					ID: testdataID,
 				}).Error
 			},
 		},

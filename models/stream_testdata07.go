@@ -10,31 +10,31 @@ import (
 
 func init() {
 	// Grand Piano: Martin Kohlstedt
-	testdataStream := uuid.MustParse("7fc21416-5d68-4ecf-bd4b-e8a89f7c31f2")
-	testdataStreamLang1 := uuid.MustParse("45bb0727-4812-40a2-8ac2-12422dfb42f1")
-	testdataStreamSpeaker1 := uuid.MustParse("976010a0-c19f-4d22-a4d6-9553b460adfe")
+	testdataID := uuid.MustParse("7fc21416-5d68-4ecf-bd4b-e8a89f7c31f2")
+	testdataIDLang1 := uuid.MustParse("45bb0727-4812-40a2-8ac2-12422dfb42f1")
+	testdataIDSpeaker1 := uuid.MustParse("976010a0-c19f-4d22-a4d6-9553b460adfe")
 
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
 			ID: "10-data-0030-01-stream-07",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
-					ID:        testdataStream,
+					ID:        testdataID,
 					ChannelID: TestChannelID1,
 					EventID:   &TestEventID2,
 					Chat:      false,
 					Running:   true,
 					StartAt:   time.Date(2021, 7, 21, 0, 0, 0, 0, loc),
 					ListenAt:  time.Date(2021, 7, 21, 0, 0, 0, 0, loc),
-					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataStream.String() + "/poster.png",
-					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataStream.String() + "/preview.webp",
+					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
+					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
 					Tags: []*Tag{
 						{ID: TestTagKonzertID},
 					},
 					Speakers: []*Speaker{
 						{
 							OwnerID: TestChannelID1,
-							ID:      testdataStreamSpeaker1,
+							ID:      testdataIDSpeaker1,
 							Name:    "Martin Kohlstedt",
 						},
 					},
@@ -42,8 +42,8 @@ func init() {
 					return err
 				}
 				if err := tx.Create(&StreamLang{
-					ID:       testdataStreamLang1,
-					StreamID: testdataStream,
+					ID:       testdataIDLang1,
+					StreamID: testdataID,
 					Lang:     "de",
 					Title:    "Martin Kohlstedt",
 					Subtitle: "Mittwoch ab 18:00",
@@ -61,7 +61,7 @@ Das neue Martin Kohlstedt Album »FLUR« erschien im November 2020 auf Warner Cl
 			},
 			Rollback: func(tx *gorm.DB) error {
 				return tx.Delete(&Stream{
-					ID: testdataStream,
+					ID: testdataID,
 				}).Error
 			},
 		},

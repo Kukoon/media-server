@@ -10,30 +10,30 @@ import (
 
 func init() {
 	// Grand Piano: Julia Kadel
-	testdataStream := uuid.MustParse("e446cfa4-9df2-4965-8491-b0d24a573585")
-	testdataStreamLang1 := uuid.MustParse("622f5adf-9d4d-4bef-8098-247c4180c6d7")
-	testdataStreamSpeaker1 := uuid.MustParse("e9d2cb0a-abc6-4ac8-ae8f-d462f87aad43")
+	testdataID := uuid.MustParse("e446cfa4-9df2-4965-8491-b0d24a573585")
+	testdataIDLang1 := uuid.MustParse("622f5adf-9d4d-4bef-8098-247c4180c6d7")
+	testdataIDSpeaker1 := uuid.MustParse("e9d2cb0a-abc6-4ac8-ae8f-d462f87aad43")
 
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
 			ID: "10-data-0030-01-stream-17",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
-					ID:        testdataStream,
+					ID:        testdataID,
 					ChannelID: TestChannelID1,
 					EventID:   &TestEventID2,
 					Chat:      false,
 					Running:   true,
 					StartAt:   time.Date(2021, 7, 25, 18, 0, 0, 0, loc),
 					ListenAt:  time.Date(2021, 7, 25, 17, 0, 0, 0, loc),
-					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataStream.String() + "/poster.png",
+					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
 					Tags: []*Tag{
 						{ID: TestTagKonzertID},
 					},
 					Speakers: []*Speaker{
 						{
 							OwnerID: TestChannelID1,
-							ID:      testdataStreamSpeaker1,
+							ID:      testdataIDSpeaker1,
 							Name:    "Julia Kadel",
 						},
 					},
@@ -41,8 +41,8 @@ func init() {
 					return err
 				}
 				if err := tx.Create(&StreamLang{
-					ID:       testdataStreamLang1,
-					StreamID: testdataStream,
+					ID:       testdataIDLang1,
+					StreamID: testdataID,
 					Lang:     "de",
 					Title:    "Julia Kadel",
 					Subtitle: "Sonntag ab 18:00",
@@ -64,7 +64,7 @@ Deutschlandstipendium 2013, Winner of HfM-Jazzpreis 2013, 2 Nominations for Germ
 			},
 			Rollback: func(tx *gorm.DB) error {
 				return tx.Delete(&Stream{
-					ID: testdataStream,
+					ID: testdataID,
 				}).Error
 			},
 		},

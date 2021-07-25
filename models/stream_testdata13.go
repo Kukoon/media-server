@@ -10,36 +10,36 @@ import (
 
 func init() {
 	// Grand Piano: KONDRASCHEWA/CHICA
-	testdataStream := uuid.MustParse("9f8b59db-34e1-47c1-93ea-e173f5af3b96")
-	testdataStreamLang1 := uuid.MustParse("ebcaee38-56b9-4c70-9616-f88887bcfee4")
-	testdataStreamSpeaker1 := uuid.MustParse("3a875769-4b33-4fe7-af36-167c51fa510f")
-	testdataStreamSpeaker2 := uuid.MustParse("4fef5401-42c3-45a7-9403-1a40a3a0d946")
+	testdataID := uuid.MustParse("9f8b59db-34e1-47c1-93ea-e173f5af3b96")
+	testdataIDLang1 := uuid.MustParse("ebcaee38-56b9-4c70-9616-f88887bcfee4")
+	testdataIDSpeaker1 := uuid.MustParse("3a875769-4b33-4fe7-af36-167c51fa510f")
+	testdataIDSpeaker2 := uuid.MustParse("4fef5401-42c3-45a7-9403-1a40a3a0d946")
 
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
 			ID: "10-data-0030-01-stream-13",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
-					ID:        testdataStream,
+					ID:        testdataID,
 					ChannelID: TestChannelID1,
 					EventID:   &TestEventID2,
 					Chat:      false,
 					Running:   true,
 					StartAt:   time.Date(2021, 7, 24, 16, 0, 0, 0, loc),
 					ListenAt:  time.Date(2021, 7, 24, 12, 0, 0, 0, loc),
-					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataStream.String() + "/poster.png",
+					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
 					Tags: []*Tag{
 						{ID: TestTagKonzertID},
 					},
 					Speakers: []*Speaker{
 						{
 							OwnerID: TestChannelID1,
-							ID:      testdataStreamSpeaker1,
+							ID:      testdataIDSpeaker1,
 							Name:    "MARINA KONDRASCHEWA",
 						},
 						{
 							OwnerID: TestChannelID1,
-							ID:      testdataStreamSpeaker2,
+							ID:      testdataIDSpeaker2,
 							Name:    "SEBASTIAN CHICA VILLA",
 						},
 					},
@@ -47,8 +47,8 @@ func init() {
 					return err
 				}
 				if err := tx.Create(&StreamLang{
-					ID:       testdataStreamLang1,
-					StreamID: testdataStream,
+					ID:       testdataIDLang1,
+					StreamID: testdataID,
 					Lang:     "de",
 					Title:    "KONDRASCHEWA/CHICA",
 					Subtitle: "Samstag ab 16:00",
@@ -61,7 +61,7 @@ func init() {
 			},
 			Rollback: func(tx *gorm.DB) error {
 				return tx.Delete(&Stream{
-					ID: testdataStream,
+					ID: testdataID,
 				}).Error
 			},
 		},

@@ -10,30 +10,30 @@ import (
 
 func init() {
 	// Grand Piano: Federico Albanese
-	testdataStream := uuid.MustParse("bd2cb25e-6f17-453d-b947-370cd51beb18")
-	testdataStreamLang1 := uuid.MustParse("6f188246-7b39-42e3-811c-a5828d01263b")
-	testdataStreamSpeaker1 := uuid.MustParse("72496cb5-05cf-4982-8ec4-45666f3704e6")
+	testdataID := uuid.MustParse("bd2cb25e-6f17-453d-b947-370cd51beb18")
+	testdataIDLang1 := uuid.MustParse("6f188246-7b39-42e3-811c-a5828d01263b")
+	testdataIDSpeaker1 := uuid.MustParse("72496cb5-05cf-4982-8ec4-45666f3704e6")
 
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
 			ID: "10-data-0030-01-stream-14",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
-					ID:        testdataStream,
+					ID:        testdataID,
 					ChannelID: TestChannelID1,
 					EventID:   &TestEventID2,
 					Chat:      false,
 					Running:   true,
 					StartAt:   time.Date(2021, 7, 24, 18, 0, 0, 0, loc),
 					ListenAt:  time.Date(2021, 7, 24, 17, 0, 0, 0, loc),
-					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataStream.String() + "/poster.png",
+					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
 					Tags: []*Tag{
 						{ID: TestTagKonzertID},
 					},
 					Speakers: []*Speaker{
 						{
 							OwnerID: TestChannelID1,
-							ID:      testdataStreamSpeaker1,
+							ID:      testdataIDSpeaker1,
 							Name:    "Federico Albanese",
 						},
 					},
@@ -41,8 +41,8 @@ func init() {
 					return err
 				}
 				if err := tx.Create(&StreamLang{
-					ID:       testdataStreamLang1,
-					StreamID: testdataStream,
+					ID:       testdataIDLang1,
+					StreamID: testdataID,
 					Lang:     "de",
 					Title:    "Federico Albanese",
 					Subtitle: "Samstag ab 18:00",
@@ -60,7 +60,7 @@ Zusammen mit der Singer- und Songwriterin Jessica Einaudi, gründet er 2007 das 
 			},
 			Rollback: func(tx *gorm.DB) error {
 				return tx.Delete(&Stream{
-					ID: testdataStream,
+					ID: testdataID,
 				}).Error
 			},
 		},

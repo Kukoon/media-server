@@ -9,41 +9,43 @@ import (
 )
 
 func init() {
-
-	testdataStream := uuid.MustParse("dffe2c0e-3713-4399-8ee2-279becbbb06e")
-	testdataStreamLang1 := uuid.MustParse("3a4f9157-65bf-4d15-a82b-1cd9295d07e0")
-	testdataStreamSpeaker1 := uuid.MustParse("0030a199-c771-489a-88a7-258f80db2bce")
-	testdataStreamSpeaker2 := uuid.MustParse("8bb5af2a-6e66-488b-9eac-6714ce005899")
-	testdataStreamSpeaker3 := uuid.MustParse("fa5323fc-5f54-487c-b5cc-173faa4e64f2")
+	// see recording 07
+	testdataID := uuid.MustParse("728edaf7-9ad9-f972-4d09-ba5940cd43f9")
+	testdataIDLang1 := uuid.MustParse("acdf7eb1-0cb9-4900-a918-a411f9afc38d")
+	testdataIDSpeaker1 := uuid.MustParse("0030a199-c771-489a-88a7-258f80db2bce")
+	testdataIDSpeaker2 := uuid.MustParse("8bb5af2a-6e66-488b-9eac-6714ce005899")
+	testdataIDSpeaker3 := uuid.MustParse("fa5323fc-5f54-487c-b5cc-173faa4e64f2")
 
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
 			ID: "10-data-0030-01-stream-01",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
-					ID:        testdataStream,
+					ID:        testdataID,
 					ChannelID: TestChannelID1,
 					Chat:      false,
 					Running:   true,
 					StartAt:   time.Date(2021, 3, 4, 18, 30, 0, 0, loc),
 					ListenAt:  time.Date(2021, 3, 4, 18, 30, 0, 0, loc),
-					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataStream.String() + "/poster.png",
-					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataStream.String() + "/preview.webp",
-					Tags:      []*Tag{{ID: TestTagVortragID}},
+					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
+					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
+					Tags: []*Tag{
+						{ID: TestTagVortragID},
+					},
 					Speakers: []*Speaker{
 						{
 							OwnerID: TestChannelID1,
-							ID:      testdataStreamSpeaker1,
+							ID:      testdataIDSpeaker1,
 							Name:    "Andreas Ehresmann",
 						},
 						{
 							OwnerID: TestChannelID1,
-							ID:      testdataStreamSpeaker2,
+							ID:      testdataIDSpeaker2,
 							Name:    "Ronald Sperling",
 						},
 						{
 							OwnerID: TestChannelID1,
-							ID:      testdataStreamSpeaker3,
+							ID:      testdataIDSpeaker3,
 							Name:    "Ines Dirolf",
 						},
 					},
@@ -51,8 +53,8 @@ func init() {
 					return err
 				}
 				if err := tx.Create(&StreamLang{
-					ID:       testdataStreamLang1,
-					StreamID: testdataStream,
+					ID:       testdataIDLang1,
+					StreamID: testdataID,
 					Lang:     "de",
 					Title:    "„Die mir von der Wehrmacht angebotenen Kriegsgefangenen sind derart entkräftet“",
 					Subtitle: "Sowjetische Kriegsgefangene in Bremer Arbeitskommandos 1941-1945",
@@ -69,7 +71,7 @@ Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, d
 			},
 			Rollback: func(tx *gorm.DB) error {
 				return tx.Delete(&Stream{
-					ID: testdataStream,
+					ID: testdataID,
 				}).Error
 			},
 		},

@@ -9,47 +9,49 @@ import (
 )
 
 func init() {
-	testdataRecording := uuid.MustParse("542685cb-3693-e720-a957-f008f5dae3ee")
-	testdataRecordingLang1 := uuid.MustParse("03d33e6a-151f-47d9-be79-a726e0f9a859")
-	testdataRecordingSpeaker1 := uuid.MustParse("7998f75e-7252-4ccd-8cfe-06989db28b51")
-	testdataRecordingSpeaker2 := uuid.MustParse("c02bb21c-c8dc-4657-b14c-d0625188f463")
-	testdataRecordingSpeaker3 := uuid.MustParse("6a3f1c47-9173-479e-bc53-262ea01a3ac1")
-	testdataRecordingFormat1 := uuid.MustParse("3a4f9157-65bf-4d15-a82b-1cd9295d07e0")
-	testdataRecordingFormat2 := uuid.MustParse("95ac279c-9ec8-4463-9e55-b18f6e6094be")
-	testdataRecordingFormat3 := uuid.MustParse("cfcd54de-dc30-4ee9-8877-92515d337af9")
-	testdataRecordingFormat4 := uuid.MustParse("e3caa805-ff00-48aa-9410-c939804d5eac")
+	testdataID := uuid.MustParse("542685cb-3693-e720-a957-f008f5dae3ee")
+	testdataIDLang1 := uuid.MustParse("03d33e6a-151f-47d9-be79-a726e0f9a859")
+	testdataIDSpeaker1 := uuid.MustParse("7998f75e-7252-4ccd-8cfe-06989db28b51")
+	testdataIDSpeaker2 := uuid.MustParse("c02bb21c-c8dc-4657-b14c-d0625188f463")
+	testdataIDSpeaker3 := uuid.MustParse("6a3f1c47-9173-479e-bc53-262ea01a3ac1")
+	testdataIDFormat1 := uuid.MustParse("3a4f9157-65bf-4d15-a82b-1cd9295d07e0")
+	testdataIDFormat2 := uuid.MustParse("95ac279c-9ec8-4463-9e55-b18f6e6094be")
+	testdataIDFormat3 := uuid.MustParse("cfcd54de-dc30-4ee9-8877-92515d337af9")
+	testdataIDFormat4 := uuid.MustParse("e3caa805-ff00-48aa-9410-c939804d5eac")
 
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
 			ID: "10-data-0020-01-recording-1",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Recording{
-					ID:         testdataRecording,
+					ID:         testdataID,
 					ChannelID:  TestChannelID1,
 					CommonName: "2020-12-polizeigewalt",
-					Poster:     "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataRecording.String() + "/poster.png",
-					Preview:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataRecording.String() + "/preview.webp",
+					Poster:     "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
+					Preview:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
 					CreatedAt:  time.Date(2020, 12, 10, 20, 0, 0, 0, loc),
 					Duration:   time.Hour + 20*time.Minute + 17*time.Second,
 					Public:     true,
 					Listed:     true,
-					Tags:       []*Tag{{ID: TestTagDiskussionID}},
+					Tags: []*Tag{
+						{ID: TestTagDiskussionID},
+					},
 					Speakers: []*Speaker{
 						{
 							OwnerID:      TestChannelID1,
-							ID:           testdataRecordingSpeaker1,
+							ID:           testdataIDSpeaker1,
 							Name:         "Leila Abdul-Rahman",
 							Organisation: "Ruhr Universität Bochum",
 						},
 						{
 							OwnerID:      TestChannelID1,
-							ID:           testdataRecordingSpeaker2,
+							ID:           testdataIDSpeaker2,
 							Name:         "Greta",
 							Organisation: "Grün-Weiße Hilfe",
 						},
 						{
 							OwnerID:      TestChannelID1,
-							ID:           testdataRecordingSpeaker3,
+							ID:           testdataIDSpeaker3,
 							Name:         "Mathilda",
 							Organisation: "KOP Bremen",
 						},
@@ -58,8 +60,8 @@ func init() {
 					return err
 				}
 				if err := tx.Create(&RecordingLang{
-					ID:          testdataRecordingLang1,
-					RecordingID: testdataRecording,
+					ID:          testdataIDLang1,
+					RecordingID: testdataID,
 					Lang:        "de",
 					Title:       "Polizeigewalt",
 					Subtitle:    "ein deutsches Problem",
@@ -95,42 +97,42 @@ oder per [Paypal](https://www.paypal.com/donate?hosted_button_id=4BQQNN582WLN6) 
 				}
 				if err := tx.Create(&[]*RecordingFormat{
 					{
-						ID:          testdataRecordingFormat1,
-						RecordingID: testdataRecording,
+						ID:          testdataIDFormat1,
+						RecordingID: testdataID,
 						Lang:        "de",
 						Quality:     0,
 						IsVideo:     true,
-						URL:         "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataRecording.String() + "/video_best.mp4",
+						URL:         "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/video_best.mp4",
 						Bytes:       3323919713,
 						Resolution:  "1920x1080",
 					},
 					{
-						ID:          testdataRecordingFormat2,
-						RecordingID: testdataRecording,
+						ID:          testdataIDFormat2,
+						RecordingID: testdataID,
 						Lang:        "de",
 						Quality:     160,
 						IsVideo:     true,
-						URL:         "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataRecording.String() + "/video_720.mp4",
+						URL:         "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/video_720.mp4",
 						Bytes:       1149359246,
 						Resolution:  "1280x720",
 					},
 					{
-						ID:          testdataRecordingFormat3,
-						RecordingID: testdataRecording,
+						ID:          testdataIDFormat3,
+						RecordingID: testdataID,
 						Lang:        "de",
 						Quality:     180,
 						IsVideo:     true,
-						URL:         "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataRecording.String() + "/video_480.mp4",
+						URL:         "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/video_480.mp4",
 						Bytes:       654217779,
 						Resolution:  "854x480",
 					},
 					{
-						ID:          testdataRecordingFormat4,
-						RecordingID: testdataRecording,
+						ID:          testdataIDFormat4,
+						RecordingID: testdataID,
 						Lang:        "de",
 						Quality:     0,
 						IsVideo:     false,
-						URL:         "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataRecording.String() + "/audio_best.mp4",
+						URL:         "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/audio_best.mp4",
 						Bytes:       130761076,
 						Resolution:  "128kb",
 					},
@@ -141,7 +143,7 @@ oder per [Paypal](https://www.paypal.com/donate?hosted_button_id=4BQQNN582WLN6) 
 			},
 			Rollback: func(tx *gorm.DB) error {
 				return tx.Delete(&Recording{
-					ID: testdataRecording,
+					ID: testdataID,
 				}).Error
 			},
 		},

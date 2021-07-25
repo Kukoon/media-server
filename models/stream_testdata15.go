@@ -10,30 +10,30 @@ import (
 
 func init() {
 	// Grand Piano: Clara Vetter
-	testdataStream := uuid.MustParse("28cf0c84-07fe-4421-b2dc-7ad6c2551689")
-	testdataStreamLang1 := uuid.MustParse("5961b97f-c19d-40ec-8a6a-562be6b9b083")
-	testdataStreamSpeaker1 := testdataSpeakerClaraVetter
+	testdataID := uuid.MustParse("28cf0c84-07fe-4421-b2dc-7ad6c2551689")
+	testdataIDLang1 := uuid.MustParse("5961b97f-c19d-40ec-8a6a-562be6b9b083")
+	testdataIDSpeaker1 := testdataSpeakerClaraVetter
 
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
 			ID: "10-data-0030-01-stream-15",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
-					ID:        testdataStream,
+					ID:        testdataID,
 					ChannelID: TestChannelID1,
 					EventID:   &TestEventID2,
 					Chat:      false,
 					Running:   true,
 					StartAt:   time.Date(2021, 7, 24, 20, 30, 0, 0, loc),
 					ListenAt:  time.Date(2021, 7, 24, 20, 00, 0, 0, loc),
-					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataStream.String() + "/poster.png",
+					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
 					Tags: []*Tag{
 						{ID: TestTagKonzertID},
 					},
 					Speakers: []*Speaker{
 						{
 							OwnerID: TestChannelID1,
-							ID:      testdataStreamSpeaker1,
+							ID:      testdataIDSpeaker1,
 							Name:    "Clara Vetter",
 						},
 					},
@@ -41,8 +41,8 @@ func init() {
 					return err
 				}
 				if err := tx.Create(&StreamLang{
-					ID:       testdataStreamLang1,
-					StreamID: testdataStream,
+					ID:       testdataIDLang1,
+					StreamID: testdataID,
 					Lang:     "de",
 					Title:    "Clara Vetter",
 					Subtitle: "Samstag ab 20:30",
@@ -55,7 +55,7 @@ func init() {
 			},
 			Rollback: func(tx *gorm.DB) error {
 				return tx.Delete(&Stream{
-					ID: testdataStream,
+					ID: testdataID,
 				}).Error
 			},
 		},
