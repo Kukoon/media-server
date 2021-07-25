@@ -55,19 +55,19 @@ var (
 	testdataRecording7Speaker2 = uuid.MustParse("8bb5af2a-6e66-488b-9eac-6714ce005899")
 	testdataRecording7Speaker3 = uuid.MustParse("fa5323fc-5f54-487c-b5cc-173faa4e64f2")
 
-	testdataRecording8         = testdataStream3
-	testdataRecording8Lang1    = testdataStream3Lang1
-	testdataRecording8Speaker1 = testdataStream3Speaker1
+	testdataRecording8         = uuid.MustParse("06e3a71e-581d-4735-9647-3e4a49b5caa8")
+	testdataRecording8Lang1    = uuid.MustParse("cff00fcd-5408-4cb4-8ac7-2d42b45fbd68")
+	testdataRecording8Speaker1 = uuid.MustParse("c03aa102-551e-4b3a-b670-5b6c7ac13faa")
 	testdataRecording8Format1  = uuid.MustParse("b98078df-b430-4a19-971c-84d324fd9b14")
 
-	testdataRecording9         = testdataStream4
-	testdataRecording9Lang1    = testdataStream4Lang1
-	testdataRecording9Speaker1 = testdataStream4Speaker1
-	testdataRecording9Speaker2 = testdataStream4Speaker2
+	testdataRecording9         = uuid.MustParse("57de7dfd-c060-4da1-8f57-f0880c1f2e5e")
+	testdataRecording9Lang1    = uuid.MustParse("d92fbc3b-a027-49f6-849b-7efb425aa5c0")
+	testdataRecording9Speaker1 = uuid.MustParse("0d1b38cd-561c-4db4-b4b9-51f74ba3dba4")
+	testdataRecording9Speaker2 = uuid.MustParse("1dbf0438-a9c1-4412-b44c-08fe7819902c")
 	testdataRecording9Format1  = uuid.MustParse("e0250ff4-ad36-47d2-a58a-5ba857f50ab4")
 
-	testdataRecording10        = testdataStream5
-	testdataRecording10Lang1   = testdataStream5Lang1
+	testdataRecording10        = uuid.MustParse("4fb029d6-063a-4302-9ae8-4c1c6a1542a5")
+	testdataRecording10Lang1   = uuid.MustParse("d5262bb7-378b-456f-9e91-34f63b174c48")
 	testdataRecording10Format1 = uuid.MustParse("5473a466-3a71-4be3-8436-a34f92c5ecc6")
 )
 

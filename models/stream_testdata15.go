@@ -12,7 +12,7 @@ func init() {
 	// Grand Piano: Clara Vetter
 	testdataStream := uuid.MustParse("28cf0c84-07fe-4421-b2dc-7ad6c2551689")
 	testdataStreamLang1 := uuid.MustParse("5961b97f-c19d-40ec-8a6a-562be6b9b083")
-	testdataStreamSpeaker1 := testdataStream8Speaker3
+	testdataStreamSpeaker1 := testdataSpeakerClaraVetter
 
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
