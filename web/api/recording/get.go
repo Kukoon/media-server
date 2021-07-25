@@ -83,6 +83,8 @@ func apiGet(r *gin.Engine, ws *web.Service) {
 			return
 		}
 
+		ws.DB.Model(&obj).Update("viewers", obj.Viewers+1)
+
 		c.JSON(http.StatusOK, &obj)
 	})
 }

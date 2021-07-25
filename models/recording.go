@@ -23,6 +23,7 @@ type Recording struct {
 	Duration   time.Duration  `json:"duration" swaggertype:"primitive,integer"`
 	Public     bool           `json:"public"`
 	Listed     bool           `json:"listed"`
+	Viewers    uint64         `json:"viewers"`
 	Lang       *RecordingLang `json:"lang" gorm:"constraint:OnDelete:CASCADE"`
 	EventID    *uuid.UUID     `json:"-" gorm:"type:uuid"`
 	Event      *Event         `json:"event"`
@@ -61,7 +62,7 @@ type RecordingLang struct {
 func init() {
 	migrations = append(migrations, []*gormigrate.Migration{
 		{
-			ID: "01-schema-0020-01-recording",
+			ID: "01-schema-0020-02-recording",
 			Migrate: func(tx *gorm.DB) error {
 				return tx.AutoMigrate(&Recording{},
 					&RecordingLang{},
