@@ -17,13 +17,6 @@ func init() {
 
 	// see stream 09
 
-	/* WARNING unreleased:
-	- Public
-	- Private
-	- Duration
-	- Bytes
-	*/
-
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
 			ID: "10-data-0030-01-recording-14",
@@ -35,9 +28,9 @@ func init() {
 					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
 					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
 					CreatedAt: time.Date(2021, 7, 22, 18, 0, 0, 0, loc),
-					Duration:  time.Hour,
-					Public:    false,
-					Listed:    false,
+					Duration:  time.Hour + 6 + time.Minute + 19*time.Second,
+					Public:    true,
+					Listed:    true,
 					Tags: []*Tag{
 						{ID: TestTagKonzertID},
 					},
@@ -74,7 +67,7 @@ Seine erste EP »Still Waters Run Deep« erschien im Februar 2020. `,
 						Quality:     0,
 						IsVideo:     true,
 						URL:         "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/video_best.mp4",
-						Bytes:       0,
+						Bytes:       1348713883,
 						Resolution:  "1920x1080",
 					},
 				}).Error; err != nil {

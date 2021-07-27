@@ -19,13 +19,6 @@ func init() {
 
 	// see stream 08
 
-	/* WARNING unreleased:
-	- Public
-	- Private
-	- Duration
-	- Bytes
-	*/
-
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
 			ID: "10-data-0030-01-recording-13",
@@ -37,9 +30,9 @@ func init() {
 					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
 					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
 					CreatedAt: time.Date(2021, 7, 21, 20, 30, 0, 0, loc),
-					Duration:  time.Hour,
-					Public:    false,
-					Listed:    false,
+					Duration:  time.Hour + 4*time.Minute + 58*time.Second,
+					Public:    true,
+					Listed:    true,
 					Tags: []*Tag{
 						{ID: TestTagKonzertID},
 					},
@@ -90,7 +83,7 @@ __Sie hat dem Jazzgesang neuen Atem eingehaucht und experimentiert ständig weit
 						Quality:     0,
 						IsVideo:     true,
 						URL:         "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/video_best.mp4",
-						Bytes:       0,
+						Bytes:       967395228,
 						Resolution:  "1920x1080",
 					},
 				}).Error; err != nil {

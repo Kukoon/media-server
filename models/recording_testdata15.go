@@ -17,13 +17,6 @@ func init() {
 
 	// see stream 10
 
-	/* WARNING unreleased:
-	- Public
-	- Private
-	- Duration
-	- Bytes
-	*/
-
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
 			ID: "10-data-0030-01-recording-15",
@@ -35,6 +28,9 @@ func init() {
 					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
 					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
 					CreatedAt: time.Date(2021, 7, 22, 20, 30, 0, 0, loc),
+					Duration:  time.Hour + 37*time.Minute + 28*time.Second,
+					Public:    true,
+					Listed:    true,
 					Tags: []*Tag{
 						{ID: TestTagKonzertID},
 					},
@@ -67,7 +63,7 @@ func init() {
 						Quality:     0,
 						IsVideo:     true,
 						URL:         "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/video_best.mp4",
-						Bytes:       0,
+						Bytes:       1616888151,
 						Resolution:  "1920x1080",
 					},
 				}).Error; err != nil {
