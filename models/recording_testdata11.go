@@ -32,7 +32,6 @@ func init() {
 				if err := tx.Create(&Recording{
 					ID:         testdataID,
 					ChannelID:  TestChannelID1,
-					EventID:    &TestEventID1,
 					CommonName: "2021-06_erinnern_stoeren",
 					Poster:     "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
 					Preview:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
