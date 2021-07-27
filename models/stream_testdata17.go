@@ -29,7 +29,7 @@ func init() {
 					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
 					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
 					Tags: []*Tag{
-						{ID: TestTagKonzertID},
+						{ID: TestTagVortragID},
 					},
 					Speakers: []*Speaker{
 						{
