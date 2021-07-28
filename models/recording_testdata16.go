@@ -17,13 +17,6 @@ func init() {
 
 	// see stream 11
 
-	/* WARNING unreleased:
-	- Public
-	- Private
-	- Duration
-	- Bytes
-	*/
-
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
 			ID: "10-data-0030-01-recording-16",
@@ -35,9 +28,9 @@ func init() {
 					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
 					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
 					CreatedAt: time.Date(2021, 7, 23, 18, 0, 0, 0, loc),
-					Duration:  time.Hour,
-					Public:    false,
-					Listed:    false,
+					Duration:  time.Hour + 29*time.Minute + 36*time.Second,
+					Public:    true,
+					Listed:    true,
 					Tags: []*Tag{
 						{ID: TestTagKonzertID},
 					},
@@ -56,7 +49,7 @@ func init() {
 					RecordingID: testdataID,
 					Lang:        "de",
 					Title:       "Motschmann Trio",
-					Subtitle:    "Freitag ab 18:00",
+					Subtitle:    "23. Juli 2021, 18:00",
 					Short:       `Mit der Premiere der Electric Fields in der Berghain Kantine startete das Trio im Jahr 2016 seine Mission`,
 					Long: `**Motschmann Trio**: Mit der Premiere der Electric Fields in der Berghain Kantine startete das Trio im Jahr 2016 seine Mission: Elektronische Musik mit Originalinstrumenten so auf die Bühne zu bringen, dass alle Sounds live generiert werden. Mit einem riesigen Arsenal von analogen Synthesizern, E-Pianos und einem komplexen Multipercussion-Setup reisen Johannes Motschmann, Boris Bolles und David Panzl zwischen den Welten und treten in Clubs wie klassischen Konzertsälen gleichermaßen auf. Electric Fields ist ein Soundtrack, der von leisen Klavierklängen bis zu harten polymetrischen Beats reicht. Ambient- und Dronesounds wechseln sich mit orchestral anmutenden Passagen ab.
 
@@ -74,7 +67,7 @@ David erweckt Rhythmen zum Leben, die vorab auf Drumcomputern konzipiert wurden 
 						Quality:     0,
 						IsVideo:     true,
 						URL:         "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/video_best.mp4",
-						Bytes:       0,
+						Bytes:       1839467757,
 						Resolution:  "1920x1080",
 					},
 				}).Error; err != nil {
