@@ -61,7 +61,7 @@ func init() {
 					RecordingID: testdataID,
 					Lang:        "de",
 					Title:       "Lucia Cadotsch",
-					Subtitle:    "Mittwoch ab 20:30",
+					Subtitle:    "21. Juli 2021, 20:30",
 					Short: `Hierzu ziteren wir den Deutschlandfunk:
 __Sie hat dem Jazzgesang neuen Atem eingehaucht und experimentiert ständig weiter.__ (deutschlandfunk.de)`,
 					Long: `Am ersten Abend wird uns **Lucia Cadotsch** begleitet von **Ronny Graupe** (Gitarre) in die Nacht begleiten. Dabei werden sie von **Clara Vetter** unterstützt.

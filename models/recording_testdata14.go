@@ -49,7 +49,7 @@ func init() {
 					RecordingID: testdataID,
 					Lang:        "de",
 					Title:       "Pablo Ortega",
-					Subtitle:    "Donnerstag ab 18:00",
+					Subtitle:    "22. Juli 2021, 18:00",
 					Short:       `Pablo Ortega ist ein spanischer Cellist und Komponist. Er lebt in Bremen, wo er aktuell als multidisziplinarischer Musiker aktiv ist.`,
 					Long: `Den zweiten Abend wird **Pablo Ortega** eröffnen.
 
