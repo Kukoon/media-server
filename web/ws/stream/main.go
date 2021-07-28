@@ -6,21 +6,22 @@ import (
 	"dev.sum7.eu/genofire/golang-lib/web"
 	"dev.sum7.eu/genofire/golang-lib/web/metrics"
 	"dev.sum7.eu/genofire/golang-lib/worker"
-	oven "dev.sum7.eu/genofire/oven-exporter/api"
 	"github.com/bdlm/log"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/prometheus/client_golang/prometheus"
+
+	"github.com/Kukoon/media-server/oven"
 )
 
 // Bind to webservice
-func Bind(oven *oven.Client, vhost, app string) web.ModuleRegisterFunc {
+func Bind(oven *oven.Service) web.ModuleRegisterFunc {
 
 	endpoints := make(map[uuid.UUID]*endpoint)
 
 	w := worker.NewWorker(5*time.Second, func() {
 		// check status of stream server
-		resp, err := oven.RequestListStreams(vhost, app)
+		resp, err := oven.Client.RequestDefaultListStreams()
 		if err != nil {
 			log.WithField("error", err).Warn("websocket status check for oven stream server")
 		} else {

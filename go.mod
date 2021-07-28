@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	dev.sum7.eu/genofire/golang-lib v0.0.0-20210722161605-32f0d844271f
-	dev.sum7.eu/genofire/oven-exporter v0.0.1 // indirect
+	dev.sum7.eu/genofire/oven-exporter v0.0.2-0.20210728125033-2b504289ea66 // indirect
 	github.com/bdlm/log v0.1.20
 	github.com/chenjiandongx/ginprom v0.0.0-20210617023641-6c809602c38a // indirect
 	github.com/eduncan911/podcast v1.4.2
@@ -23,8 +23,8 @@ require (
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-isatty v0.0.13 // indirect
 	github.com/prometheus/client_golang v1.11.0
-	github.com/prometheus/common v0.29.0 // indirect
-	github.com/prometheus/procfs v0.7.0 // indirect
+	github.com/prometheus/common v0.30.0 // indirect
+	github.com/prometheus/procfs v0.7.1 // indirect
 	github.com/stretchr/testify v1.7.0
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14
 	github.com/swaggo/gin-swagger v1.3.0

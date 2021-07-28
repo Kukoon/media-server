@@ -4,9 +4,9 @@ import (
 	"dev.sum7.eu/genofire/golang-lib/web"
 	"dev.sum7.eu/genofire/golang-lib/web/api/status"
 	"dev.sum7.eu/genofire/golang-lib/web/metrics"
-	oven "dev.sum7.eu/genofire/oven-exporter/api"
 	"github.com/gin-gonic/gin"
 
+	"github.com/Kukoon/media-server/oven"
 	"github.com/Kukoon/media-server/web/api/channel"
 	"github.com/Kukoon/media-server/web/api/recording"
 	"github.com/Kukoon/media-server/web/api/stream"
@@ -15,8 +15,8 @@ import (
 )
 
 // Bind to webservice
-func Bind(oven *oven.Client, vhost, app string) web.ModuleRegisterFunc {
-	wsStreamBinder := wsStream.Bind(oven, vhost, app)
+func Bind(oven *oven.Service) web.ModuleRegisterFunc {
+	wsStreamBinder := wsStream.Bind(oven)
 	return func(r *gin.Engine, ws *web.Service) {
 		status.Register(r, ws)
 		metrics.Register(r, ws)

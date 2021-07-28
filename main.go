@@ -10,9 +10,9 @@ import (
 	"dev.sum7.eu/genofire/golang-lib/web"
 	apiStatus "dev.sum7.eu/genofire/golang-lib/web/api/status"
 	webM "dev.sum7.eu/genofire/golang-lib/web/metrics"
-	ovenAPI "dev.sum7.eu/genofire/oven-exporter/api"
 
 	"github.com/Kukoon/media-server/models"
+	"github.com/Kukoon/media-server/oven"
 	webOWN "github.com/Kukoon/media-server/web"
 )
 
@@ -21,9 +21,7 @@ var VERSION = "development"
 type configData struct {
 	Database  database.Database `toml:"database"`
 	Webserver web.Service       `toml:"webserver"`
-	OvenAPI   ovenAPI.Client    `toml:"oven"`
-	OvenVHost string            `toml:"oven_vhost"`
-	OvenApp   string            `toml:"oven_app"`
+	Oven      oven.Service      `toml:"oven"`
 }
 
 func main() {
@@ -47,7 +45,7 @@ func main() {
 	if err := file.ReadTOML(configPath, config); err != nil {
 		log.Panicf("open config file: %s", err)
 	}
-	config.OvenAPI.SetToken(config.OvenAPI.Token)
+	config.Oven.Client.SetToken(config.Oven.Client.Token)
 	models.SetupMigration(&config.Database)
 
 	if err := config.Database.Run(); err != nil {
@@ -62,7 +60,7 @@ func main() {
 	apiStatus.VERSION = webM.VERSION
 	apiStatus.UP = webM.UP
 
-	config.Webserver.ModuleRegister(webOWN.Bind(&config.OvenAPI, config.OvenVHost, config.OvenApp))
+	config.Webserver.ModuleRegister(webOWN.Bind(&config.Oven))
 
 	if err := config.Webserver.Run(); err != nil {
 		log.Fatal(err)

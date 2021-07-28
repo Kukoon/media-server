@@ -1,9 +1,9 @@
-oven_vhost = "default"
-oven_app = "stream"
-
-[oven]
-host = "http://1.2.3.4:8081"
+[oven.app]
+url = "http://1.2.3.4:8081"
 token = "ome-access-token"
+default_vhost = "default"
+default_app = "stream"
+
 
 [webserver]
 listen = ":8090"
