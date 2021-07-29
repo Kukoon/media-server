@@ -53,6 +53,7 @@ func main() {
 	}
 
 	config.Webserver.DB = config.Database.DB
+	config.Oven.DB = config.Database.DB
 
 	webM.UP = func() bool {
 		return config.Database.Status() == nil
@@ -61,6 +62,8 @@ func main() {
 	apiStatus.UP = webM.UP
 
 	config.Webserver.ModuleRegister(webOWN.Bind(&config.Oven))
+
+	config.Oven.Run()
 
 	if err := config.Webserver.Run(); err != nil {
 		log.Fatal(err)

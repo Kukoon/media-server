@@ -28,7 +28,6 @@ type endpoint struct {
 	web                *web.Service
 	Worker             *worker.Worker
 	channelID          uuid.UUID
-	Running            bool
 	usernameMU         sync.RWMutex
 	usernames          map[string]*ws.Subscriber
 	subscriberUsername map[*ws.Subscriber]string

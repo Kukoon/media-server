@@ -3,6 +3,7 @@ package web
 import (
 	"dev.sum7.eu/genofire/golang-lib/web"
 	"dev.sum7.eu/genofire/golang-lib/web/api/status"
+	"dev.sum7.eu/genofire/golang-lib/web/auth"
 	"dev.sum7.eu/genofire/golang-lib/web/metrics"
 	"github.com/gin-gonic/gin"
 
@@ -16,17 +17,17 @@ import (
 
 // Bind to webservice
 func Bind(oven *oven.Service) web.ModuleRegisterFunc {
-	wsStreamBinder := wsStream.Bind(oven)
 	return func(r *gin.Engine, ws *web.Service) {
 		status.Register(r, ws)
 		metrics.Register(r, ws)
+		auth.Register(r, ws)
 
 		channel.Bind(r, ws)
 		recording.Bind(r, ws)
 		stream.Bind(r, ws)
 
 		podcast.Bind(r, ws)
-		wsStreamBinder(r, ws)
+		wsStream.Bind(r, ws)
 
 	}
 }

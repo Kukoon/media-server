@@ -28,7 +28,7 @@ func (we *endpoint) SendStatus(origin *ws.Message) {
 		Body: map[string]interface{}{
 			"viewers":   len(we.Subscribers),
 			"chatusers": len(we.usernames),
-			"running":   we.Running,
+			"running":   m.Running,
 			"stream":    m.ID,
 		},
 	}
