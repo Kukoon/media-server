@@ -17,13 +17,6 @@ func init() {
 
 	// see stream 16
 
-	/* WARNING unreleased:
-	- Public
-	- Private
-	- Duration
-	- Bytes
-	*/
-
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
 			ID: "10-data-0030-01-recording-20",
@@ -35,9 +28,9 @@ func init() {
 					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
 					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
 					CreatedAt: time.Date(2021, 7, 25, 16, 0, 0, 0, loc),
-					Duration:  time.Hour,
-					Public:    false,
-					Listed:    false,
+					Duration:  27*time.Minute + 38*time.Second,
+					Public:    true,
+					Listed:    true,
 					Tags: []*Tag{
 						{ID: TestTagKonzertID},
 					},
@@ -56,7 +49,7 @@ func init() {
 					RecordingID: testdataID,
 					Lang:        "de",
 					Title:       "Kat Kit",
-					Subtitle:    "Sonntag ab 16:00",
+					Subtitle:    "25. Juli 2021, 16:00",
 					Short:       `**Kat Kit** ist eine Singer-Songwriterin, die keine sein will.`,
 					Long: `Den Auftakt des letzten Tages macht **Kat Kit**:
 **Kat Kit** ist eine Singer-Songwriterin, die keine sein will.
@@ -72,7 +65,7 @@ Sie hat durch Peer Pressure mit der Musik angefangen - im Kinderchor gab es näm
 						Quality:     0,
 						IsVideo:     true,
 						URL:         "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/video_best.mp4",
-						Bytes:       0,
+						Bytes:       559446112,
 						Resolution:  "1920x1080",
 					},
 				}).Error; err != nil {

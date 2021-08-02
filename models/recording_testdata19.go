@@ -56,7 +56,7 @@ func init() {
 					RecordingID: testdataID,
 					Lang:        "de",
 					Title:       "Federico Albanese",
-					Subtitle:    "Samstag ab 18:00",
+					Subtitle:    "24. Juli 2021, 18:00",
 					Short:       `**Federico Albanese** kombiniert in seinen Kompositionen minimalistische Pianomelodien mit Streicherarrangements und Elektronika.`,
 					Long: `**Federico Albanese** kombiniert in seinen Kompositionen minimalistische Pianomelodien mit Streicherarrangements und Elektronika. Mit seiner Musik entführt der 1982 in Mailand geborene Wahlberliner in geradezu filmische Klangwelten, die sich aus Elementen der Klassik, Pop- und Ambientmusik speisen. Die vielfältigen musikalischen Einflüsse in seinen Kompositionen spiegeln zugleich seine große Liebe zur Musik.
 
