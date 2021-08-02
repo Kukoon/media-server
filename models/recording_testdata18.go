@@ -18,13 +18,6 @@ func init() {
 
 	// see stream 13
 
-	/* WARNING unreleased:
-	- Public
-	- Private
-	- Duration
-	- Bytes
-	*/
-
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
 			ID: "10-data-0030-01-recording-18",
@@ -36,9 +29,9 @@ func init() {
 					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
 					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
 					CreatedAt: time.Date(2021, 7, 24, 16, 0, 0, 0, loc),
-					Duration:  time.Hour,
-					Public:    false,
-					Listed:    false,
+					Duration:  time.Hour + 12*time.Minute + time.Second,
+					Public:    true,
+					Listed:    true,
 					Tags: []*Tag{
 						{ID: TestTagKonzertID},
 					},
@@ -62,7 +55,7 @@ func init() {
 					RecordingID: testdataID,
 					Lang:        "de",
 					Title:       "KONDRASCHEWA/CHICA",
-					Subtitle:    "Samstag ab 16:00",
+					Subtitle:    "24. Juli 2021, 16:00",
 					Short:       `**KONDRASCHEWA/CHICA** bringen mit risikoreichem Verve und fast popmusikalisch anmutendem völlig unakademischen Appeal feinst gewobene Interpretationen von anspruchsvoller zeitgenössischer Klaviermusik für vier Hände und für zwei Klaviere zu Gehör.`,
 					Long:        `**KONDRASCHEWA/CHICA** bringen mit risikoreichem Verve und fast popmusikalisch anmutendem völlig unakademischen Appeal feinst gewobene Interpretationen von anspruchsvoller zeitgenössischer Klaviermusik für vier Hände und für zwei Klaviere zu Gehör. Marina und Sebastian, aus der Ukraine/Deutschland und Kolumbien stammend, vermitteln in intimer Konzertatmosphäre die besondere Nähe dieser speziellen Art der Kammermusik. Das Programm sowie die Frische und Intensität der Interpretation sind absolut hörenswert, auch für Hörer, die bisher mit sogenannter “klassischer” Klaviermusik nicht soviel anzufangen wissen.`,
 				}).Error; err != nil {
@@ -76,7 +69,7 @@ func init() {
 						Quality:     0,
 						IsVideo:     true,
 						URL:         "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/video_best.mp4",
-						Bytes:       0,
+						Bytes:       2216192019,
 						Resolution:  "1920x1080",
 					},
 				}).Error; err != nil {
