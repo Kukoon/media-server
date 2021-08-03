@@ -45,7 +45,10 @@ func apiGet(r *gin.Engine, ws *web.Service) {
 
 		now := time.Now()
 
-		db = db.Where("listen_at < ?", now).Order("listen_at DESC")
+		db = db.
+			Where("listen_at < ?", now).
+			Where("start_at < ?", now).
+			Order("start_at DESC")
 
 		if err := db.First(&obj).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {

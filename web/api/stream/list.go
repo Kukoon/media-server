@@ -3,6 +3,7 @@ package stream
 import (
 	"net/http"
 	"strconv"
+	"time"
 
 	"dev.sum7.eu/genofire/golang-lib/web"
 	"github.com/gin-gonic/gin"
@@ -29,6 +30,7 @@ func apiList(r *gin.Engine, ws *web.Service) {
 	r.GET("/api/v1/streams", func(c *gin.Context) {
 		list := []*models.Stream{}
 		db := ws.DB
+		now := time.Now()
 
 		// running
 		if str, ok := c.GetQuery("running"); ok {
@@ -41,6 +43,24 @@ func apiList(r *gin.Engine, ws *web.Service) {
 				return
 			}
 			db = db.Where("running", b)
+		}
+		// upcoming
+		if str, ok := c.GetQuery("upcoming"); ok {
+			b, err := strconv.ParseBool(str)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, web.HTTPError{
+					Message: web.ErrAPIInvalidRequestFormat.Error(),
+					Error:   err.Error(),
+				})
+				return
+			}
+			if b {
+				db = db.Where("start_at > ?", now)
+			} else {
+				db = db.Where("start_at <= ?", now)
+			}
+			// TODO - here order?
+			db = db.Order("start_at DESC")
 		}
 
 		// channel
@@ -114,7 +134,11 @@ func apiList(r *gin.Engine, ws *web.Service) {
 			}
 			db = db.Joins("LEFT JOIN stream_speakers ON stream_speakers.stream_id = streams.id").Where("speaker_id IN (?)", ids)
 		}
-		if err := db.Find(&list).Error; err != nil {
+		// TODO - here order?
+		if err := db.
+			Where("listen_at < ?", now).
+			Order("start_at DESC").
+			Find(&list).Error; err != nil {
 			c.JSON(http.StatusInternalServerError, web.HTTPError{
 				Message: web.ErrAPIInternalDatabase.Error(),
 				Error:   err.Error(),

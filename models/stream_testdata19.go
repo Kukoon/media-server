@@ -23,7 +23,7 @@ func init() {
 					Chat:      false,
 					Running:   true,
 					StartAt:   time.Date(2021, 8, 21, 19, 0, 0, 0, loc),
-					ListenAt:  time.Date(2021, 8, 20, 0, 0, 0, 0, loc),
+					ListenAt:  time.Date(2021, 0, 0, 0, 0, 0, 0, loc),
 					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
 					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
 					Tags: []*Tag{
