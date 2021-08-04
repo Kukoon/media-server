@@ -16,13 +16,6 @@ func init() {
 
 	// see stream 06
 
-	/* WARNING unreleased:
-	- Public
-	- Private
-	- Duration
-	- Bytes
-	*/
-
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
 			ID: "10-data-0030-01-recording-12",
@@ -33,9 +26,9 @@ func init() {
 					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
 					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
 					CreatedAt: time.Date(2021, 6, 24, 18, 30, 0, 0, loc),
-					Duration:  time.Hour,
-					Public:    false,
-					Listed:    false,
+					Duration:  time.Hour + 30*time.Minute + 51*time.Second,
+					Public:    true,
+					Listed:    true,
 					Tags: []*Tag{
 						{ID: TestTagDiskussionID},
 					},
@@ -48,12 +41,8 @@ func init() {
 					Lang:        "de",
 					Title:       "System Change not Climate Change!",
 					Subtitle:    "Einführung zu Klimakrise und Kapitalismuskritik",
-					Short: `Diskussionsveranstaltung mit der Gruppe **direction f** (Hannover)
-
-**Kukoon im Park** oder hier`,
+					Short:       `Diskussionsveranstaltung mit der Gruppe **direction f** (Hannover)`,
 					Long: `Diskussionsveranstaltung mit der Gruppe **direction f** (Hannover)
-
-**Kukoon im Park** oder hier
 
 Zwar verblasst die Klimakrise seit einem Jahr im medialen Schatten der Corona-Pandemie, die Dringlichkeit zum Handeln bleibt jedoch unverändert. Klar ist, dass die Klimakrise kein rein ökologisches Phänomen sondern ebenso sehr eine soziale Krise ist. Als »direction f« haben wir uns bisher vorrangig mit den Zusammenhängen von Klimakrise und Kapitalismus befasst. Im Rahmen der Veranstaltung wollen wir kurz auf den Ist-Zustand und bestehende Zusammenhänge eingehen. Davon ausgehend würden wir gerne darüber diskutieren, was (un)taugliche Strategien gegen die drohende Klimakatstrophe sein können und welche Rolle und Aufgaben dabei einer (radikalen) Linken zukämen. direction f ist ein Zusammenschluss von Menschen in Hannover, der sich bisher schwerpunktmäßig mit dem Zusammenhang von Klimakrise und Kapitalismus befasst hat.
 
@@ -69,7 +58,7 @@ Mehr Infos unter [direction-f.org](https://direction-f.org/)`,
 						Quality:     0,
 						IsVideo:     true,
 						URL:         "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/video_best.mp4",
-						Bytes:       0,
+						Bytes:       2010872430,
 						Resolution:  "1920x1080",
 					},
 				}).Error; err != nil {
