@@ -21,6 +21,7 @@ import (
 // @Failure 500 {object} web.HTTPError
 // @Router /api/v1/streams [get]
 // @Param running query bool false "filter by running streams"
+// @Param upcoming query bool false "filter by next streams"
 // @Param channel query string false "filter by UUID of a channel"
 // @Param event query string false "filter by UUID of a event"
 // @Param tag query string false "filter by UUID of any tag (multiple times)"

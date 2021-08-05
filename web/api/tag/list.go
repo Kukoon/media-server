@@ -16,6 +16,7 @@ import (
 // @Success 200 {array} models.Tag
 // @Failure 500 {object} web.HTTPError
 // @Router /api/v1/tags [get]
+// @Param lang query string false "show description in given language"
 func apiList(r *gin.Engine, ws *web.Service) {
 	r.GET("/api/v1/tags", func(c *gin.Context) {
 		list := []*models.Tag{}
