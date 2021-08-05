@@ -24,12 +24,12 @@ func init() {
 					ChannelID: TestChannelID1,
 					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
 					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
-					CreatedAt: time.Date(2021, 7, 29, 19, 0, 0, 0, loc),
+					CreatedAt: time.Date(2021, 8, 5, 17, 0, 0, 0, loc),
 					Duration:  18*time.Minute + time.Second,
 					Public:    true,
 					Listed:    true,
 					Tags: []*Tag{
-						{ID: TestTagGalerieID},
+						{ID: TestTagAusstellungID},
 						{ID: TestTagInterviewID},
 					},
 					Speakers: []*Speaker{
@@ -46,10 +46,10 @@ func init() {
 					ID:          testdataIDLang1,
 					RecordingID: testdataID,
 					Lang:        "de",
-					Title:       "»Vieja muito, vieja pouco«",
+					Title:       "Tony Mahoni – »Vieja muito, vieja pouco«",
 					Subtitle:    "Ein Gespräch mit zeit][raum zur Onlineausstellung",
 					Short:       `**Tony Mahoni** malt seit seiner Kindheit gern Tiere und Pflanzen. Später hat er es einige Jahre fast ausschließlich auf Steine und Felsen abgesehen, bis dieses Motiv wiederum von dem des Wassers in Form von Wellen abgelöst wurde.`,
-					Long:        `**Tony Mahoni** malt seit seiner Kindheit gern Tiere und Pflanzen. Später hat er es einige Jahre fast ausschließlich auf Steine und Felsen abgesehen, bis dieses Motiv wiederum von dem des Wassers in Form von Wellen abgelöst wurde. Nach einigen Jahren der künstlerischen Ungewissheit und der damit verbundenen Farblosigkeit hat er seinen Lebenslauf gefälscht, um nun, mit Beginn der gesellschaftlichen Krise wieder in den Farbbeutel zu greifen. Tatsächlich wurde der Zeitpunkt des beginnenden Lockdowns Anfang des Jahres 2020 zur Geburt seiner aktuellen Formen- und Farbsprache. Nach einem vierwöchigen künstlerischen Aufenthalt in Porto, sowie einer Kunstresidenz in Antwerpen, ist er nun erstmal wieder in Bremen zu Hause und nutzt die Chance seine Ölkreiden im Kukoon auszustellen. Inspiriert durch zwei seiner ehemaligen künstlerischen Mentor*innen, Renate Schiller (Malerin und Kunstpädagogin in Stuttgart) und Gerd Helmers (Bildhauer und Kunsttherapeut bei Freiburg) ist er sehr froh, seine Umgebung in einem farbigen Tagebuch festzuhalten und zu teilen.`,
+					Long:        `**Tony Mahoni** malt seit seiner Kindheit gern Tiere und Pflanzen. Später hat er es einige Jahre fast ausschließlich auf Steine und Felsen abgesehen, bis dieses Motiv wiederum von dem des Wassers in Form von Wellen abgelöst wurde. Nach einigen Jahren der künstlerischen Ungewissheit und der damit verbundenen Farblosigkeit hat er seinen Lebenslauf gefälscht, um nun, mit Beginn der gesellschaftlichen Krise wieder in den Farbbeutel zu greifen. Tatsächlich wurde der Zeitpunkt des beginnenden Lockdowns Anfang des Jahres 2020 zur Geburt seiner aktuellen Formen- und Farbsprache. Nach einem vierwöchigen künstlerischen Aufenthalt in Porto, sowie einer Kunstresidenz in Antwerpen, ist er nun erstmal wieder in Bremen zu Hause und nutzt die Chance seine Ölkreiden im Kukoon auszustellen.`,
 				}).Error; err != nil {
 					return err
 				}

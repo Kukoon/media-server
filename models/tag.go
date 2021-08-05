@@ -35,8 +35,8 @@ var (
 	// TestTagKonzertID - uuid for tag konzert
 	TestTagKonzertID = uuid.MustParse("71082693-c58d-43b7-86ff-6b240c643a83")
 
-	// TestTagGalerieID - uuid for tag galerie
-	TestTagGalerieID = uuid.MustParse("87fb7f4b-1e5c-4c1b-8020-2860987da6bc")
+	// TestTagAusstellungID - uuid for tag galerie
+	TestTagAusstellungID = uuid.MustParse("87fb7f4b-1e5c-4c1b-8020-2860987da6bc")
 
 	// TestTagInterviewID - uuid for tag interview
 	TestTagInterviewID = uuid.MustParse("1aa3f441-4461-42da-a858-63abf5ee254c")
@@ -47,7 +47,7 @@ func init() {
 	testTagDiskussionLangDEID := uuid.MustParse("38722845-beba-4e3d-ad3f-694c029d751f")
 	testTagVortragLangDEID := uuid.MustParse("ec784c8e-2673-4870-b219-eb636e4765c8")
 	testTagKonzertLangDEID := uuid.MustParse("57160845-0982-473c-820b-c0b9a132c282")
-	testTagGalerieLangDEID := uuid.MustParse("4dc67d8a-be5c-403c-904c-106a5dd83627")
+	testTagAusstellungLangDEID := uuid.MustParse("4dc67d8a-be5c-403c-904c-106a5dd83627")
 	testTagInterviewLangDEID := uuid.MustParse("366de5e6-fc00-415c-9ef3-bfc8990841ad")
 
 	migrations = append(migrations, []*gormigrate.Migration{
@@ -136,17 +136,17 @@ func init() {
 			ID: "10-data-0018-01-tag-eg2",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&[]*Tag{
-					{ID: TestTagGalerieID},
+					{ID: TestTagAusstellungID},
 					{ID: TestTagInterviewID},
 				}).Error; err != nil {
 					return err
 				}
 				if err := tx.Create(&[]*TagLang{
 					{
-						ID:    testTagGalerieLangDEID,
-						TagID: TestTagGalerieID,
+						ID:    testTagAusstellungLangDEID,
+						TagID: TestTagAusstellungID,
 						Lang:  "de",
-						Name:  "Galerie",
+						Name:  "Ausstellung",
 					},
 					{
 						ID:    testTagInterviewLangDEID,
@@ -162,13 +162,13 @@ func init() {
 			Rollback: func(tx *gorm.DB) error {
 				if err := tx.Delete(&[]*TagLang{
 					{ID: testTagInterviewLangDEID},
-					{ID: testTagGalerieLangDEID},
+					{ID: testTagAusstellungLangDEID},
 				}).Error; err != nil {
 					return err
 				}
 				if err := tx.Delete(&[]*Tag{
 					{ID: TestTagInterviewID},
-					{ID: TestTagGalerieID},
+					{ID: TestTagAusstellungID},
 				}).Error; err != nil {
 					return err
 				}
