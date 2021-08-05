@@ -13,7 +13,6 @@ func init() {
 	testdataID := uuid.MustParse("9f8b59db-34e1-47c1-93ea-e173f5af3b96")
 	testdataIDLang1 := uuid.MustParse("ebcaee38-56b9-4c70-9616-f88887bcfee4")
 	testdataIDSpeaker1 := uuid.MustParse("3a875769-4b33-4fe7-af36-167c51fa510f")
-	testdataIDSpeaker2 := uuid.MustParse("4fef5401-42c3-45a7-9403-1a40a3a0d946")
 
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
@@ -36,12 +35,7 @@ func init() {
 						{
 							OwnerID: TestChannelID1,
 							ID:      testdataIDSpeaker1,
-							Name:    "MARINA KONDRASCHEWA",
-						},
-						{
-							OwnerID: TestChannelID1,
-							ID:      testdataIDSpeaker2,
-							Name:    "SEBASTIAN CHICA VILLA",
+							Name:    "KONDRASCHEWA/CHICA",
 						},
 					},
 				}).Error; err != nil {
