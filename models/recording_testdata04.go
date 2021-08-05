@@ -35,7 +35,7 @@ func init() {
 						{
 							OwnerID: TestChannelID1,
 							ID:      testdataIDSpeaker1,
-							Name:    "Jan Backmann",
+							Name:    "Jan Bachmann",
 						},
 					},
 				}).Error; err != nil {
