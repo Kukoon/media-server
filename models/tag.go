@@ -25,26 +25,31 @@ type TagLang struct {
 var (
 	// TestTagBuchvorstellungID - uuid for tag buchvorstellung
 	TestTagBuchvorstellungID = uuid.MustParse("0bca0cf4-a9b9-46d7-821f-18c59c08fc1d")
-	// TestTagBuchvorstellungLangID - german translation
-	TestTagBuchvorstellungLangID = uuid.MustParse("35822fe2-1910-48e7-904f-15c9e6f7ea34")
 
 	// TestTagDiskussionID - uuid for tag diskussion
 	TestTagDiskussionID = uuid.MustParse("277026b0-b9d6-48d6-bfa1-96dcc7eb3451")
-	// TestTagDiskussionLangID - german translation
-	TestTagDiskussionLangID = uuid.MustParse("38722845-beba-4e3d-ad3f-694c029d751f")
 
 	// TestTagVortragID - uuid for tag vortrag
 	TestTagVortragID = uuid.MustParse("7297a654-71f9-43be-8120-69b8152f01fc")
-	// TestTagVortragLangID - german translation
-	TestTagVortragLangID = uuid.MustParse("ec784c8e-2673-4870-b219-eb636e4765c8")
 
 	// TestTagKonzertID - uuid for tag konzert
 	TestTagKonzertID = uuid.MustParse("71082693-c58d-43b7-86ff-6b240c643a83")
-	// TestTagKonzertLangID - german translation
-	TestTagKonzertLangID = uuid.MustParse("57160845-0982-473c-820b-c0b9a132c282")
+
+	// TestTagGalerieID - uuid for tag galerie
+	TestTagGalerieID = uuid.MustParse("87fb7f4b-1e5c-4c1b-8020-2860987da6bc")
+
+	// TestTagInterviewID - uuid for tag interview
+	TestTagInterviewID = uuid.MustParse("1aa3f441-4461-42da-a858-63abf5ee254c")
 )
 
 func init() {
+	testTagBuchvorstellungLangDEID := uuid.MustParse("35822fe2-1910-48e7-904f-15c9e6f7ea34")
+	testTagDiskussionLangDEID := uuid.MustParse("38722845-beba-4e3d-ad3f-694c029d751f")
+	testTagVortragLangDEID := uuid.MustParse("ec784c8e-2673-4870-b219-eb636e4765c8")
+	testTagKonzertLangDEID := uuid.MustParse("57160845-0982-473c-820b-c0b9a132c282")
+	testTagGalerieLangDEID := uuid.MustParse("4dc67d8a-be5c-403c-904c-106a5dd83627")
+	testTagInterviewLangDEID := uuid.MustParse("366de5e6-fc00-415c-9ef3-bfc8990841ad")
+
 	migrations = append(migrations, []*gormigrate.Migration{
 		{
 			ID: "01-schema-0018-01-tag",
@@ -54,6 +59,9 @@ func init() {
 			},
 			Rollback: func(tx *gorm.DB) error {
 				if err := tx.Migrator().DropTable("tag_langs"); err != nil {
+					return err
+				}
+				if err := tx.Migrator().DropTable("tags"); err != nil {
 					return err
 				}
 				return nil
@@ -66,90 +74,102 @@ func init() {
 			ID: "10-data-0018-01-tag-eg",
 			Migrate: func(tx *gorm.DB) error {
 				// -
-				if err := tx.Create(&Tag{
-					ID: TestTagBuchvorstellungID,
+				if err := tx.Create(&[]*Tag{
+					{ID: TestTagBuchvorstellungID},
+					{ID: TestTagDiskussionID},
+					{ID: TestTagVortragID},
+					{ID: TestTagKonzertID},
 				}).Error; err != nil {
 					return err
 				}
-				if err := tx.Create(&TagLang{
-					ID:    TestTagBuchvorstellungLangID,
-					TagID: TestTagBuchvorstellungID,
-					Lang:  "de",
-					Name:  "Buchvorstellung",
-				}).Error; err != nil {
-					return err
-				}
-				// -
-				if err := tx.Create(&Tag{
-					ID: TestTagDiskussionID,
-				}).Error; err != nil {
-					return err
-				}
-				if err := tx.Create(&TagLang{
-					ID:    TestTagDiskussionLangID,
-					TagID: TestTagDiskussionID,
-					Lang:  "de",
-					Name:  "Diskussion",
-				}).Error; err != nil {
-					return err
-				}
-				// -
-				if err := tx.Create(&Tag{
-					ID: TestTagVortragID,
-				}).Error; err != nil {
-					return err
-				}
-				if err := tx.Create(&TagLang{
-					ID:    TestTagVortragLangID,
-					TagID: TestTagVortragID,
-					Lang:  "de",
-					Name:  "Vortrag",
-				}).Error; err != nil {
-					return err
-				}
-				// -
-				if err := tx.Create(&Tag{
-					ID: TestTagKonzertID,
-				}).Error; err != nil {
-					return err
-				}
-				if err := tx.Create(&TagLang{
-					ID:    TestTagKonzertLangID,
-					TagID: TestTagKonzertID,
-					Lang:  "de",
-					Name:  "Konzert",
+				if err := tx.Create(&[]*TagLang{
+					{
+						ID:    testTagBuchvorstellungLangDEID,
+						TagID: TestTagBuchvorstellungID,
+						Lang:  "de",
+						Name:  "Buchvorstellung",
+					},
+					{
+						ID:    testTagDiskussionLangDEID,
+						TagID: TestTagDiskussionID,
+						Lang:  "de",
+						Name:  "Diskussion",
+					},
+					{
+						ID:    testTagVortragLangDEID,
+						TagID: TestTagVortragID,
+						Lang:  "de",
+						Name:  "Vortrag",
+					},
+					{
+						ID:    testTagKonzertLangDEID,
+						TagID: TestTagKonzertID,
+						Lang:  "de",
+						Name:  "Konzert",
+					},
 				}).Error; err != nil {
 					return err
 				}
 				return nil
 			},
 			Rollback: func(tx *gorm.DB) error {
-				// -
-				if err := tx.Delete(&TagLang{ID: TestTagKonzertLangID}).Error; err != nil {
+				if err := tx.Delete(&[]*TagLang{
+					{ID: testTagKonzertLangDEID},
+					{ID: testTagVortragLangDEID},
+					{ID: testTagDiskussionLangDEID},
+					{ID: testTagBuchvorstellungLangDEID},
+				}).Error; err != nil {
 					return err
 				}
-				if err := tx.Delete(&Tag{ID: TestTagKonzertID}).Error; err != nil {
+				if err := tx.Delete(&[]*Tag{
+					{ID: TestTagKonzertID},
+					{ID: TestTagVortragID},
+					{ID: TestTagDiskussionID},
+					{ID: TestTagBuchvorstellungID},
+				}).Error; err != nil {
 					return err
 				}
-				// -
-				if err := tx.Delete(&TagLang{ID: TestTagVortragLangID}).Error; err != nil {
+				return nil
+			},
+		},
+		{
+			ID: "10-data-0018-01-tag-eg2",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.Create(&[]*Tag{
+					{ID: TestTagGalerieID},
+					{ID: TestTagInterviewID},
+				}).Error; err != nil {
 					return err
 				}
-				if err := tx.Delete(&Tag{ID: TestTagVortragID}).Error; err != nil {
+				if err := tx.Create(&[]*TagLang{
+					{
+						ID:    testTagGalerieLangDEID,
+						TagID: TestTagGalerieID,
+						Lang:  "de",
+						Name:  "Galerie",
+					},
+					{
+						ID:    testTagInterviewLangDEID,
+						TagID: TestTagInterviewID,
+						Lang:  "de",
+						Name:  "Interview",
+					},
+				}).Error; err != nil {
 					return err
 				}
-				// -
-				if err := tx.Delete(&TagLang{ID: TestTagDiskussionLangID}).Error; err != nil {
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Delete(&[]*TagLang{
+					{ID: testTagInterviewLangDEID},
+					{ID: testTagGalerieLangDEID},
+				}).Error; err != nil {
 					return err
 				}
-				if err := tx.Delete(&Tag{ID: TestTagDiskussionID}).Error; err != nil {
-					return err
-				}
-				// -
-				if err := tx.Delete(&TagLang{ID: TestTagBuchvorstellungLangID}).Error; err != nil {
-					return err
-				}
-				if err := tx.Delete(&Tag{ID: TestTagBuchvorstellungID}).Error; err != nil {
+				if err := tx.Delete(&[]*Tag{
+					{ID: TestTagInterviewID},
+					{ID: TestTagGalerieID},
+				}).Error; err != nil {
 					return err
 				}
 				return nil
