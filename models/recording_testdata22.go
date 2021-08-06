@@ -61,7 +61,7 @@ func init() {
 						Quality:     0,
 						IsVideo:     true,
 						URL:         "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/video_best.mp4",
-						Bytes:       424064519,
+						Bytes:       424034431,
 						Resolution:  "1920x1080",
 					},
 				}).Error; err != nil {
