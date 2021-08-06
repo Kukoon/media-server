@@ -1,6 +1,7 @@
 package recording
 
 import (
+	"fmt"
 	"net/http"
 
 	"dev.sum7.eu/genofire/golang-lib/web"
@@ -68,8 +69,7 @@ func apiList(r *gin.Engine, ws *web.Service) {
 		}
 		// filter tag
 		if strArray, ok := c.GetQueryArray("tag"); ok {
-			ids := []uuid.UUID{}
-			for _, str := range strArray {
+			for i, str := range strArray {
 				id, err := uuid.Parse(str)
 				if err != nil {
 					c.JSON(http.StatusBadRequest, web.HTTPError{
@@ -78,15 +78,13 @@ func apiList(r *gin.Engine, ws *web.Service) {
 					})
 					return
 				}
-				ids = append(ids, id)
+				db = db.Joins(fmt.Sprintf("INNER JOIN recording_tags rt%d ON rt%d.recording_id = recordings.id AND rt%d.tag_id = ?", i, i, i), id)
 			}
-			db = db.Joins("LEFT JOIN recording_tags ON recording_tags.recording_id = recordings.id").Where("tag_id IN (?)", ids)
 		}
 		// filter speaker
 		db = db.Preload("Speakers")
 		if strArray, ok := c.GetQueryArray("speaker"); ok {
-			ids := []uuid.UUID{}
-			for _, str := range strArray {
+			for i, str := range strArray {
 				id, err := uuid.Parse(str)
 				if err != nil {
 					c.JSON(http.StatusBadRequest, web.HTTPError{
@@ -95,9 +93,8 @@ func apiList(r *gin.Engine, ws *web.Service) {
 					})
 					return
 				}
-				ids = append(ids, id)
+				db = db.Joins(fmt.Sprintf("INNER JOIN recording_speakers rs%d ON rs%d.recording_id = recordings.id AND rs%d.speaker_id = ?", i, i, i), id)
 			}
-			db = db.Joins("LEFT JOIN recording_speakers ON recording_speakers.recording_id = recordings.id").Where("speaker_id IN (?)", ids)
 		}
 
 		// TODO login - own channel

@@ -1,6 +1,7 @@
 package stream
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -104,8 +105,7 @@ func apiList(r *gin.Engine, ws *web.Service) {
 		}
 		// filter tag
 		if strArray, ok := c.GetQueryArray("tag"); ok {
-			ids := []uuid.UUID{}
-			for _, str := range strArray {
+			for i, str := range strArray {
 				id, err := uuid.Parse(str)
 				if err != nil {
 					c.JSON(http.StatusBadRequest, web.HTTPError{
@@ -114,15 +114,13 @@ func apiList(r *gin.Engine, ws *web.Service) {
 					})
 					return
 				}
-				ids = append(ids, id)
+				db = db.Joins(fmt.Sprintf("INNER JOIN stream_tags st%d ON st%d.stream_id = streams.id AND st%d.tag_id = ?", i, i, i), id)
 			}
-			db = db.Joins("LEFT JOIN stream_tags ON stream_tags.stream_id = streams.id").Where("tag_id IN (?)", ids)
 		}
 		// filter speaker
 		db = db.Preload("Speakers")
 		if strArray, ok := c.GetQueryArray("speaker"); ok {
-			ids := []uuid.UUID{}
-			for _, str := range strArray {
+			for i, str := range strArray {
 				id, err := uuid.Parse(str)
 				if err != nil {
 					c.JSON(http.StatusBadRequest, web.HTTPError{
@@ -131,9 +129,8 @@ func apiList(r *gin.Engine, ws *web.Service) {
 					})
 					return
 				}
-				ids = append(ids, id)
+				db = db.Joins(fmt.Sprintf("INNER JOIN stream_speakers ss%d ON ss%d.stream_id = streams.id AND ss%d.speaker_id = ?", i, i, i), id)
 			}
-			db = db.Joins("LEFT JOIN stream_speakers ON stream_speakers.stream_id = streams.id").Where("speaker_id IN (?)", ids)
 		}
 		// TODO - here order?
 		if err := db.
