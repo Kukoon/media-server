@@ -22,7 +22,7 @@ func init() {
 					ChannelID: TestChannelID1,
 					Chat:      false,
 					Running:   true,
-					StartAt:   time.Date(2021, 8, 21, 19, 0, 0, 0, loc),
+					StartAt:   time.Date(2021, 8, 21, 18, 30, 0, 0, loc),
 					ListenAt:  time.Date(2021, 0, 0, 0, 0, 0, 0, loc),
 					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
 					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
