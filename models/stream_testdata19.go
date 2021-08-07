@@ -36,7 +36,7 @@ func init() {
 					ID:       testdataIDLang1,
 					StreamID: testdataID,
 					Lang:     "de",
-					Title:    "Zinerelease und Lesung mit dem queer-feministischen D.I.Y. Zine",
+					Title:    "Fussball & Polyamorie",
 					Subtitle: "Brav_a (Berlin)",
 					Short:    `Mitten in Corona haben wir die neueste Ausgabe unseres queer-feministischen Teen-mags gedruckt und veröffentlicht. Leider war es uns bisher nicht möglich, eine richtige Release-Veranstaltung zu organisieren.`,
 					Long: `Mitten in Corona haben wir die neueste Ausgabe unseres queer-feministischen Teen-mags gedruckt und veröffentlicht. Leider war es uns bisher nicht möglich, eine richtige Release-Veranstaltung zu organisieren. Deswegen sind wir umso froher, das jetzt in Bremen tun zu können. Die Schwerpunkt-Themen der letzten Ausgabe waren Fußball und Polyamorie. Bei Fußball denken wir an Empowerment für Mädchen, an die Popularität von Ballsportarten und an Fantum ohne Nationalismus und Lokalpatriotismus. Wir haben hierzu eine Reihe von spannenden Texten und Interviews zusammengebracht. Das zweite Thema der Ausgabe ist Polyamorie. Poly- im Gegensatz zu Monogamie, was heißt das eigentlich? Die Beiträge im Zine diskutieren Idee und Praktiken von Polyamorie; außerdem gibt es als Beilage ein ganzes Zine-im-Zine, das das Thema in Comicform vertieft. Schöne und weniger schöne poly-Erlebnisse werden in Texten und Comics verhandelt. Als Lesung halten wir einige der Texte aus dieser Ausgabe und dazu noch Texte aus den vergangenen drei Ausgaben. Dazu wird es ein kleines Quiz geben mit Musik, interaktive Aufgaben und viel Spaß!
