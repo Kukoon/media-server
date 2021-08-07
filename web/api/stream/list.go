@@ -62,7 +62,7 @@ func apiList(r *gin.Engine, ws *web.Service) {
 				db = db.Where("start_at <= ?", now)
 			}
 			// TODO - here order?
-			db = db.Order("start_at DESC")
+			db = db.Order("start_at")
 		}
 
 		// channel
@@ -135,7 +135,7 @@ func apiList(r *gin.Engine, ws *web.Service) {
 		// TODO - here order?
 		if err := db.
 			Where("listen_at < ?", now).
-			Order("start_at DESC").
+			Order("start_at").
 			Find(&list).Error; err != nil {
 			c.JSON(http.StatusInternalServerError, web.HTTPError{
 				Message: web.ErrAPIInternalDatabase.Error(),
