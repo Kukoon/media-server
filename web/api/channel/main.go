@@ -8,5 +8,6 @@ import (
 // Bind to webservice
 func Bind(r *gin.Engine, ws *web.Service) {
 	apiList(r, ws)
+	apiListMy(r, ws)
 	apiGet(r, ws)
 }
