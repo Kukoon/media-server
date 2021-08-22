@@ -10,6 +10,7 @@ import (
 func Bind(r *gin.Engine, ws *web.Service, oven *oven.Service) {
 	apiRestreamList(r, ws, oven)
 	apiRestreamDelete(r, ws, oven)
+	apiRestreamAdd(r, ws, oven)
 	apiList(r, ws)
 	apiListMy(r, ws)
 	apiGet(r, ws)

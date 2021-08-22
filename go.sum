@@ -47,6 +47,8 @@ dev.sum7.eu/genofire/oven-exporter v0.0.2-0.20210818110725-14d35a91704e h1:Vnx52
 dev.sum7.eu/genofire/oven-exporter v0.0.2-0.20210818110725-14d35a91704e/go.mod h1:93pHJhAkeap1tHkaUu+1ysQlYxX55H6HiX4gbRC7bbA=
 dev.sum7.eu/genofire/oven-exporter v0.0.2-0.20210822132613-81c0ed479362 h1:nvt/CJ33T6hQbBdeAV4SKLwju5IplC8iXSl5MPwiTio=
 dev.sum7.eu/genofire/oven-exporter v0.0.2-0.20210822132613-81c0ed479362/go.mod h1:93pHJhAkeap1tHkaUu+1ysQlYxX55H6HiX4gbRC7bbA=
+dev.sum7.eu/genofire/oven-exporter v0.0.2-0.20210822151232-a94acd17adab h1:W6Tp0ErrfOP6MiZ57D3pQYDFad16yb/Mz6crBg1YJwI=
+dev.sum7.eu/genofire/oven-exporter v0.0.2-0.20210822151232-a94acd17adab/go.mod h1:93pHJhAkeap1tHkaUu+1ysQlYxX55H6HiX4gbRC7bbA=
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=

@@ -1,6 +1,8 @@
 package channel
 
 import (
+	"fmt"
+
 	oven "dev.sum7.eu/genofire/oven-exporter/api"
 )
 
@@ -35,5 +37,19 @@ type RestreamAdd struct {
 	Name      string `json:"name" example:"Blub"`
 	Protocol  string `json:"protocol" example:"rtmp"`
 	URL       string `json:"url" example:"rtmp://a.rtmp.youtube.com/live2"`
-	StreamKey string `json:"streamKey" example:"SUPERSECRET"`
+	StreamKey string `json:"secret" example:"SUPERSECRET"`
+}
+
+// Convert for Oven
+func (d *RestreamAdd) ToOven(channelID string) *oven.ResponsePushStart {
+	id := fmt.Sprintf("%s-%s", channelID, d.Name)
+	return &oven.ResponsePushStart{
+		ID:        id,
+		Protocol:  d.Protocol,
+		URL:       d.URL,
+		StreamKey: d.StreamKey,
+		Stream: &oven.ResponsePushDataStream{
+			Name: channelID,
+		},
+	}
 }
