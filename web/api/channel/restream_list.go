@@ -12,8 +12,10 @@ import (
 
 // @Summary List Restreams of Channel
 // @Description Show a list of all restream / push of channel
+// @Tags channel
 // @Produce  json
 // @Success 200 {array} Restream
+// @Failure 401 {object} web.HTTPError
 // @Failure 500 {object} web.HTTPError
 // @Router /api/v1/channel/{channel_id}/restreams [get]
 func apiRestreamList(r *gin.Engine, ws *web.Service, oven *oven.Service) {

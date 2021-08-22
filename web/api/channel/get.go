@@ -14,6 +14,7 @@ import (
 
 // @Summary Show Channel
 // @Description Show channel with all informations
+// @Tags channel
 // @Produce  json
 // @Success 200 {object} models.Channel
 // @Failure 400 {object} web.HTTPError

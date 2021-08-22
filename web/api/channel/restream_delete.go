@@ -13,9 +13,11 @@ import (
 
 // @Summary Delete Restream of Channel
 // @Description Delete all restream / push of channel
+// @Tags channel
 // @Produce  json
 // @Success 200 {object} Restream
 // @Failure 400 {object} web.HTTPError
+// @Failure 401 {object} web.HTTPError
 // @Failure 404 {object} web.HTTPError
 // @Failure 500 {object} web.HTTPError
 // @Router /api/v1/channel/{channel_id}/restream/{id} [delete]

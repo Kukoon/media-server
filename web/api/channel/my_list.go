@@ -12,6 +12,7 @@ import (
 
 // @Summary List my Channels
 // @Description Show a list of all channels you has permission
+// @Tags channel
 // @Produce  json
 // @Success 200 {array} models.Channel
 // @Failure 500 {object} web.HTTPError
