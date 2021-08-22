@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"dev.sum7.eu/genofire/golang-lib/web"
+	"dev.sum7.eu/genofire/golang-lib/web/auth"
+	"github.com/Kukoon/media-server/models"
 	"github.com/Kukoon/media-server/oven"
 	"github.com/gin-gonic/gin"
 )
@@ -11,11 +13,11 @@ import (
 // @Summary List Restreams of Channel
 // @Description Show a list of all restream / push of channel
 // @Produce  json
-// @Success 200 {array} models.Channel
+// @Success 200 {array} Restream
 // @Failure 500 {object} web.HTTPError
-// @Router /api/v1/channel/{id}/restreams [get]
-func apiRestreamList(r *gin.Engine, oven *oven.Service) {
-	r.GET("/api/v1/channel/:slug/restreams", func(c *gin.Context) {
+// @Router /api/v1/channel/{channel_id}/restreams [get]
+func apiRestreamList(r *gin.Engine, ws *web.Service, oven *oven.Service) {
+	r.GET("/api/v1/channel/:slug/restreams", auth.MiddlewarePermissionParam(ws, models.Channel{}, "slug"), func(c *gin.Context) {
 		id := c.Params.ByName("slug")
 		resp, err := oven.Client.RequestPushStatusDefault()
 		if err != nil {

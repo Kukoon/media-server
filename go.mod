@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	dev.sum7.eu/genofire/golang-lib v0.0.0-20210730160759-3e90199d981e
-	dev.sum7.eu/genofire/oven-exporter v0.0.2-0.20210818110725-14d35a91704e // indirect
+	dev.sum7.eu/genofire/oven-exporter v0.0.2-0.20210822132613-81c0ed479362 // indirect
 	github.com/bdlm/log v0.1.20
 	github.com/chenjiandongx/ginprom v0.0.0-20210617023641-6c809602c38a // indirect
 	github.com/eduncan911/podcast v1.4.2
