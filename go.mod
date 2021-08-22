@@ -3,8 +3,8 @@ module github.com/Kukoon/media-server
 go 1.16
 
 require (
-	dev.sum7.eu/genofire/golang-lib v0.0.0-20210722161605-32f0d844271f
-	dev.sum7.eu/genofire/oven-exporter v0.0.2-0.20210728125033-2b504289ea66 // indirect
+	dev.sum7.eu/genofire/golang-lib v0.0.0-20210730160759-3e90199d981e
+	dev.sum7.eu/genofire/oven-exporter v0.0.2-0.20210818110725-14d35a91704e // indirect
 	github.com/bdlm/log v0.1.20
 	github.com/chenjiandongx/ginprom v0.0.0-20210617023641-6c809602c38a // indirect
 	github.com/eduncan911/podcast v1.4.2
@@ -24,15 +24,15 @@ require (
 	github.com/mattn/go-isatty v0.0.13 // indirect
 	github.com/prometheus/client_golang v1.11.0
 	github.com/prometheus/common v0.30.0 // indirect
-	github.com/prometheus/procfs v0.7.1 // indirect
+	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/stretchr/testify v1.7.0
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14
 	github.com/swaggo/gin-swagger v1.3.0
 	github.com/swaggo/swag v1.7.1-0.20210326183817-17c1766b6349
 	github.com/ugorji/go v1.2.6 // indirect
-	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
+	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
 	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
-	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
+	golang.org/x/sys v0.0.0-20210820121016-41cdb8703e55 // indirect
 	golang.org/x/term v0.0.0-20210615171337-6886f2dfbf5b // indirect
 	golang.org/x/time v0.0.0-20210611083556-38a9dc6acbc6 // indirect
 	golang.org/x/tools v0.1.4 // indirect

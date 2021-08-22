@@ -28,7 +28,7 @@ func Bind(oven *oven.Service) web.ModuleRegisterFunc {
 		metrics.Register(r, ws)
 		auth.Register(r, ws)
 
-		channel.Bind(r, ws)
+		channel.Bind(r, ws, oven)
 		recording.Bind(r, ws)
 		stream.Bind(r, ws)
 
