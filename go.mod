@@ -20,7 +20,6 @@ require (
 	github.com/gorilla/sessions v1.2.1 // indirect
 	github.com/jackc/pgx/v4 v4.13.0 // indirect
 	github.com/klauspost/compress v1.13.4 // indirect
-	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-isatty v0.0.13 // indirect
 	github.com/prometheus/client_golang v1.11.0

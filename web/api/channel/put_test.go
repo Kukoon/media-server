@@ -6,7 +6,7 @@ import (
 
 	"dev.sum7.eu/genofire/golang-lib/web/auth"
 	"dev.sum7.eu/genofire/golang-lib/web/webtest"
-	"github.com/gofrs/uuid"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 
 	"dev.sum7.eu/genofire/golang-lib/web"
