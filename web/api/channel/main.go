@@ -14,4 +14,5 @@ func Bind(r *gin.Engine, ws *web.Service, oven *oven.Service) {
 	apiList(r, ws)
 	apiListMy(r, ws)
 	apiGet(r, ws)
+	apiPut(r, ws)
 }
