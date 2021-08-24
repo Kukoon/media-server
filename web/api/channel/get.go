@@ -40,7 +40,6 @@ func apiGet(r *gin.Engine, ws *web.Service) {
 					Message: web.ErrAPINotFound.Error(),
 					Error:   err.Error(),
 				})
-				c.JSON(http.StatusNotFound, err.Error())
 				return
 			}
 			c.JSON(http.StatusInternalServerError, web.HTTPError{
