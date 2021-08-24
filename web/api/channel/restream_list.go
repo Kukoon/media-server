@@ -18,6 +18,7 @@ import (
 // @Failure 401 {object} web.HTTPError
 // @Failure 500 {object} web.HTTPError
 // @Router /api/v1/channel/{channel_id}/restreams [get]
+// @Param channel_id path string false "uuid of channel"
 func apiRestreamList(r *gin.Engine, ws *web.Service, oven *oven.Service) {
 	r.GET("/api/v1/channel/:slug/restreams", auth.MiddlewarePermissionParam(ws, models.Channel{}, "slug"), func(c *gin.Context) {
 		id := c.Params.ByName("slug")
