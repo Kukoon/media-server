@@ -62,7 +62,7 @@ func init() {
 					ID:         TestChannelID1,
 					CommonName: "kukoon",
 					Title:      "Im Kukoon",
-					Logo:       "https://media.kukoon.de/static/css/kukoon/logo.png",
+					Logo:       "https://kukoon.de/user/themes/kukoon/images/logo.png",
 					Owners: []User{
 						{ID: TestUserID1},
 					},
