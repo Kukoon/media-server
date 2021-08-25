@@ -62,8 +62,8 @@ type PublicStream struct {
 	Channel   Channel   `json:"channel" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	ChannelID uuid.UUID `json:"-" gorm:"type:uuid;unique_index:idx_stream_channel"`
 	Secret    string    `json:"-"`
-	StartAt   time.Time `json:"-"`
-	ListenAt  time.Time `json:"listen_at" example:"2020-12-10T19:00:00.000000+01:00"`
+	StartAt   time.Time `json:"start_at" example:"2020-12-10T18:30:00.000000+01:00"`
+	ListenAt  time.Time `json:"-"`
 	Chat      bool      `json:"chat"`
 	Running   bool      `json:"running"`
 	// attributes

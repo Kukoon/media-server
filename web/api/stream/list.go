@@ -23,7 +23,9 @@ import (
 // @Router /api/v1/streams [get]
 // @Param running query bool false "filter by running streams"
 // @Param upcoming query bool false "filter by next streams"
-// @Param channel query string false "filter by UUID of a channel"
+// @Param from query bool false "filter by date start streams"
+// @Param to query bool false "filter by date end streams"
+// @Param channel query string false "filter by UUID of a channel (multiple times)"
 // @Param event query string false "filter by UUID of a event"
 // @Param tag query string false "filter by UUID of any tag (multiple times)"
 // @Param speaker query string false "filter by UUID of any speaker (multiple times)"
@@ -64,11 +66,9 @@ func apiList(r *gin.Engine, ws *web.Service) {
 			// TODO - here order?
 			db = db.Order("start_at")
 		}
-
-		// channel
-		db = db.Joins("Channel")
-		if str, ok := c.GetQuery("channel"); ok {
-			uuid, err := uuid.Parse(str)
+		// from
+		if str, ok := c.GetQuery("from"); ok {
+			t, err := time.Parse(time.RFC3339, str)
 			if err != nil {
 				c.JSON(http.StatusBadRequest, web.HTTPError{
 					Message: web.ErrAPIInvalidRequestFormat.Error(),
@@ -76,7 +76,37 @@ func apiList(r *gin.Engine, ws *web.Service) {
 				})
 				return
 			}
-			db = db.Where("channel_id", uuid)
+			db = db.Where("start_at >= ?", t)
+		}
+		// to
+		if str, ok := c.GetQuery("to"); ok {
+			t, err := time.Parse(time.RFC3339, str)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, web.HTTPError{
+					Message: web.ErrAPIInvalidRequestFormat.Error(),
+					Error:   err.Error(),
+				})
+				return
+			}
+			db = db.Where("start_at <= ?", t)
+		}
+
+		// channel
+		db = db.Joins("Channel")
+		if strArray, ok := c.GetQueryArray("channel"); ok {
+			ids := make([]uuid.UUID, len(strArray))
+			for i, str := range strArray {
+				id, err := uuid.Parse(str)
+				if err != nil {
+					c.JSON(http.StatusBadRequest, web.HTTPError{
+						Message: web.ErrAPIInvalidRequestFormat.Error(),
+						Error:   err.Error(),
+					})
+					return
+				}
+				ids[i] = id
+			}
+			db = db.Where("channel_id IN (?)", ids)
 		}
 
 		// event
