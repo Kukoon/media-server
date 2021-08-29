@@ -14,14 +14,14 @@ type Channel struct {
 	Title      string       `json:"title" example:"Im Kukoon"`
 	Logo       string       `json:"logo" example:"https://media.kukoon.de/static/css/kukoon/logo.png"`
 	Recordings []*Recording `json:"recordings,omitempty" swaggerignore:"true"`
-	Owners     []User       `json:"-" gorm:"many2many:user_channels;"`
+	Owners     []User       `json:"-" gorm:"many2many:user_channels;constraint:OnDelete:CASCADE"`
 }
 
 // HasPermission - has user permission on channel
 func (Channel) HasPermission(tx *gorm.DB, userID, objID uuid.UUID) (interface{}, error) {
 	c := Channel{}
 	count := 0
-	if err := tx.Debug().Raw("SELECT count(*) FROM user_channels uc WHERE uc.user_id = ? AND uc.channel_id = ?", userID, objID).Scan(&count).Error; err != nil {
+	if err := tx.Raw("SELECT count(*) FROM user_channels uc WHERE uc.user_id = ? AND uc.channel_id = ?", userID, objID).Scan(&count).Error; err != nil {
 		return nil, err
 	}
 	if count != 1 {
