@@ -8,9 +8,13 @@ import (
 	"gorm.io/gorm"
 )
 
+// uuid of streams for testing
+var (
+	TestStreamID1 = uuid.MustParse("728edaf7-9ad9-f972-4d09-ba5940cd43f9")
+)
+
 func init() {
 	// see recording 07
-	testdataID := uuid.MustParse("728edaf7-9ad9-f972-4d09-ba5940cd43f9")
 	testdataIDLang1 := uuid.MustParse("acdf7eb1-0cb9-4900-a918-a411f9afc38d")
 	testdataIDSpeaker1 := uuid.MustParse("0030a199-c771-489a-88a7-258f80db2bce")
 	testdataIDSpeaker2 := uuid.MustParse("8bb5af2a-6e66-488b-9eac-6714ce005899")
@@ -21,14 +25,14 @@ func init() {
 			ID: "10-data-0020-01-stream-01",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Stream{
-					ID:        testdataID,
+					ID:        TestStreamID1,
 					ChannelID: TestChannelID1,
 					Chat:      false,
 					Running:   true,
 					StartAt:   time.Date(2021, 3, 4, 18, 30, 0, 0, loc),
 					ListenAt:  time.Date(2021, 3, 4, 18, 30, 0, 0, loc),
-					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
-					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
+					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + TestStreamID1.String() + "/poster.png",
+					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + TestStreamID1.String() + "/preview.webp",
 					Tags: []*Tag{
 						{ID: TestTagVortragID},
 					},
@@ -54,7 +58,7 @@ func init() {
 				}
 				if err := tx.Create(&StreamLang{
 					ID:       testdataIDLang1,
-					StreamID: testdataID,
+					StreamID: TestStreamID1,
 					Lang:     "de",
 					Title:    "„Die mir von der Wehrmacht angebotenen Kriegsgefangenen sind derart entkräftet“",
 					Subtitle: "Sowjetische Kriegsgefangene in Bremer Arbeitskommandos 1941-1945",
@@ -71,7 +75,7 @@ Bildinfo: Personalkarte des sowjetischen Kriegsgefangenen Wasilij M. Alexejew, d
 			},
 			Rollback: func(tx *gorm.DB) error {
 				return tx.Delete(&Stream{
-					ID: testdataID,
+					ID: TestStreamID1,
 				}).Error
 			},
 		},

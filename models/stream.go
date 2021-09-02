@@ -2,6 +2,7 @@ package models
 
 import (
 	"time"
+	"errors"
 
 	gormigrate "github.com/genofire/gormigrate/v2"
 	"github.com/google/uuid"
@@ -33,6 +34,27 @@ type Stream struct {
 func (Stream) TableName() string {
 	return "streams"
 }
+
+// HasPermission - has user permission on stream
+func (Stream) HasPermission(tx *gorm.DB, userID, objID uuid.UUID) (interface{}, error) {
+	tx = tx.Debug()
+	s := Stream{}
+	if err := tx.First(&s, objID).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	count := 0
+	if err := tx.Raw("SELECT count(*) FROM user_channels uc WHERE uc.user_id = ? AND uc.channel_id = ?", userID, s.ChannelID).Scan(&count).Error; err != nil {
+		return nil, err
+	}
+	if count != 1 {
+		return nil, nil
+	}
+	return &s, nil
+}
+
 
 func (s *Stream) GetPublic() *PublicStream {
 	return &PublicStream{
