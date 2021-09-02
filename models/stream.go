@@ -1,8 +1,8 @@
 package models
 
 import (
-	"time"
 	"errors"
+	"time"
 
 	gormigrate "github.com/genofire/gormigrate/v2"
 	"github.com/google/uuid"
@@ -54,7 +54,6 @@ func (Stream) HasPermission(tx *gorm.DB, userID, objID uuid.UUID) (interface{}, 
 	}
 	return &s, nil
 }
-
 
 func (s *Stream) GetPublic() *PublicStream {
 	return &PublicStream{

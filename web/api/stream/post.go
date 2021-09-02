@@ -23,6 +23,7 @@ import (
 // @Router /api/v1/channel/{channel_id}/stream [post]
 // @Param channel_id path string false "uuid of channel"
 // @Param body body Stream false "new values in stream"
+// @Security ApiKeyAuth
 func apiPost(r *gin.Engine, ws *web.Service) {
 	r.POST("/api/v1/channel/:slug/stream", auth.MiddlewarePermissionParam(ws, models.Channel{}, "slug"), func(c *gin.Context) {
 		id := uuid.MustParse(c.Params.ByName("slug"))

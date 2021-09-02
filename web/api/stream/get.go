@@ -3,9 +3,9 @@ package stream
 import (
 	"errors"
 	"net/http"
-	"time"
 
 	"dev.sum7.eu/genofire/golang-lib/web"
+	"dev.sum7.eu/genofire/golang-lib/web/auth"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -13,45 +13,25 @@ import (
 	"github.com/Kukoon/media-server/models"
 )
 
-// @Summary Show current Stream of channel
-// @Description Show stream with all informations
+// @Summary Get Stream
+// @Description Get stream by ID
 // @Tags stream
 // @Produce  json
-// @Success 200 {object} models.PublicStream{}
+// @Success 200 {object} models.Stream
 // @Failure 400 {object} web.HTTPError
+// @Failure 401 {object} web.HTTPError
 // @Failure 404 {object} web.HTTPError
-// @Router /api/v1/stream/{slug} [get]
-// @Param slug path string false "slug or uuid of stream"
-// @Param lang query string false "show description in given language"
+// @Failure 500 {object} web.HTTPError
+// @Router /api/v1/stream/{stream_id} [get]
+// @Param stream_id path string false "uuid of channel"
+// @Security ApiKeyAuth
 func apiGet(r *gin.Engine, ws *web.Service) {
-	r.GET("/api/v1/stream/:slug", func(c *gin.Context) {
-		slug := c.Params.ByName("slug")
-		db := ws.DB.Joins("Event").Preload("Speakers").Joins("Channel")
-		if id, err := uuid.Parse(slug); err == nil {
-			db = db.Where("streams.channel_id=?", id)
-		} else {
-			db = db.Where("\"Channel\".\"common_name\"=?", slug)
-		}
-		obj := models.Stream{}
-
-		if str, ok := c.GetQuery("lang"); ok {
-			db = db.Preload("Lang", func(db *gorm.DB) *gorm.DB {
-				return db.Where("lang", str).Limit(1)
-			}).Preload("Tags.Lang", func(db *gorm.DB) *gorm.DB {
-				return db.Where("lang", str)
-			})
-		} else {
-			db = db.Preload("Tags")
+	r.GET("/api/v1/stream/:uuid", auth.MiddlewarePermissionParamUUID(ws, models.Stream{}), func(c *gin.Context) {
+		data := models.Stream{
+			ID: uuid.MustParse(c.Params.ByName("uuid")),
 		}
 
-		now := time.Now()
-
-		db = db.
-			Where("listen_at < ?", now).
-			Where("start_at < ?", now).
-			Order("start_at DESC")
-
-		if err := db.First(&obj).Error; err != nil {
+		if err := ws.DB.First(&data).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				c.JSON(http.StatusNotFound, web.HTTPError{
 					Message: web.ErrAPINotFound.Error(),
@@ -66,6 +46,6 @@ func apiGet(r *gin.Engine, ws *web.Service) {
 			return
 		}
 
-		c.JSON(http.StatusOK, obj.GetPublic())
+		c.JSON(http.StatusOK, &data)
 	})
 }
