@@ -15,6 +15,7 @@ import (
 
 // @Summary Show current Stream of channel
 // @Description Show stream with all informations
+// @Tags stream
 // @Produce  json
 // @Success 200 {object} models.PublicStream{}
 // @Failure 400 {object} web.HTTPError

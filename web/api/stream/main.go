@@ -9,4 +9,5 @@ import (
 func Bind(r *gin.Engine, ws *web.Service) {
 	apiList(r, ws)
 	apiGet(r, ws)
+	apiPost(r, ws)
 }

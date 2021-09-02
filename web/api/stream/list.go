@@ -16,6 +16,7 @@ import (
 
 // @Summary List all Streams
 // @Description Show a list of all streams
+// @Tags stream
 // @Produce  json
 // @Success 200 {array} models.PublicStream
 // @Failure 400 {object} web.HTTPError
