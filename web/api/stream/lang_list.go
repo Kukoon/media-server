@@ -22,6 +22,7 @@ import (
 // @Failure 500 {object} web.HTTPError
 // @Router /api/v1/stream/{stream_id}/langs [get]
 // @Param stream_id path string false "uuid of stream"
+// @Param lang query string false "show description in given language"
 func apiLangList(r *gin.Engine, ws *web.Service) {
 	r.GET("/api/v1/stream/:uuid/langs", func(c *gin.Context) {
 		id, err := uuid.Parse(c.Params.ByName("uuid"))
@@ -32,9 +33,13 @@ func apiLangList(r *gin.Engine, ws *web.Service) {
 			})
 			return
 		}
+		db := ws.DB.Where("stream_id = ?", id)
+		if str, ok := c.GetQuery("lang"); ok {
+			db = db.Where("lang", str)
+		}
 
 		list := []*models.StreamLang{}
-		if err := ws.DB.Where("stream_id = ?", id).Find(&list).Error; err != nil {
+		if err := db.Find(&list).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				c.JSON(http.StatusNotFound, web.HTTPError{
 					Message: web.ErrAPINotFound.Error(),

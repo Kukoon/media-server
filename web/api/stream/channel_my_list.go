@@ -1,10 +1,7 @@
 package stream
 
 import (
-	"fmt"
 	"net/http"
-	"strconv"
-	"time"
 
 	"dev.sum7.eu/genofire/golang-lib/web"
 	"dev.sum7.eu/genofire/golang-lib/web/auth"
@@ -30,111 +27,15 @@ import (
 // @Param event query string false "filter by UUID of a event"
 // @Param tag query string false "filter by UUID of any tag (multiple times)"
 // @Param speaker query string false "filter by UUID of any speaker (multiple times)"
+// @Param lang query string false "show description in given language"
 func apiChannelListMy(r *gin.Engine, ws *web.Service) {
 	r.GET("/api/v1/channel/:slug/streams", auth.MiddlewarePermissionParam(ws, models.Channel{}, "slug"), func(c *gin.Context) {
+		db, ok := filterStreams(ws.DB, c)
+		if !ok {
+			return
+		}
+
 		list := []*models.Stream{}
-		db := ws.DB
-		now := time.Now()
-
-		// running
-		if str, ok := c.GetQuery("running"); ok {
-			b, err := strconv.ParseBool(str)
-			if err != nil {
-				c.JSON(http.StatusBadRequest, web.HTTPError{
-					Message: web.ErrAPIInvalidRequestFormat.Error(),
-					Error:   err.Error(),
-				})
-				return
-			}
-			db = db.Where("running", b)
-		}
-		// upcoming
-		if str, ok := c.GetQuery("upcoming"); ok {
-			b, err := strconv.ParseBool(str)
-			if err != nil {
-				c.JSON(http.StatusBadRequest, web.HTTPError{
-					Message: web.ErrAPIInvalidRequestFormat.Error(),
-					Error:   err.Error(),
-				})
-				return
-			}
-			if b {
-				db = db.Where("start_at > ?", now)
-			} else {
-				db = db.Where("start_at <= ?", now)
-			}
-			// TODO - here order?
-			db = db.Order("start_at")
-		}
-		// from
-		if str, ok := c.GetQuery("from"); ok {
-			t, err := time.Parse(time.RFC3339, str)
-			if err != nil {
-				c.JSON(http.StatusBadRequest, web.HTTPError{
-					Message: web.ErrAPIInvalidRequestFormat.Error(),
-					Error:   err.Error(),
-				})
-				return
-			}
-			db = db.Where("start_at >= ?", t)
-		}
-		// to
-		if str, ok := c.GetQuery("to"); ok {
-			t, err := time.Parse(time.RFC3339, str)
-			if err != nil {
-				c.JSON(http.StatusBadRequest, web.HTTPError{
-					Message: web.ErrAPIInvalidRequestFormat.Error(),
-					Error:   err.Error(),
-				})
-				return
-			}
-			db = db.Where("start_at <= ?", t)
-		}
-
-		// event
-		db = db.Joins("Event")
-		if str, ok := c.GetQuery("event"); ok {
-			uuid, err := uuid.Parse(str)
-			if err != nil {
-				c.JSON(http.StatusBadRequest, web.HTTPError{
-					Message: web.ErrAPIInvalidRequestFormat.Error(),
-					Error:   err.Error(),
-				})
-				return
-			}
-			db = db.Where("event_id", uuid)
-		}
-
-		// filter tag
-		db = db.Preload("Tags")
-		if strArray, ok := c.GetQueryArray("tag"); ok {
-			for i, str := range strArray {
-				id, err := uuid.Parse(str)
-				if err != nil {
-					c.JSON(http.StatusBadRequest, web.HTTPError{
-						Message: web.ErrAPIInvalidRequestFormat.Error(),
-						Error:   err.Error(),
-					})
-					return
-				}
-				db = db.Joins(fmt.Sprintf("INNER JOIN stream_tags st%d ON st%d.stream_id = streams.id AND st%d.tag_id = ?", i, i, i), id)
-			}
-		}
-		// filter speaker
-		db = db.Preload("Speakers")
-		if strArray, ok := c.GetQueryArray("speaker"); ok {
-			for i, str := range strArray {
-				id, err := uuid.Parse(str)
-				if err != nil {
-					c.JSON(http.StatusBadRequest, web.HTTPError{
-						Message: web.ErrAPIInvalidRequestFormat.Error(),
-						Error:   err.Error(),
-					})
-					return
-				}
-				db = db.Joins(fmt.Sprintf("INNER JOIN stream_speakers ss%d ON ss%d.stream_id = streams.id AND ss%d.speaker_id = ?", i, i, i), id)
-			}
-		}
 		// TODO no filter for listen_at
 		if err := db.
 			Joins("Channel").

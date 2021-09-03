@@ -26,4 +26,16 @@ func TestAPILangList(t *testing.T) {
 		lang := resp[0]
 		assert.Equal(models.TestStream1IDLang1, lang.ID)
 	}
+
+	resp = []*models.StreamLang{}
+	// GET - id
+	err = s.Request(http.MethodGet, "/api/v1/stream/"+models.TestStreamID1.String()+"/langs?lang=en", nil, http.StatusOK, &resp)
+	assert.NoError(err)
+	assert.Len(resp, 0)
+
+	resp = []*models.StreamLang{}
+	// GET - id
+	err = s.Request(http.MethodGet, "/api/v1/stream/"+models.TestStreamID1.String()+"/langs?lang=de", nil, http.StatusOK, &resp)
+	assert.NoError(err)
+	assert.Len(resp, 1)
 }
