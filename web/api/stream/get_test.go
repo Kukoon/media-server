@@ -38,7 +38,4 @@ func TestAPIStreamGet(t *testing.T) {
 	err = s.Request(http.MethodGet, "/api/v1/stream/"+models.TestStreamID1.String(), nil, http.StatusOK, &resp)
 	assert.NoError(err)
 	assert.NotEqual(uuid.Nil, resp.ID)
-
-	err = s.DB.DB.Delete(&resp).Error
-	assert.NoError(err)
 }

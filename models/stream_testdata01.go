@@ -10,12 +10,12 @@ import (
 
 // uuid of streams for testing
 var (
-	TestStreamID1 = uuid.MustParse("728edaf7-9ad9-f972-4d09-ba5940cd43f9")
+	TestStreamID1      = uuid.MustParse("728edaf7-9ad9-f972-4d09-ba5940cd43f9")
+	TestStream1IDLang1 = uuid.MustParse("acdf7eb1-0cb9-4900-a918-a411f9afc38d")
 )
 
 func init() {
 	// see recording 07
-	testdataIDLang1 := uuid.MustParse("acdf7eb1-0cb9-4900-a918-a411f9afc38d")
 	testdataIDSpeaker1 := uuid.MustParse("0030a199-c771-489a-88a7-258f80db2bce")
 	testdataIDSpeaker2 := uuid.MustParse("8bb5af2a-6e66-488b-9eac-6714ce005899")
 	testdataIDSpeaker3 := uuid.MustParse("fa5323fc-5f54-487c-b5cc-173faa4e64f2")
@@ -57,7 +57,7 @@ func init() {
 					return err
 				}
 				if err := tx.Create(&StreamLang{
-					ID:       testdataIDLang1,
+					ID:       TestStream1IDLang1,
 					StreamID: TestStreamID1,
 					Lang:     "de",
 					Title:    "„Die mir von der Wehrmacht angebotenen Kriegsgefangenen sind derart entkräftet“",

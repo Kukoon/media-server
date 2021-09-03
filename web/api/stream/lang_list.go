@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"dev.sum7.eu/genofire/golang-lib/web"
-	"dev.sum7.eu/genofire/golang-lib/web/auth"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -13,25 +12,29 @@ import (
 	"github.com/Kukoon/media-server/models"
 )
 
-// @Summary Get Stream
-// @Description Get stream by ID
+// @Summary List all Language Description of an Stream
+// @Description List all Descriptions/Languages of stream by ID
 // @Tags stream
 // @Produce  json
-// @Success 200 {object} models.Stream
+// @Success 200 {array} models.StreamLang
 // @Failure 400 {object} web.HTTPError
-// @Failure 401 {object} web.HTTPError
 // @Failure 404 {object} web.HTTPError
 // @Failure 500 {object} web.HTTPError
-// @Router /api/v1/stream/{stream_id} [get]
+// @Router /api/v1/stream/{stream_id}/langs [get]
 // @Param stream_id path string false "uuid of stream"
-// @Security ApiKeyAuth
-func apiGet(r *gin.Engine, ws *web.Service) {
-	r.GET("/api/v1/stream/:uuid", auth.MiddlewarePermissionParamUUID(ws, models.Stream{}), func(c *gin.Context) {
-		data := models.Stream{
-			ID: uuid.MustParse(c.Params.ByName("uuid")),
+func apiLangList(r *gin.Engine, ws *web.Service) {
+	r.GET("/api/v1/stream/:uuid/langs", func(c *gin.Context) {
+		id, err := uuid.Parse(c.Params.ByName("uuid"))
+		if err != nil {
+			c.JSON(http.StatusBadRequest, web.HTTPError{
+				Message: web.ErrAPIInvalidRequestFormat.Error(),
+				Error:   err.Error(),
+			})
+			return
 		}
 
-		if err := ws.DB.First(&data).Error; err != nil {
+		list := []*models.StreamLang{}
+		if err := ws.DB.Where("stream_id = ?", id).Find(&list).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				c.JSON(http.StatusNotFound, web.HTTPError{
 					Message: web.ErrAPINotFound.Error(),
@@ -46,6 +49,6 @@ func apiGet(r *gin.Engine, ws *web.Service) {
 			return
 		}
 
-		c.JSON(http.StatusOK, &data)
+		c.JSON(http.StatusOK, &list)
 	})
 }

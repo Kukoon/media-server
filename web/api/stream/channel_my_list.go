@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"time"
 
-	"dev.sum7.eu/genofire/golang-lib/web/auth"
 	"dev.sum7.eu/genofire/golang-lib/web"
+	"dev.sum7.eu/genofire/golang-lib/web/auth"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 
@@ -90,7 +90,6 @@ func apiChannelListMy(r *gin.Engine, ws *web.Service) {
 			}
 			db = db.Where("start_at <= ?", t)
 		}
-
 
 		// event
 		db = db.Joins("Event")

@@ -61,9 +61,9 @@ func init() {
 							Name:    "Artur Becker",
 						},
 						{
-							OwnerID: TestChannelID1,
-							ID:      testdataIDSpeaker6,
-							Name:    "Helge Hommers",
+							OwnerID:      TestChannelID1,
+							ID:           testdataIDSpeaker6,
+							Name:         "Helge Hommers",
 							Organisation: "Literaturkontor",
 						},
 					},
