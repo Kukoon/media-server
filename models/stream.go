@@ -38,11 +38,19 @@ func (Stream) TableName() string {
 func (Stream) HasPermission(tx *gorm.DB, userID, objID uuid.UUID) (interface{}, error) {
 	s := Stream{}
 	count := 0
-	if err := tx.Raw("SELECT count(*) FROM user_channels uc INNER JOIN streams s ON uc.channel_id=s.channel_id AND s.id=? WHERE uc.user_id = ?", objID, userID).Scan(&count).Error; err != nil {
+	if err := tx.Raw(`SELECT
+		count(*)
+		FROM user_channels uc
+		INNER JOIN streams s ON uc.channel_id=s.channel_id AND s.id=?
+		WHERE uc.user_id = ?`,
+		objID, userID).Scan(&count).Error; err != nil {
 		return nil, err
 	}
 	if count != 1 {
 		return nil, nil
+	}
+	if err := tx.First(&s, objID).Error; err != nil {
+		return nil, err
 	}
 	return &s, nil
 }
@@ -107,6 +115,28 @@ type StreamLang struct {
 	Subtitle string `json:"subtitle" example:"Zum Stand des europäischen Migrations- und Grenzregimes"`
 	Short    string `json:"short" example:"Nach dem katastrophalen Brand des Flüchtlingslagers Moria auf Lesbos hatte die Europäische Kommission erneut einen Neustart in der europäischen Migrations- und Asylpolitik versucht. [...]"`
 	Long     string `json:"long" example:"Nach dem katastrophalen Brand des Flüchtlingslagers Moria auf Lesbos hatte die Europäische Kommission erneut einen Neustart in der europäischen Migrations- und Asylpolitik versucht."`
+}
+
+// HasPermission - has user permission on stream
+func (StreamLang) HasPermission(tx *gorm.DB, userID, objID uuid.UUID) (interface{}, error) {
+	sl := StreamLang{}
+	count := 0
+	if err := tx.Raw(`SELECT
+		count(*)
+		FROM user_channels uc
+		INNER JOIN streams s ON uc.channel_id=s.channel_id
+		INNER JOIN stream_langs sl ON s.id=sl.stream_id AND sl.id=?
+		WHERE uc.user_id = ?`,
+		objID, userID).Scan(&count).Error; err != nil {
+		return nil, err
+	}
+	if count != 1 {
+		return nil, nil
+	}
+	if err := tx.First(&sl, objID).Error; err != nil {
+		return nil, err
+	}
+	return &sl, nil
 }
 
 func init() {
