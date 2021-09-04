@@ -41,14 +41,18 @@ func (s *Stream) Model() *models.Stream {
 	if s.Tags != nil {
 		m.Tags = make([]*models.Tag, len(s.Tags))
 		for i, id := range s.Tags {
-			m.Tags[i].ID = id
+			m.Tags[i] = &models.Tag{ID: id}
 		}
+	} else {
+		m.Tags = []*models.Tag{}
 	}
 	if s.Speakers != nil {
 		m.Speakers = make([]*models.Speaker, len(s.Speakers))
 		for i, id := range s.Speakers {
-			m.Speakers[i].ID = id
+			m.Speakers[i] = &models.Speaker{ID: id}
 		}
+	} else {
+		m.Speakers = []*models.Speaker{}
 	}
 	return m
 }
