@@ -1,7 +1,6 @@
 package models
 
 import (
-	"errors"
 	"time"
 
 	gormigrate "github.com/genofire/gormigrate/v2"
@@ -37,16 +36,9 @@ func (Stream) TableName() string {
 
 // HasPermission - has user permission on stream
 func (Stream) HasPermission(tx *gorm.DB, userID, objID uuid.UUID) (interface{}, error) {
-	tx = tx.Debug()
 	s := Stream{}
-	if err := tx.First(&s, objID).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil
-		}
-		return nil, err
-	}
 	count := 0
-	if err := tx.Raw("SELECT count(*) FROM user_channels uc WHERE uc.user_id = ? AND uc.channel_id = ?", userID, s.ChannelID).Scan(&count).Error; err != nil {
+	if err := tx.Raw("SELECT count(*) FROM user_channels uc INNER JOIN streams s ON uc.channel_id=s.channel_id AND s.id=? WHERE uc.user_id = ?", objID, userID).Scan(&count).Error; err != nil {
 		return nil, err
 	}
 	if count != 1 {
