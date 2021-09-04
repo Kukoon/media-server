@@ -7,10 +7,15 @@ import (
 
 // Bind to webservice
 func Bind(r *gin.Engine, ws *web.Service) {
-	apiChannelGet(r, ws)
-	apiChannelListMy(r, ws)
-	apiLangList(r, ws)
+	// meta
 	apiList(r, ws)
 	apiGet(r, ws)
 	apiPost(r, ws)
+	apiPut(r, ws)
+	apiDelete(r, ws)
+	// of channel
+	apiChannelGet(r, ws)
+	apiChannelListMy(r, ws)
+	// lang
+	apiLangList(r, ws)
 }

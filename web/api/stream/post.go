@@ -11,8 +11,8 @@ import (
 	"github.com/Kukoon/media-server/models"
 )
 
-// @Summary Create new stream
-// @Description Create new stream on given Channel
+// @Summary Create new stream metadata
+// @Description Create new stream metadata on given Channel
 // @Tags stream
 // @Produce  json
 // @Success 200 {object} models.Stream

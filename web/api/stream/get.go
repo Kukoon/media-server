@@ -13,8 +13,8 @@ import (
 	"github.com/Kukoon/media-server/models"
 )
 
-// @Summary Get Stream
-// @Description Get stream by ID
+// @Summary Get Stream Metadata
+// @Description Get stream Metadata by ID
 // @Tags stream
 // @Produce  json
 // @Success 200 {object} models.Stream
