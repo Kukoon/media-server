@@ -27,9 +27,9 @@ import (
 // @Param body body Stream false "new values in stream"
 // @Security ApiKeyAuth
 func apiPut(r *gin.Engine, ws *web.Service) {
-	r.PUT("/api/v1/stream/:sid", auth.MiddlewarePermissionParam(ws, models.Stream{}, "sid"), func(c *gin.Context) {
+	r.PUT("/api/v1/stream/:uuid", auth.MiddlewarePermissionParamUUID(ws, models.Stream{}), func(c *gin.Context) {
 		old := models.Stream{
-			ID: uuid.MustParse(c.Params.ByName("sid")),
+			ID: uuid.MustParse(c.Params.ByName("uuid")),
 		}
 		if err := ws.DB.First(&old).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -58,13 +58,26 @@ func apiPut(r *gin.Engine, ws *web.Service) {
 		data.ID = old.ID
 		data.ChannelID = old.ChannelID
 
-		if err := ws.DB.Omit("Lang", "Tags.*", "Speakers.*").Save(&data).Error; err != nil {
+		if err := ws.DB.Transaction(func(tx *gorm.DB) error {
+			if err := tx.Omit("Lang", "Tags.*", "Speakers.*").Save(&data).Error; err != nil {
+				return err
+			}
+			if err := tx.Model(&data).Association("Tags").Replace(data.Tags); err != nil {
+				return err
+			}
+			if err := tx.Model(&data).Association("Speakers").Replace(data.Speakers); err != nil {
+				return err
+			}
+			return nil
+		}); err != nil {
 			c.JSON(http.StatusInternalServerError, web.HTTPError{
 				Message: web.ErrAPIInternalDatabase.Error(),
 				Error:   err.Error(),
 			})
 			return
 		}
+
+		ws.DB.Preload("Event").First(&data)
 
 		c.JSON(http.StatusOK, &data)
 	})

@@ -31,7 +31,7 @@ func apiGet(r *gin.Engine, ws *web.Service) {
 			ID: uuid.MustParse(c.Params.ByName("uuid")),
 		}
 
-		if err := ws.DB.First(&data).Error; err != nil {
+		if err := ws.DB.Preload("Speakers").Preload("Tags").Preload("Event").First(&data).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				c.JSON(http.StatusNotFound, web.HTTPError{
 					Message: web.ErrAPINotFound.Error(),
