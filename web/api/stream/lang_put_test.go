@@ -13,7 +13,7 @@ import (
 	"github.com/Kukoon/media-server/models"
 )
 
-func TestAPIPut(t *testing.T) {
+func TestAPILangPut(t *testing.T) {
 	assert := assert.New(t)
 	s, err := webtest.NewWithDBSetup(bindTest, models.SetupMigration)
 	assert.NoError(err)
@@ -22,7 +22,7 @@ func TestAPIPut(t *testing.T) {
 
 	hErr := web.HTTPError{}
 	// GET - not found
-	err = s.Request(http.MethodPut, "/api/v1/stream/"+models.TestStreamID1.String(), nil, http.StatusUnauthorized, &hErr)
+	err = s.Request(http.MethodPut, "/api/v1/stream-lang/"+models.TestStream1IDLang1.String(), nil, http.StatusUnauthorized, &hErr)
 	assert.NoError(err)
 	assert.Equal(auth.ErrAPINoSession.Error(), hErr.Message)
 
@@ -34,23 +34,23 @@ func TestAPIPut(t *testing.T) {
 
 	hErr = web.HTTPError{}
 	// GET - id
-	err = s.Request(http.MethodPut, "/api/v1/stream/00000000-0000-0000-0000-000000000001", nil, http.StatusNotFound, &hErr)
+	err = s.Request(http.MethodPut, "/api/v1/stream-lang/00000000-0000-0000-0000-000000000001", nil, http.StatusNotFound, &hErr)
 	assert.NoError(err)
 	assert.Equal(web.ErrAPINotFound.Error(), hErr.Message)
 
 	hErr = web.HTTPError{}
 	// GET - id
-	err = s.Request(http.MethodPut, "/api/v1/stream/"+models.TestStreamID1.String(), nil, http.StatusBadRequest, &hErr)
+	err = s.Request(http.MethodPut, "/api/v1/stream-lang/"+models.TestStream1IDLang1.String(), nil, http.StatusBadRequest, &hErr)
 	assert.NoError(err)
 	assert.Equal(web.ErrAPIInvalidRequestFormat.Error(), hErr.Message)
 
-	req := Stream{
-		Preview: "nope",
+	req := models.StreamLang{
+		Lang: "en",
 	}
-	resp := models.Stream{}
+	resp := models.StreamLang{}
 	// GET - id
-	err = s.Request(http.MethodPut, "/api/v1/stream/"+models.TestStreamID1.String(), &req, http.StatusOK, &resp)
+	err = s.Request(http.MethodPut, "/api/v1/stream-lang/"+models.TestStream1IDLang1.String(), &req, http.StatusOK, &resp)
 	assert.NoError(err)
-	assert.Equal(models.TestStreamID1, resp.ID)
-	assert.Equal("nope", resp.Preview)
+	assert.Equal(models.TestStream1IDLang1, resp.ID)
+	assert.Equal("en", resp.Lang)
 }

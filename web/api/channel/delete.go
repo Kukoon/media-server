@@ -24,7 +24,8 @@ import (
 func apiDelete(r *gin.Engine, ws *web.Service) {
 	r.DELETE("/api/v1/channel/:slug", auth.MiddlewarePermissionParam(ws, models.Channel{}, "slug"), func(c *gin.Context) {
 		id := uuid.MustParse(c.Params.ByName("slug"))
-		if err := ws.DB.Delete(&models.Channel{ID: id}).Error; err != nil {
+		result := ws.DB.Delete(&models.Channel{ID: id})
+		if err := result.Error; err != nil {
 			c.JSON(http.StatusInternalServerError, web.HTTPError{
 				Message: web.ErrAPIInternalDatabase.Error(),
 				Error:   err.Error(),
@@ -32,6 +33,12 @@ func apiDelete(r *gin.Engine, ws *web.Service) {
 			return
 		}
 
+		if result.RowsAffected != 1 {
+			c.JSON(http.StatusNotFound, web.HTTPError{
+				Message: web.ErrAPINotFound.Error(),
+			})
+			return
+		}
 		c.JSON(http.StatusOK, true)
 	})
 }

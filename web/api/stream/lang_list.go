@@ -1,13 +1,11 @@
 package stream
 
 import (
-	"errors"
 	"net/http"
 
 	"dev.sum7.eu/genofire/golang-lib/web"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 
 	"github.com/Kukoon/media-server/models"
 )
@@ -40,13 +38,6 @@ func apiLangList(r *gin.Engine, ws *web.Service) {
 
 		list := []*models.StreamLang{}
 		if err := db.Find(&list).Error; err != nil {
-			if errors.Is(err, gorm.ErrRecordNotFound) {
-				c.JSON(http.StatusNotFound, web.HTTPError{
-					Message: web.ErrAPINotFound.Error(),
-					Error:   err.Error(),
-				})
-				return
-			}
 			c.JSON(http.StatusInternalServerError, web.HTTPError{
 				Message: web.ErrAPIInternalDatabase.Error(),
 				Error:   err.Error(),

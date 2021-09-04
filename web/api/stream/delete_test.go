@@ -32,6 +32,12 @@ func TestAPIDelete(t *testing.T) {
 	})
 	assert.NoError(err)
 
+	hErr = web.HTTPError{}
+	// GET - id
+	err = s.Request(http.MethodDelete, "/api/v1/stream/00000000-0000-0000-0000-000000000001", nil, http.StatusNotFound, &hErr)
+	assert.NoError(err)
+	assert.Equal(web.ErrAPINotFound.Error(), hErr.Message)
+
 	resp := false
 	// GET - id
 	err = s.Request(http.MethodDelete, "/api/v1/stream/"+models.TestStreamID1.String(), nil, http.StatusOK, &resp)

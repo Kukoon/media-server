@@ -11,21 +11,22 @@ import (
 	"github.com/Kukoon/media-server/models"
 )
 
-// @Summary Delete Stream
-// @Description Delete Stream
+// @Summary Delete Stream Description
+// @Description Delete Stream Description in language
 // @Tags stream
 // @Produce  json
 // @Success 200 {object} bool "true if deleted"
 // @Failure 400 {object} web.HTTPError
 // @Failure 404 {object} web.HTTPError
 // @Failure 500 {object} web.HTTPError
-// @Router /api/v1/stream/{stream_id} [delete]
+// @Router /api/v1/stream-lang/{lang_id} [delete]
 // @Param stream_id path string false "uuid of stream"
+// @Param lang_id path string false "uuid of stream description"
 // @Security ApiKeyAuth
-func apiDelete(r *gin.Engine, ws *web.Service) {
-	r.DELETE("/api/v1/stream/:uuid", auth.MiddlewarePermissionParamUUID(ws, models.Stream{}), func(c *gin.Context) {
+func apiLangDelete(r *gin.Engine, ws *web.Service) {
+	r.DELETE("/api/v1/stream-lang/:uuid", auth.MiddlewarePermissionParamUUID(ws, models.StreamLang{}), func(c *gin.Context) {
 		id := uuid.MustParse(c.Params.ByName("uuid"))
-		result := ws.DB.Delete(&models.Stream{ID: id})
+		result := ws.DB.Delete(&models.StreamLang{ID: id})
 		if err := result.Error; err != nil {
 			c.JSON(http.StatusInternalServerError, web.HTTPError{
 				Message: web.ErrAPIInternalDatabase.Error(),

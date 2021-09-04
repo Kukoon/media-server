@@ -14,7 +14,7 @@ import (
 	"github.com/Kukoon/media-server/models"
 )
 
-func TestAPIPost(t *testing.T) {
+func TestAPILangPost(t *testing.T) {
 	assert := assert.New(t)
 	s, err := webtest.NewWithDBSetup(bindTest, models.SetupMigration)
 	assert.NoError(err)
@@ -23,7 +23,7 @@ func TestAPIPost(t *testing.T) {
 
 	hErr := web.HTTPError{}
 	// GET - not found
-	err = s.Request(http.MethodPost, "/api/v1/channel/"+models.TestChannelID2.String()+"/stream", nil, http.StatusUnauthorized, &hErr)
+	err = s.Request(http.MethodPost, "/api/v1/stream/"+models.TestStreamID1.String()+"/lang", nil, http.StatusUnauthorized, &hErr)
 	assert.NoError(err)
 	assert.Equal(auth.ErrAPINoSession.Error(), hErr.Message)
 
@@ -35,14 +35,16 @@ func TestAPIPost(t *testing.T) {
 
 	hErr = web.HTTPError{}
 	// GET - id
-	err = s.Request(http.MethodPost, "/api/v1/channel/"+models.TestChannelID2.String()+"/stream", nil, http.StatusBadRequest, &hErr)
+	err = s.Request(http.MethodPost, "/api/v1/stream/"+models.TestStreamID1.String()+"/lang", nil, http.StatusBadRequest, &hErr)
 	assert.NoError(err)
 	assert.Equal(web.ErrAPIInvalidRequestFormat.Error(), hErr.Message)
 
-	req := Stream{}
-	resp := models.Stream{}
+	req := models.StreamLang{
+		Lang: "de",
+	}
+	resp := models.StreamLang{}
 	// GET - id
-	err = s.Request(http.MethodPost, "/api/v1/channel/"+models.TestChannelID2.String()+"/stream", &req, http.StatusOK, &resp)
+	err = s.Request(http.MethodPost, "/api/v1/stream/"+models.TestStreamID1.String()+"/lang", &req, http.StatusOK, &resp)
 	assert.NoError(err)
 	assert.NotEqual(uuid.Nil, resp.ID)
 

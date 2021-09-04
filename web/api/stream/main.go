@@ -18,4 +18,7 @@ func Bind(r *gin.Engine, ws *web.Service) {
 	apiChannelListMy(r, ws)
 	// lang
 	apiLangList(r, ws)
+	apiLangPost(r, ws)
+	apiLangPut(r, ws)
+	apiLangDelete(r, ws)
 }
