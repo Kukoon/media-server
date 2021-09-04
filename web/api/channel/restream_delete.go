@@ -22,6 +22,7 @@ import (
 // @Failure 500 {object} web.HTTPError
 // @Router /api/v1/channel/{channel_id}/restream/{id} [delete]
 // @Param channel_id path string false "uuid of channel"
+// @Security ApiKeyAuth
 func apiRestreamDelete(r *gin.Engine, ws *web.Service, oven *oven.Service) {
 	r.DELETE("/api/v1/channel/:slug/restream/:id", auth.MiddlewarePermissionParam(ws, models.Channel{}, "slug"), func(c *gin.Context) {
 		channelid := c.Params.ByName("slug")

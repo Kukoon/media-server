@@ -47,8 +47,7 @@ func TestAPIStreamPut(t *testing.T) {
 	req := Stream{
 		Preview: "nope",
 	}
-	resp := models.Stream{
-	}
+	resp := models.Stream{}
 	// GET - id
 	err = s.Request(http.MethodPut, "/api/v1/stream/"+models.TestStreamID1.String(), &req, http.StatusOK, &resp)
 	assert.NoError(err)

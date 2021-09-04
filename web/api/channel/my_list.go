@@ -17,6 +17,7 @@ import (
 // @Success 200 {array} models.Channel
 // @Failure 500 {object} web.HTTPError
 // @Router /api/v1/my/channels [get]
+// @Security ApiKeyAuth
 func apiListMy(r *gin.Engine, ws *web.Service) {
 	r.GET("/api/v1/my/channels", func(c *gin.Context) {
 		id, ok := auth.GetCurrentUserID(c)

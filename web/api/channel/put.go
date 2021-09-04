@@ -21,6 +21,7 @@ import (
 // @Router /api/v1/channel/{channel_id} [put]
 // @Param channel_id path string false "uuid of channel"
 // @Param body body models.Channel false "new values in channel"
+// @Security ApiKeyAuth
 func apiPut(r *gin.Engine, ws *web.Service) {
 	r.PUT("/api/v1/channel/:slug", auth.MiddlewarePermissionParam(ws, models.Channel{}, "slug"), func(c *gin.Context) {
 		id := uuid.MustParse(c.Params.ByName("slug"))

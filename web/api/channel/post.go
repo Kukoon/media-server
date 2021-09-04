@@ -20,6 +20,7 @@ import (
 // @Failure 500 {object} web.HTTPError
 // @Router /api/v1/channel [post]
 // @Param body body models.Channel false "channel"
+// @Security ApiKeyAuth
 func apiPost(r *gin.Engine, ws *web.Service) {
 	r.POST("/api/v1/channel", func(c *gin.Context) {
 		id, ok := auth.GetCurrentUserID(c)

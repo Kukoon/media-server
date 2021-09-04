@@ -20,6 +20,7 @@ import (
 // @Failure 404 {object} web.HTTPError
 // @Router /api/v1/channel/{channel_id} [delete]
 // @Param channel_id path string false "uuid of channel"
+// @Security ApiKeyAuth
 func apiDelete(r *gin.Engine, ws *web.Service) {
 	r.DELETE("/api/v1/channel/:slug", auth.MiddlewarePermissionParam(ws, models.Channel{}, "slug"), func(c *gin.Context) {
 		id := uuid.MustParse(c.Params.ByName("slug"))

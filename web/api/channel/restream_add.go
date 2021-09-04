@@ -23,6 +23,7 @@ import (
 // @Router /api/v1/channel/{channel_id}/restream [post]
 // @Param channel_id path string false "uuid of channel"
 // @Param body body RestreamAdd false "restream add"
+// @Security ApiKeyAuth
 func apiRestreamAdd(r *gin.Engine, ws *web.Service, oven *oven.Service) {
 	r.POST("/api/v1/channel/:slug/restream", auth.MiddlewarePermissionParam(ws, models.Channel{}, "slug"), func(c *gin.Context) {
 		channelid := c.Params.ByName("slug")
