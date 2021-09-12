@@ -18,5 +18,9 @@ func Bind(r *gin.Engine, ws *web.Service) {
 	apiLangPost(r, ws)
 	apiLangPut(r, ws)
 	apiLangDelete(r, ws)
+	// format
+	apiFormatPost(r, ws)
+	apiFormatPut(r, ws)
+	apiFormatDelete(r, ws)
 
 }
