@@ -31,6 +31,27 @@ type Recording struct {
 	Speakers   []*Speaker     `json:"speakers" gorm:"many2many:recording_speakers;constraint:OnDelete:CASCADE"`
 }
 
+// HasPermission - has user permission on stream
+func (Recording) HasPermission(tx *gorm.DB, userID, objID uuid.UUID) (interface{}, error) {
+	s := Recording{}
+	count := 0
+	if err := tx.Raw(`SELECT
+		count(*)
+		FROM user_channels uc
+		INNER JOIN recordings s ON uc.channel_id=s.channel_id AND s.id=?
+		WHERE uc.user_id = ?`,
+		objID, userID).Scan(&count).Error; err != nil {
+		return nil, err
+	}
+	if count != 1 {
+		return nil, nil
+	}
+	if err := tx.First(&s, objID).Error; err != nil {
+		return nil, err
+	}
+	return &s, nil
+}
+
 // RecordingFormat struct - for format
 type RecordingFormat struct {
 	ID          uuid.UUID `json:"id" gorm:"type:uuid;default:gen_random_uuid()" example:"3a4f9157-65bf-4d15-a82b-1cd9295d07e0"`
@@ -46,6 +67,28 @@ type RecordingFormat struct {
 	Resolution string `json:"resolution" example:"1920x1080"`
 }
 
+// HasPermission - has user permission on stream
+func (RecordingFormat) HasPermission(tx *gorm.DB, userID, objID uuid.UUID) (interface{}, error) {
+	sl := RecordingFormat{}
+	count := 0
+	if err := tx.Raw(`SELECT
+		count(*)
+		FROM user_channels uc
+		INNER JOIN recordings s ON uc.channel_id=s.channel_id
+		INNER JOIN recording_formats sl ON s.id=sl.recording_id AND sl.id=?
+		WHERE uc.user_id = ?`,
+		objID, userID).Scan(&count).Error; err != nil {
+		return nil, err
+	}
+	if count != 1 {
+		return nil, nil
+	}
+	if err := tx.First(&sl, objID).Error; err != nil {
+		return nil, err
+	}
+	return &sl, nil
+}
+
 // RecordingLang struct - for i18n data of a
 type RecordingLang struct {
 	ID          uuid.UUID `json:"id" gorm:"type:uuid;default:gen_random_uuid()" example:"3a4f9157-65bf-4d15-a82b-1cd9295d07e0"`
@@ -57,6 +100,28 @@ type RecordingLang struct {
 	Subtitle string `json:"subtitle" example:"Ein deutsches Problem Diskussionsveranstaltung mit Laila Abdul-Rahman, Greta (Grün-Weiße Hilfe Bremen) und Mathilda (Kampagne für Opfer rassistischer Polizeigewalt - KOP Bremen)"`
 	Short    string `json:"short" example:"Nachdem Mord an George Floyd ist es zu großen Protesten in den Vereinigten Staaten gekommen. Auch in Deutschland sterben schwarze Menschen in Polizeigewahrsam. [...]"`
 	Long     string `json:"long" example:"Nachdem Mord an George Floyd ist es zu großen Protesten in den Vereinigten Staaten gekommen. Auch in Deutschland sterben schwarze Menschen in Polizeigewahrsam.  Ihre Namen sind weitgehend unbekannt: William Tonou-Mbobda, Hussam Fadl, Rooble Warsame, Oury Jalloh, Yaya Diabi, Amed A., Aamir Ageeb, Achidi John, Laya-Alama Condé, Mohamed Idrissi – die Liste ließe sich fortsetzen."`
+}
+
+// HasPermission - has user permission on stream
+func (RecordingLang) HasPermission(tx *gorm.DB, userID, objID uuid.UUID) (interface{}, error) {
+	sl := RecordingLang{}
+	count := 0
+	if err := tx.Raw(`SELECT
+		count(*)
+		FROM user_channels uc
+		INNER JOIN recordings s ON uc.channel_id=s.channel_id
+		INNER JOIN recording_langs sl ON s.id=sl.recording_id AND sl.id=?
+		WHERE uc.user_id = ?`,
+		objID, userID).Scan(&count).Error; err != nil {
+		return nil, err
+	}
+	if count != 1 {
+		return nil, nil
+	}
+	if err := tx.First(&sl, objID).Error; err != nil {
+		return nil, err
+	}
+	return &sl, nil
 }
 
 func init() {

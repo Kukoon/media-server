@@ -9,4 +9,10 @@ import (
 func Bind(r *gin.Engine, ws *web.Service) {
 	apiList(r, ws)
 	apiGet(r, ws)
+	// lang
+	apiLangList(r, ws)
+	apiLangPost(r, ws)
+	apiLangPut(r, ws)
+	apiLangDelete(r, ws)
+
 }

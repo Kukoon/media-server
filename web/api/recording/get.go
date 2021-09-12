@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"dev.sum7.eu/genofire/golang-lib/web/auth"
 	"dev.sum7.eu/genofire/golang-lib/web"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -22,13 +23,27 @@ import (
 // @Router /api/v1/recording/{slug} [get]
 // @Param slug path string false "slug or uuid of recording"
 // @Param video_format query bool false "just format with video output"
+// @Param count_viewer query bool false "count this request as an viewer"
 // @Param lang query string false "show description in given language"
 func apiGet(r *gin.Engine, ws *web.Service) {
-	r.GET("/api/v1/recording/:slug", func(c *gin.Context) {
-		slug := c.Params.ByName("slug")
+	r.GET("/api/v1/recording/:uuid", func(c *gin.Context) {
+		slug := c.Params.ByName("uuid")
 		db := ws.DB.Joins("Channel").Joins("Event").Preload("Speakers")
 		obj := models.Recording{}
 
+		countViewer := false
+
+		if str, ok := c.GetQuery("count_viewer"); ok {
+			b, err := strconv.ParseBool(str)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, web.HTTPError{
+					Message: web.ErrAPIInvalidRequestFormat.Error(),
+					Error:   err.Error(),
+				})
+				return
+			}
+			countViewer = b
+		}
 		if str, ok := c.GetQuery("video_format"); ok {
 			isVideo, err := strconv.ParseBool(str)
 			if err != nil {
@@ -65,9 +80,6 @@ func apiGet(r *gin.Engine, ws *web.Service) {
 			obj.ID = uuid
 		}
 
-		// TODO login - own channel
-		db = db.Where("public", true)
-
 		if err := db.First(&obj).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				c.JSON(http.StatusNotFound, web.HTTPError{
@@ -82,8 +94,27 @@ func apiGet(r *gin.Engine, ws *web.Service) {
 			})
 			return
 		}
+		// have permission - own channel
+		if !obj.Public {
+			id , ok := auth.GetCurrentUserID(c)
+			if !ok {
+				c.JSON(http.StatusNotFound, web.HTTPError{
+					Message: web.ErrAPINotFound.Error(),
+				})
+				return
+			}
+			if _, err := obj.HasPermission(ws.DB, id, obj.ID); err != nil {
+				c.JSON(http.StatusNotFound, web.HTTPError{
+					Message: web.ErrAPINotFound.Error(),
+					Error:   err.Error(),
+				})
+				return
+			}
+		}
 
-		ws.DB.Model(&obj).Update("viewers", obj.Viewers+1)
+		if countViewer {
+			ws.DB.Model(&obj).Update("viewers", obj.Viewers+1)
+		}
 
 		c.JSON(http.StatusOK, &obj)
 	})
