@@ -54,7 +54,7 @@ func init() {
 
 	testdata = append(testdata, []*gormigrate.Migration{
 		{
-			ID: "20-testdata-0008-01-user",
+			ID: "10-data-0008-02-user",
 			Migrate: func(tx *gorm.DB) error {
 				user, err := auth.NewUser("c3woc", "CHANGEME")
 				if err != nil {
@@ -65,7 +65,7 @@ func init() {
 			},
 			Rollback: func(tx *gorm.DB) error {
 				return tx.Delete(&User{
-					ID: TestUserID1,
+					ID: TestUserID2,
 				}).Error
 			},
 		},

@@ -12,7 +12,7 @@ import (
 	"github.com/Kukoon/media-server/models"
 )
 
-func TestAPIChannelListMy(t *testing.T) {
+func TestAPIListMy(t *testing.T) {
 	assert := assert.New(t)
 	s, err := webtest.NewWithDBSetup(bindTest, models.SetupMigration)
 	assert.NoError(err)

@@ -14,7 +14,7 @@ import (
 	"github.com/Kukoon/media-server/models"
 )
 
-func TestAPIChannelPut(t *testing.T) {
+func TestAPIPut(t *testing.T) {
 	assert := assert.New(t)
 	s, err := webtest.NewWithDBSetup(bindTest, models.SetupMigration)
 	assert.NoError(err)
@@ -23,7 +23,7 @@ func TestAPIChannelPut(t *testing.T) {
 
 	hErr := web.HTTPError{}
 	// GET - not found
-	err = s.Request(http.MethodPut, "/api/v1/channel/"+models.TestChannelID2.String(), nil, http.StatusUnauthorized, &hErr)
+	err = s.Request(http.MethodPut, "/api/v1/channel/"+models.TestChannelID1.String(), nil, http.StatusUnauthorized, &hErr)
 	assert.NoError(err)
 	assert.Equal(auth.ErrAPINoSession.Error(), hErr.Message)
 
@@ -35,14 +35,14 @@ func TestAPIChannelPut(t *testing.T) {
 
 	hErr = web.HTTPError{}
 	// GET - id
-	err = s.Request(http.MethodPut, "/api/v1/channel/"+models.TestChannelID2.String(), nil, http.StatusBadRequest, &hErr)
+	err = s.Request(http.MethodPut, "/api/v1/channel/"+models.TestChannelID1.String(), nil, http.StatusBadRequest, &hErr)
 	assert.NoError(err)
 	assert.Equal(web.ErrAPIInvalidRequestFormat.Error(), hErr.Message)
 
 	req := models.Channel{}
 	resp := models.Channel{}
 	// GET - id
-	err = s.Request(http.MethodPut, "/api/v1/channel/"+models.TestChannelID2.String(), &req, http.StatusOK, &resp)
+	err = s.Request(http.MethodPut, "/api/v1/channel/"+models.TestChannelID1.String(), &req, http.StatusOK, &resp)
 	assert.NoError(err)
 	assert.NotEqual(uuid.Nil, resp.ID)
 }

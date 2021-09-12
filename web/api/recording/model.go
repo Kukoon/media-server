@@ -9,7 +9,8 @@ import (
 
 // Recording struct
 type Recording struct {
-	ID       uuid.UUID `json:"id" example:"dffe2c0e-3713-4399-8ee2-279becbbb06e"`
+	ID        uuid.UUID `json:"id" example:"dffe2c0e-3713-4399-8ee2-279becbbb06e"`
+	CreatedAt time.Time `json:"created_at" example:"2020-12-10T19:00:00.000000+01:00"`
 	// attributes
 	CommonName string        `json:"common_name" example:"2020-12-polizeigewalt"`
 	Poster     string        `json:"poster" example:"https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/poster.png"`
@@ -28,6 +29,7 @@ func (s *Recording) Model() *models.Recording {
 	}
 	m := &models.Recording{
 		ID:         s.ID,
+		CreatedAt:  s.CreatedAt,
 		CommonName: s.CommonName,
 		Poster:     s.Poster,
 		Preview:    s.Preview,

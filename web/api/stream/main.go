@@ -13,6 +13,7 @@ func Bind(r *gin.Engine, ws *web.Service) {
 	apiPost(r, ws)
 	apiPut(r, ws)
 	apiDelete(r, ws)
+	apiPostToRecording(r, ws)
 	// of channel
 	apiChannelGet(r, ws)
 	apiChannelListMy(r, ws)

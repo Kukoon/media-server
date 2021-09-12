@@ -13,7 +13,7 @@ import (
 	"github.com/Kukoon/media-server/models"
 )
 
-func TestAPIChannelDelete(t *testing.T) {
+func TestAPIDelete(t *testing.T) {
 	assert := assert.New(t)
 	s, err := webtest.NewWithDBSetup(bindTest, models.SetupMigration)
 	assert.NoError(err)
@@ -22,7 +22,7 @@ func TestAPIChannelDelete(t *testing.T) {
 
 	hErr := web.HTTPError{}
 	// GET - not found
-	err = s.Request(http.MethodDelete, "/api/v1/channel/"+models.TestChannelID2.String(), nil, http.StatusUnauthorized, &hErr)
+	err = s.Request(http.MethodDelete, "/api/v1/channel/"+models.TestChannelID1.String(), nil, http.StatusUnauthorized, &hErr)
 	assert.NoError(err)
 	assert.Equal(auth.ErrAPINoSession.Error(), hErr.Message)
 
@@ -40,7 +40,7 @@ func TestAPIChannelDelete(t *testing.T) {
 
 	resp := false
 	// GET - id
-	err = s.Request(http.MethodDelete, "/api/v1/channel/"+models.TestChannelID2.String(), nil, http.StatusOK, &resp)
+	err = s.Request(http.MethodDelete, "/api/v1/channel/"+models.TestChannelID1.String(), nil, http.StatusOK, &resp)
 	assert.NoError(err)
 	assert.True(resp)
 }

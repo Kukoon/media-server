@@ -14,7 +14,7 @@ import (
 	"github.com/Kukoon/media-server/models"
 )
 
-func TestAPIStreamGet(t *testing.T) {
+func TestAPIGet(t *testing.T) {
 	assert := assert.New(t)
 	s, err := webtest.NewWithDBSetup(bindTest, models.SetupMigration)
 	assert.NoError(err)

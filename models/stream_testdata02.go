@@ -8,9 +8,14 @@ import (
 	"gorm.io/gorm"
 )
 
+// Testdata ID
+var (
+	TestStreamID2 = uuid.MustParse("0801a547-59f1-4a63-946f-2ab03f62e6ee")
+)
+
 func init() {
 
-	testdataID := uuid.MustParse("0801a547-59f1-4a63-946f-2ab03f62e6ee")
+	testdataID := TestStreamID2
 	testdataIDLang1 := uuid.MustParse("50388781-0c42-434e-ae99-170e4c1c0bcf")
 
 	testdata = append(testdata, []*gormigrate.Migration{

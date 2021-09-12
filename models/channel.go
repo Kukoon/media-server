@@ -13,7 +13,7 @@ type Channel struct {
 	CommonName string       `json:"common_name" gorm:"unique" example:"kukoon"`
 	Title      string       `json:"title" example:"Im Kukoon"`
 	Logo       string       `json:"logo" example:"https://media.kukoon.de/static/css/kukoon/logo.png"`
-	Recordings []*Recording `json:"recordings,omitempty" swaggerignore:"true"`
+	Recordings []*Recording `json:"recordings,omitempty" gorm:"constraint:OnDelete:CASCADE" swaggerignore:"true"`
 	Owners     []User       `json:"-" gorm:"many2many:user_channels;constraint:OnDelete:CASCADE"`
 }
 
@@ -86,7 +86,7 @@ func init() {
 					Title:      "C3 Waffel Operation Center",
 					Logo:       "https://c3woc.de/images/logo.svg",
 					Owners: []User{
-						{ID: TestUserID1},
+						{ID: TestUserID2},
 					},
 				}).Error
 			},

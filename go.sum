@@ -33,6 +33,10 @@ cloud.google.com/go/storage v1.10.0/go.mod h1:FLPqc6j+Ki4BU591ie1oL6qBQGu2Bl/tZ9
 dev.sum7.eu/genofire/golang-lib v0.0.0-20210719163544-fb766ca32b7c/go.mod h1:lgni+6D1ZPDBGEhOnGGf9iCrs+spTzeqwUFX5cvHPyo=
 dev.sum7.eu/genofire/golang-lib v0.0.0-20210730160759-3e90199d981e h1:MyLLDAmG/eMnTWUsd9d5SLH1JFKhlb2JtxZvG46xBWU=
 dev.sum7.eu/genofire/golang-lib v0.0.0-20210730160759-3e90199d981e/go.mod h1:8fBNwMOpKq6bWHISrivkcs65mUBHiO44THbqhjeOoas=
+dev.sum7.eu/genofire/golang-lib v0.0.0-20210912204133-f4da9a9f2ca9 h1:HYQlu97FQrCpAAwbWvjbdkZ1R6MMMGeOmazjmLVISDk=
+dev.sum7.eu/genofire/golang-lib v0.0.0-20210912204133-f4da9a9f2ca9/go.mod h1:8fBNwMOpKq6bWHISrivkcs65mUBHiO44THbqhjeOoas=
+dev.sum7.eu/genofire/golang-lib v0.0.0-20210912204316-9b2fe62df536 h1:Q6l6hQTYqFT9bNpI0a1JL3rcmEQIyK2uUnuCaH1EXuo=
+dev.sum7.eu/genofire/golang-lib v0.0.0-20210912204316-9b2fe62df536/go.mod h1:8fBNwMOpKq6bWHISrivkcs65mUBHiO44THbqhjeOoas=
 dev.sum7.eu/genofire/oven-exporter v0.0.2-0.20210822151232-a94acd17adab h1:W6Tp0ErrfOP6MiZ57D3pQYDFad16yb/Mz6crBg1YJwI=
 dev.sum7.eu/genofire/oven-exporter v0.0.2-0.20210822151232-a94acd17adab/go.mod h1:93pHJhAkeap1tHkaUu+1ysQlYxX55H6HiX4gbRC7bbA=
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
