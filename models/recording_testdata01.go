@@ -9,8 +9,8 @@ import (
 )
 
 var (
-	TestRecording1ID = uuid.MustParse("542685cb-3693-e720-a957-f008f5dae3ee")
-	TestRecording1IDLang1 = uuid.MustParse("03d33e6a-151f-47d9-be79-a726e0f9a859")
+	TestRecording1ID        = uuid.MustParse("542685cb-3693-e720-a957-f008f5dae3ee")
+	TestRecording1IDLang1   = uuid.MustParse("03d33e6a-151f-47d9-be79-a726e0f9a859")
 	TestRecording1IDFormat1 = uuid.MustParse("3a4f9157-65bf-4d15-a82b-1cd9295d07e0")
 )
 

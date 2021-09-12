@@ -10,8 +10,8 @@ import (
 
 // uuid of streams for testing
 var (
-	TestStreamID1      = uuid.MustParse("728edaf7-9ad9-f972-4d09-ba5940cd43f9")
-	TestStream1IDLang1 = uuid.MustParse("acdf7eb1-0cb9-4900-a918-a411f9afc38d")
+	TestStreamID1         = uuid.MustParse("728edaf7-9ad9-f972-4d09-ba5940cd43f9")
+	TestStream1IDLang1    = uuid.MustParse("acdf7eb1-0cb9-4900-a918-a411f9afc38d")
 	TestStream1IDSpeaker1 = uuid.MustParse("0030a199-c771-489a-88a7-258f80db2bce")
 )
 
