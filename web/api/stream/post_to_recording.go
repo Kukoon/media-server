@@ -64,7 +64,7 @@ func apiPostToRecording(r *gin.Engine, ws *web.Service) {
 				return err
 			}
 			list := []*models.StreamLang{}
-			if err := tx.Find(&list).Error; err != nil {
+			if err := tx.Where("stream_id", data.ID).Find(&list).Error; err != nil {
 				return err
 			}
 			for _, lang := range list {
