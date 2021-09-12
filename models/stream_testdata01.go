@@ -12,11 +12,11 @@ import (
 var (
 	TestStreamID1      = uuid.MustParse("728edaf7-9ad9-f972-4d09-ba5940cd43f9")
 	TestStream1IDLang1 = uuid.MustParse("acdf7eb1-0cb9-4900-a918-a411f9afc38d")
+	TestStream1IDSpeaker1 = uuid.MustParse("0030a199-c771-489a-88a7-258f80db2bce")
 )
 
 func init() {
 	// see recording 07
-	testdataIDSpeaker1 := uuid.MustParse("0030a199-c771-489a-88a7-258f80db2bce")
 	testdataIDSpeaker2 := uuid.MustParse("8bb5af2a-6e66-488b-9eac-6714ce005899")
 	testdataIDSpeaker3 := uuid.MustParse("fa5323fc-5f54-487c-b5cc-173faa4e64f2")
 
@@ -39,7 +39,7 @@ func init() {
 					Speakers: []*Speaker{
 						{
 							OwnerID: TestChannelID1,
-							ID:      testdataIDSpeaker1,
+							ID:      TestStream1IDSpeaker1,
 							Name:    "Andreas Ehresmann",
 						},
 						{

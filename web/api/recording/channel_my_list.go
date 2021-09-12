@@ -4,25 +4,28 @@ import (
 	"net/http"
 
 	"dev.sum7.eu/genofire/golang-lib/web"
+	"dev.sum7.eu/genofire/golang-lib/web/auth"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 
 	"github.com/Kukoon/media-server/models"
 )
 
-// @Summary List all Recordings
-// @Description Show a list of all recordings
+// @Summary List Recordings of my Channel
+// @Description Show a list of all recordings on a given channel (with my permission)
+// @Tags recording
 // @Produce  json
 // @Success 200 {array} models.Recording
 // @Failure 400 {object} web.HTTPError
 // @Failure 500 {object} web.HTTPError
-// @Router /api/v1/recordings [get]
-// @Param channel query string false "filter by UUID of a channel"
+// @Router /api/v1/channel/{slug}/recordings [get]
+// @Param slug path string false "slug or uuid of recording"
 // @Param event query string false "filter by UUID of a event"
 // @Param tag query string false "filter by UUID of any tag (multiple times)"
 // @Param speaker query string false "filter by UUID of any speaker (multiple times)"
 // @Param lang query string false "show description in given language"
-func apiList(r *gin.Engine, ws *web.Service) {
-	r.GET("/api/v1/recordings", func(c *gin.Context) {
+func apiChannelListMy(r *gin.Engine, ws *web.Service) {
+	r.GET("/api/v1/channel/:slug/recordings", auth.MiddlewarePermissionParam(ws, models.Channel{}, "slug"), func(c *gin.Context) {
 		db, ok := filterRecordings(ws.DB, c)
 		if !ok {
 			return
@@ -31,7 +34,7 @@ func apiList(r *gin.Engine, ws *web.Service) {
 		list := []*models.Recording{}
 		// TODO no filter for listen_at
 		if err := db.
-			Where("public", true).Where("listed", true).
+			Where("channel_id = ?", uuid.MustParse(c.Params.ByName("slug"))).
 			Order("created_at DESC").
 			Find(&list).Error; err != nil {
 			c.JSON(http.StatusInternalServerError, web.HTTPError{

@@ -34,12 +34,12 @@ func apiLangDelete(r *gin.Engine, ws *web.Service) {
 			return
 		}
 
-		if result.RowsAffected != 1 {
+		if result.RowsAffected < 1 {
 			c.JSON(http.StatusNotFound, web.HTTPError{
 				Message: web.ErrAPINotFound.Error(),
 			})
 			return
 		}
-		c.JSON(http.StatusOK, true)
+		c.JSON(http.StatusOK, result.RowsAffected == 1)
 	})
 }

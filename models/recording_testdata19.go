@@ -8,9 +8,13 @@ import (
 	"gorm.io/gorm"
 )
 
+// Test Recording for privat
+var (
+	TestRecording19ID = uuid.MustParse("bd2cb25e-6f17-453d-b947-370cd51beb18")
+)
+
 func init() {
 	// Grand Piano: Federico Albanese
-	testdataID := uuid.MustParse("bd2cb25e-6f17-453d-b947-370cd51beb18")
 	testdataIDLang1 := uuid.MustParse("6f188246-7b39-42e3-811c-a5828d01263b")
 	testdataIDSpeaker1 := uuid.MustParse("72496cb5-05cf-4982-8ec4-45666f3704e6")
 	testdataIDFormat1 := uuid.MustParse("3aa420ba-7eee-4f86-9a69-ea6e363733f5")
@@ -29,11 +33,11 @@ func init() {
 			ID: "10-data-0030-01-recording-19",
 			Migrate: func(tx *gorm.DB) error {
 				if err := tx.Create(&Recording{
-					ID:        testdataID,
+					ID:        TestRecording19ID,
 					ChannelID: TestChannelID1,
 					EventID:   &TestEventID2,
-					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/poster.png",
-					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/preview.webp",
+					Poster:    "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + TestRecording19ID.String() + "/poster.png",
+					Preview:   "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + TestRecording19ID.String() + "/preview.webp",
 					CreatedAt: time.Date(2021, 7, 24, 18, 0, 0, 0, loc),
 					Duration:  time.Hour,
 					Public:    false,
@@ -53,7 +57,7 @@ func init() {
 				}
 				if err := tx.Create(&RecordingLang{
 					ID:          testdataIDLang1,
-					RecordingID: testdataID,
+					RecordingID: TestRecording19ID,
 					Lang:        "de",
 					Title:       "Federico Albanese",
 					Subtitle:    "24. Juli 2021, 18:00",
@@ -70,11 +74,11 @@ Zusammen mit der Singer- und Songwriterin Jessica Einaudi, gründet er 2007 das 
 				if err := tx.Create(&[]*RecordingFormat{
 					{
 						ID:          testdataIDFormat1,
-						RecordingID: testdataID,
+						RecordingID: TestRecording19ID,
 						Lang:        "de",
 						Quality:     0,
 						IsVideo:     true,
-						URL:         "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + testdataID.String() + "/video_best.mp4",
+						URL:         "https://cdn.media.kukoon.de/videos/" + TestChannelID1.String() + "/" + TestRecording19ID.String() + "/video_best.mp4",
 						Bytes:       0,
 						Resolution:  "1920x1080",
 					},
@@ -85,7 +89,7 @@ Zusammen mit der Singer- und Songwriterin Jessica Einaudi, gründet er 2007 das 
 			},
 			Rollback: func(tx *gorm.DB) error {
 				return tx.Delete(&Recording{
-					ID: testdataID,
+					ID: TestRecording19ID,
 				}).Error
 			},
 		},

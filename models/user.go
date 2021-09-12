@@ -19,6 +19,7 @@ type User struct {
 var (
 	// TestUserID1 - uuid of initial user
 	TestUserID1 = uuid.MustParse("88078ec0-2135-445f-bf05-632701c77695")
+	TestUserID2 = uuid.MustParse("aca3f761-042b-4c7f-a8d1-82e972683adf")
 )
 
 func init() {
@@ -52,15 +53,14 @@ func init() {
 	}...)
 
 	testdata = append(testdata, []*gormigrate.Migration{
-		/* -
 		{
-			ID: "10-data-0008-01-user",
+			ID: "20-testdata-0008-01-user",
 			Migrate: func(tx *gorm.DB) error {
-				user, err := auth.NewUser("kukoon", "CHANGEME")
+				user, err := auth.NewUser("c3woc", "CHANGEME")
 				if err != nil {
 					return err
 				}
-				user.ID = TestUserID1
+				user.ID = TestUserID2
 				return tx.Create(user).Error
 			},
 			Rollback: func(tx *gorm.DB) error {
@@ -69,6 +69,5 @@ func init() {
 				}).Error
 			},
 		},
-		*/
 	}...)
 }

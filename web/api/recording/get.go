@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"dev.sum7.eu/genofire/golang-lib/web/auth"
 	"dev.sum7.eu/genofire/golang-lib/web"
+	"dev.sum7.eu/genofire/golang-lib/web/auth"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -74,8 +74,7 @@ func apiGet(r *gin.Engine, ws *web.Service) {
 
 		uuid, err := uuid.Parse(slug)
 		if err != nil {
-			db = db.Where("common_name", slug)
-			obj.CommonName = slug
+			db = db.Where("recordings.common_name", slug)
 		} else {
 			obj.ID = uuid
 		}
@@ -96,17 +95,16 @@ func apiGet(r *gin.Engine, ws *web.Service) {
 		}
 		// have permission - own channel
 		if !obj.Public {
-			id , ok := auth.GetCurrentUserID(c)
+			id, ok := auth.GetCurrentUserID(c)
 			if !ok {
 				c.JSON(http.StatusNotFound, web.HTTPError{
 					Message: web.ErrAPINotFound.Error(),
 				})
 				return
 			}
-			if _, err := obj.HasPermission(ws.DB, id, obj.ID); err != nil {
+			if a, err := obj.HasPermission(ws.DB, id, obj.ID); err != nil || a == nil {
 				c.JSON(http.StatusNotFound, web.HTTPError{
 					Message: web.ErrAPINotFound.Error(),
-					Error:   err.Error(),
 				})
 				return
 			}
