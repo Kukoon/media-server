@@ -9,5 +9,6 @@ import (
 func Bind(r *gin.Engine, ws *web.Service) {
 	apiChannelListMy(r, ws)
 	apiList(r, ws)
+	apiPut(r, ws)
 	apiDelete(r, ws)
 }
