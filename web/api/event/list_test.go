@@ -21,4 +21,5 @@ func TestAPIEventList(t *testing.T) {
 	// GET
 	err = s.Request(http.MethodGet, "/api/v1/events", nil, http.StatusOK, &list)
 	assert.NoError(err)
+	assert.Len(list, 2)
 }

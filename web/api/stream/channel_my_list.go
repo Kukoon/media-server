@@ -19,7 +19,7 @@ import (
 // @Failure 400 {object} web.HTTPError
 // @Failure 500 {object} web.HTTPError
 // @Router /api/v1/channel/{slug}/streams [get]
-// @Param slug path string false "slug or uuid of stream"
+// @Param slug path string false "uuid of channel"
 // @Param running query bool false "filter by running streams"
 // @Param upcoming query bool false "filter by next streams"
 // @Param from query bool false "filter by date start streams"
@@ -28,6 +28,7 @@ import (
 // @Param tag query string false "filter by UUID of any tag (multiple times)"
 // @Param speaker query string false "filter by UUID of any speaker (multiple times)"
 // @Param lang query string false "show description in given language"
+// @Security ApiKeyAuth
 func apiChannelListMy(r *gin.Engine, ws *web.Service) {
 	r.GET("/api/v1/channel/:slug/streams", auth.MiddlewarePermissionParam(ws, models.Channel{}, "slug"), func(c *gin.Context) {
 		db, ok := filterStreams(ws.DB, c)

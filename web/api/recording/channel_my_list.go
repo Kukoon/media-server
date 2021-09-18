@@ -19,7 +19,7 @@ import (
 // @Failure 400 {object} web.HTTPError
 // @Failure 500 {object} web.HTTPError
 // @Router /api/v1/channel/{slug}/recordings [get]
-// @Param slug path string false "slug or uuid of recording"
+// @Param slug path string false "uuid of channel"
 // @Param event query string false "filter by UUID of a event"
 // @Param tag query string false "filter by UUID of any tag (multiple times)"
 // @Param speaker query string false "filter by UUID of any speaker (multiple times)"

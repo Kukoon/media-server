@@ -7,5 +7,6 @@ import (
 
 // Bind to webservice
 func Bind(r *gin.Engine, ws *web.Service) {
+	apiChannelListMy(r, ws)
 	apiList(r, ws)
 }
