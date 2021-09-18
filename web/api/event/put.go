@@ -24,7 +24,7 @@ import (
 // @Failure 500 {object} web.HTTPError
 // @Router /api/v1/event/{event_id} [put]
 // @Param event_id path string false "uuid of event"
-// @Param body body Event false "new values in event"
+// @Param body body models.Event false "new values in event"
 // @Security ApiKeyAuth
 func apiPut(r *gin.Engine, ws *web.Service) {
 	r.PUT("/api/v1/event/:uuid", auth.MiddlewarePermissionParamUUID(ws, models.Event{}), func(c *gin.Context) {
