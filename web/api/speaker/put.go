@@ -24,7 +24,7 @@ import (
 // @Failure 500 {object} web.HTTPError
 // @Router /api/v1/speaker/{speaker_id} [put]
 // @Param speaker_id path string false "uuid of speaker"
-// @Param body body Speaker false "new values in speaker"
+// @Param body body models.Speaker false "new values in speaker"
 // @Security ApiKeyAuth
 func apiPut(r *gin.Engine, ws *web.Service) {
 	r.PUT("/api/v1/speaker/:uuid", auth.MiddlewarePermissionParamUUID(ws, models.Speaker{}), func(c *gin.Context) {
