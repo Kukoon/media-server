@@ -7,8 +7,8 @@ import (
 	"dev.sum7.eu/genofire/golang-lib/web/auth"
 	"github.com/Kukoon/media-server/models"
 	"github.com/Kukoon/media-server/oven"
-	"github.com/bdlm/log"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // @Summary Add Restream to Channel
@@ -46,7 +46,7 @@ func apiRestreamAdd(r *gin.Engine, ws *web.Service, oven *oven.Service) {
 			return
 		}
 
-		log.Error(len(resp.Data))
+		ws.Log().Info("pusher", zap.Int("count", len(resp.Data)))
 
 		c.JSON(http.StatusOK, RestreamFromOven(resp.Data[0]))
 	})

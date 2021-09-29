@@ -8,8 +8,8 @@ import (
 	"dev.sum7.eu/genofire/golang-lib/web"
 	"dev.sum7.eu/genofire/golang-lib/web/ws"
 	"dev.sum7.eu/genofire/golang-lib/worker"
-	"github.com/bdlm/log"
 	"github.com/google/uuid"
+	"go.uber.org/zap"
 )
 
 const (
@@ -25,6 +25,7 @@ const (
 
 type endpoint struct {
 	*ws.WebsocketEndpoint
+	log                *zap.Logger
 	web                *web.Service
 	Worker             *worker.Worker
 	channelID          uuid.UUID
@@ -48,8 +49,10 @@ func (we *endpoint) onClose(s *ws.Subscriber, out chan<- *ws.Message) {
 
 // NewEndpoint of Websocket for stream
 func NewEndpoint(web *web.Service, channelID uuid.UUID) *endpoint {
+	log := web.Log()
 	we := endpoint{
-		WebsocketEndpoint:  ws.NewEndpoint(),
+		log:                log,
+		WebsocketEndpoint:  ws.NewEndpoint(log),
 		web:                web,
 		channelID:          channelID,
 		usernames:          make(map[string]*ws.Subscriber),
@@ -62,7 +65,7 @@ func NewEndpoint(web *web.Service, channelID uuid.UUID) *endpoint {
 		we.SendStatus(nil)
 	})
 	we.DefaultMessageHandler = func(ctx context.Context, msg *ws.Message) {
-		log.WithField("type", msg.Type).Warn("unsupported websocket message")
+		we.log.Warn("unsupported websocket message", zap.String("type", msg.Type))
 	}
 
 	we.AddMessageHandler(MessageTypePing, func(ctx context.Context, msg *ws.Message) {

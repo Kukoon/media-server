@@ -3,13 +3,12 @@ package main
 import (
 	"flag"
 
-	"github.com/bdlm/log"
-
 	"dev.sum7.eu/genofire/golang-lib/database"
 	"dev.sum7.eu/genofire/golang-lib/file"
 	"dev.sum7.eu/genofire/golang-lib/web"
 	apiStatus "dev.sum7.eu/genofire/golang-lib/web/api/status"
 	webM "dev.sum7.eu/genofire/golang-lib/web/metrics"
+	"go.uber.org/zap"
 
 	"github.com/Kukoon/media-server/models"
 	"github.com/Kukoon/media-server/oven"
@@ -19,6 +18,7 @@ import (
 var VERSION = "development"
 
 type configData struct {
+	Log       *zap.Config       `toml:"log"`
 	Database  database.Database `toml:"database"`
 	Webserver web.Service       `toml:"webserver"`
 	Oven      oven.Service      `toml:"oven"`
@@ -31,25 +31,35 @@ func main() {
 	configPath := "config.toml"
 	showVersion := false
 
+	log := zap.L()
+
 	flag.StringVar(&configPath, "c", configPath, "path to configuration file")
 	flag.BoolVar(&showVersion, "version", showVersion, "show current version")
 
 	flag.Parse()
 
 	if showVersion {
-		log.WithField("version", VERSION).Info("Version")
+		log.Info("Version", zap.String("version", VERSION))
 		return
 	}
 
 	config := &configData{}
 	if err := file.ReadTOML(configPath, config); err != nil {
-		log.Panicf("open config file: %s", err)
+		log.Panic("open config file", zap.Error(err))
+	}
+
+	if config.Log != nil {
+		l, err := config.Log.Build()
+		if err != nil {
+			log.Panic("generate logger from config", zap.Error(err))
+		}
+		log = l
 	}
 	config.Oven.Client.SetToken(config.Oven.Client.Token)
 	models.SetupMigration(&config.Database)
 
 	if err := config.Database.Run(); err != nil {
-		log.Fatal(err)
+		log.Fatal("database setup", zap.Error(err))
 	}
 
 	config.Webserver.DB = config.Database.DB
@@ -63,10 +73,10 @@ func main() {
 
 	config.Webserver.ModuleRegister(webOWN.Bind(&config.Oven))
 
-	config.Oven.Run()
+	config.Oven.Run(log)
 
-	if err := config.Webserver.Run(); err != nil {
-		log.Fatal(err)
+	if err := config.Webserver.Run(log); err != nil {
+		log.Fatal("crash webserver", zap.Error(err))
 	}
 
 }

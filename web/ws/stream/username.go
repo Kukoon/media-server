@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"dev.sum7.eu/genofire/golang-lib/web/ws"
-	"github.com/bdlm/log"
+	"go.uber.org/zap"
 )
 
 // GetUsername of subscriber
@@ -52,9 +52,10 @@ func (we *endpoint) usernameHandler(_ context.Context, msg *ws.Message) {
 			msg.Body[ws.BodyError] = "already in use"
 		}
 	}
-	if _, ok := msg.Body[ws.BodyGet]; ok {
+	_, ok := msg.Body[ws.BodyGet]
+	if ok {
 		msg.Body[ws.BodyGet] = we.getUsername(msg.Subscriber)
 	}
-	log.Warnf("usernameHandler: %v", msg.Body)
+	we.log.Info("usernameHandler", zap.Bool("get", ok))
 	msg.Reply(msg)
 }

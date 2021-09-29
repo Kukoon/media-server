@@ -6,19 +6,22 @@ import (
 	"dev.sum7.eu/genofire/golang-lib/file"
 	"dev.sum7.eu/genofire/golang-lib/worker"
 	ovenAPI "dev.sum7.eu/genofire/oven-exporter/api"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
 // Service for oven related commands
 type Service struct {
+	log         *zap.Logger
+	w           *worker.Worker
 	Client      ovenAPI.Client    `toml:"client"`
 	StreamCheck file.TOMLDuration `toml:"stream_check"`
 	DB          *gorm.DB          `toml:"-"`
-	w           *worker.Worker
 }
 
 // Run start all related workers on oven service
-func (s *Service) Run() {
+func (s *Service) Run(log *zap.Logger) {
+	s.log = log
 	if s.w != nil {
 		// TODO error handling
 		return

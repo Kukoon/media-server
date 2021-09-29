@@ -5,7 +5,7 @@ import (
 
 	"dev.sum7.eu/genofire/golang-lib/web/ws"
 	"github.com/Kukoon/media-server/models"
-	"github.com/bdlm/log"
+	"go.uber.org/zap"
 )
 
 // SendStatus
@@ -18,10 +18,10 @@ func (we *endpoint) SendStatus(origin *ws.Message) {
 		Where("start_at < ?", now).
 		Order("start_at DESC").
 		First(m).Error; err != nil {
-		log.WithFields(map[string]interface{}{
-			"channel_id": we.channelID,
-			"err":        err,
-		}).Warn("websocket: send status could not fetch current stream")
+		we.log.Warn("websocket: send status could not fetch current stream",
+			zap.String("channel_id", we.channelID.String()),
+			zap.Error(err),
+		)
 	}
 	we.usernameMU.RLock()
 	msg := ws.Message{

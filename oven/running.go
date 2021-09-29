@@ -4,8 +4,8 @@ import (
 	"time"
 
 	"github.com/Kukoon/media-server/models"
-	"github.com/bdlm/log"
 	"github.com/google/uuid"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -13,7 +13,7 @@ func (s *Service) checkRunning() {
 	// check status of stream server
 	resp, err := s.Client.RequestDefaultListStreams()
 	if err != nil {
-		log.WithField("error", err).Warn("status check for oven stream server")
+		s.log.Warn("status check for oven stream server", zap.Error(err))
 		return
 	}
 	ids := make([]uuid.UUID, len(resp.Data))
@@ -46,6 +46,6 @@ func (s *Service) checkRunning() {
 		}
 		return nil
 	}); err != nil {
-		log.WithField("error", err).Warn("update on database failed")
+		s.log.Warn("update on database failed", zap.Error(err))
 	}
 }
