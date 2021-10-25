@@ -14,8 +14,9 @@ type Stream struct {
 	Channel   Channel   `json:"channel" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	ChannelID uuid.UUID `json:"-" gorm:"type:uuid;unique_index:idx_stream_channel"`
 	Secret    string    `json:"secret" example:"717897bf-198c-4f1b-bb4f-5a25cb197107"`
-	StartAt   time.Time `json:"start_at" example:"2020-12-10T18:30:00.000000+01:00"`
-	ListenAt  time.Time `json:"listen_at" example:"2020-12-10T19:00:00.000000+01:00"`
+	ListenAt  time.Time `json:"listen_at" example:"2020-12-10T00:00:00.000000+01:00"`
+	StartAt   time.Time `json:"start_at" example:"2020-12-10T19:00:00.000000+01:00"`
+	EndAt     time.Time `json:"end_at" example:"2020-12-10T22:00:00.000000+01:00"`
 	Chat      bool      `json:"chat"`
 	Running   bool      `json:"running"`
 	// attributes
@@ -61,8 +62,9 @@ func (s *Stream) GetPublic() *PublicStream {
 		Channel:   s.Channel,
 		ChannelID: s.ChannelID,
 		Secret:    s.Secret,
-		StartAt:   s.StartAt,
 		ListenAt:  s.ListenAt,
+		StartAt:   s.StartAt,
+		EndAt:     s.EndAt,
 		Chat:      s.Chat,
 		Running:   s.Running,
 		// attributes
@@ -83,8 +85,9 @@ type PublicStream struct {
 	Channel   Channel   `json:"channel" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	ChannelID uuid.UUID `json:"-" gorm:"type:uuid;unique_index:idx_stream_channel"`
 	Secret    string    `json:"-"`
-	StartAt   time.Time `json:"start_at" example:"2020-12-10T18:30:00.000000+01:00"`
 	ListenAt  time.Time `json:"-"`
+	StartAt   time.Time `json:"start_at" example:"2020-12-10T19:00:00.000000+01:00"`
+	EndAt     time.Time `json:"end_at" example:"2020-12-10T22:00:00.000000+01:00"`
 	Chat      bool      `json:"chat"`
 	Running   bool      `json:"running"`
 	// attributes
@@ -157,6 +160,21 @@ func init() {
 					return err
 				}
 				return tx.Migrator().DropTable(Stream{}.TableName())
+			},
+		},
+		{
+			ID: "01-schema-0030-02-stream",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.AutoMigrate(&Stream{}); err != nil {
+					return err
+				}
+				return tx.Model(&Stream{}).Where("end_at", nil).Update("end_at", gorm.Expr("start_at + interval '1 hour'")).Error
+			},
+			Rollback: func(tx *gorm.DB) error {
+				if err := tx.Migrator().DropColumn(&Stream{}, "end_at"); err != nil {
+					return err
+				}
+				return nil
 			},
 		},
 	}...)

@@ -37,7 +37,10 @@ func (s *Service) checkRunning() {
 		}
 		for _, id := range ids {
 			stream := &models.Stream{}
-			if err := tx.Where("channel_id = ?", id).Where("start_at < ?", now).Order("start_at DESC").First(&stream).Error; err != nil {
+			if err := tx.Where("channel_id = ?", id).
+				Where("start_at < ?", now).
+				Where("end_at > ?", now).
+				Order("start_at DESC").First(&stream).Error; err != nil {
 				return err
 			}
 			if err := tx.Model(stream).Update("running", true).Error; err != nil {

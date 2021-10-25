@@ -49,6 +49,7 @@ func apiChannelGet(r *gin.Engine, ws *web.Service) {
 		db = db.
 			Where("listen_at < ?", now).
 			Where("start_at < ?", now).
+			Where("end_at >= ?", now).
 			Order("start_at DESC")
 
 		if err := db.First(&obj).Error; err != nil {

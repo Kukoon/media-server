@@ -39,9 +39,11 @@ func filterStreams(tx *gorm.DB, c *gin.Context) (db *gorm.DB, isOK bool) {
 			return
 		}
 		if b {
-			db = db.Where("start_at > ?", now)
+			db = db.Where("start_at > ?", now).
+				Where("end_at <= ?", now)
 		} else {
-			db = db.Where("start_at <= ?", now)
+			db = db.Where("start_at <= ?", now).
+				Where("end_at > ?", now)
 		}
 		// TODO - here order?
 		db = db.Order("start_at")
@@ -68,7 +70,7 @@ func filterStreams(tx *gorm.DB, c *gin.Context) (db *gorm.DB, isOK bool) {
 			})
 			return
 		}
-		db = db.Where("start_at <= ?", t)
+		db = db.Where("end_at < ?", t)
 	}
 
 	// channel

@@ -10,8 +10,9 @@ import (
 // Stream struct
 type Stream struct {
 	ID       uuid.UUID `json:"id" example:"dffe2c0e-3713-4399-8ee2-279becbbb06e"`
-	StartAt  time.Time `json:"start_at" example:"2020-12-10T18:30:00.000000+01:00"`
-	ListenAt time.Time `json:"listen_at" example:"2020-12-10T19:00:00.000000+01:00"`
+	ListenAt time.Time `json:"listen_at" example:"2020-12-10T00:00:00.000000+01:00"`
+	StartAt  time.Time `json:"start_at" example:"2020-12-10T19:00:00.000000+01:00"`
+	EndAt    time.Time `json:"end_at" example:"2020-12-10T22:00:00.000000+01:00"`
 	Chat     bool      `json:"chat"`
 	Running  bool      `json:"running"`
 	// attributes
@@ -29,8 +30,9 @@ func (s *Stream) Model() *models.Stream {
 	}
 	m := &models.Stream{
 		ID:         s.ID,
-		StartAt:    s.StartAt,
 		ListenAt:   s.ListenAt,
+		StartAt:    s.StartAt,
+		EndAt:      s.EndAt,
 		Chat:       s.Chat,
 		Running:    s.Running,
 		CommonName: s.CommonName,

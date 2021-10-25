@@ -3,6 +3,7 @@ package stream
 import (
 	"net/http"
 	"testing"
+	"time"
 
 	"dev.sum7.eu/genofire/golang-lib/web/webtest"
 	"github.com/stretchr/testify/assert"
@@ -18,6 +19,10 @@ func TestAPIChannelGet(t *testing.T) {
 	assert.NoError(err)
 	defer s.Close()
 	assert.NotNil(s)
+
+	now := time.Now()
+	err = s.DB.DB.Model(&models.Stream{}).Where("id", models.TestStreamID1).Update("end_at", now.Add(time.Hour)).Error
+	assert.NoError(err)
 
 	obj := models.PublicStream{}
 	// GET - common name
