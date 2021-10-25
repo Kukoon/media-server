@@ -3,7 +3,7 @@ module github.com/Kukoon/media-server
 go 1.16
 
 require (
-	dev.sum7.eu/genofire/golang-lib v1.1.1-0.20210929123017-694ca30e0da9
+	dev.sum7.eu/genofire/golang-lib v1.1.1-0.20211025111957-2937b93dff42
 	dev.sum7.eu/genofire/oven-exporter v0.0.2-0.20210929120325-af80fc6c92e0
 	github.com/eduncan911/podcast v1.4.2
 	github.com/genofire/gormigrate/v2 v2.0.1-0.20210715085530-7373801d0902
