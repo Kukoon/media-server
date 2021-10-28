@@ -14,8 +14,8 @@ func (we *endpoint) SendStatus(origin *ws.Message) {
 	m := &models.Stream{}
 	if err := we.web.DB.
 		Where("channel_id=?", we.channelID).
-		Where("listen_at < ?", now).
-		Where("start_at < ?", now).
+		Where("start_at <= ?", now).
+		Where("end_at >= ?", now).
 		Order("start_at DESC").
 		First(m).Error; err != nil {
 		we.log.Warn("websocket: send status could not fetch current stream",
