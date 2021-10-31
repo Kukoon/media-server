@@ -57,6 +57,7 @@ func apiPut(r *gin.Engine, ws *web.Service) {
 		data := req.Model()
 		data.ID = old.ID
 		data.ChannelID = old.ChannelID
+		data.Viewers = old.Viewers
 
 		if err := ws.DB.Transaction(func(tx *gorm.DB) error {
 			if err := tx.Omit("Format", "Lang", "Tags.*", "Speakers.*").Save(&data).Error; err != nil {
