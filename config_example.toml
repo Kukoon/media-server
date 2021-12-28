@@ -1,7 +1,7 @@
 [oven]
 stream_check = "5s"
 
-[oven.app]
+[oven.client]
 url = "http://1.2.3.4:8081"
 token = "ome-access-token"
 default_vhost = "default"
