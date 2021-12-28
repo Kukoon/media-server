@@ -34,6 +34,7 @@ func apiChannelListMy(r *gin.Engine, ws *web.Service) {
 		list := []*models.Recording{}
 		// TODO no filter for listen_at
 		if err := db.
+			Preload("Langs").
 			Where("channel_id = ?", uuid.MustParse(c.Params.ByName("slug"))).
 			Order("created_at DESC").
 			Find(&list).Error; err != nil {

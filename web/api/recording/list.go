@@ -31,6 +31,7 @@ func apiList(r *gin.Engine, ws *web.Service) {
 		list := []*models.Recording{}
 		// TODO no filter for listen_at
 		if err := db.
+			Preload("Langs").
 			Where("public", true).Where("listed", true).
 			Order("created_at DESC").
 			Find(&list).Error; err != nil {

@@ -17,18 +17,31 @@ type Recording struct {
 	ChannelID uuid.UUID          `json:"-" gorm:"type:uuid;unique_index:idx_recording_channel"`
 	Formats   []*RecordingFormat `json:"formats,omitempty" gorm:"constraint:OnDelete:CASCADE" swaggerignore:"true"`
 	// attributes
-	CommonName string         `json:"common_name" gorm:"unique_index:idx_recording_channel" example:"2020-12-polizeigewalt"`
-	Poster     string         `json:"poster" example:"https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/poster.png"`
-	Preview    string         `json:"preview" example:"https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/preview.webp"`
-	Duration   time.Duration  `json:"duration" swaggertype:"primitive,integer"`
-	Public     bool           `json:"public"`
-	Listed     bool           `json:"listed"`
-	Viewers    uint64         `json:"viewers"`
-	Lang       *RecordingLang `json:"lang" gorm:"constraint:OnDelete:CASCADE"`
-	EventID    *uuid.UUID     `json:"-" gorm:"type:uuid"`
-	Event      *Event         `json:"event"`
-	Tags       []*Tag         `json:"tags" gorm:"many2many:recording_tags;constraint:OnDelete:CASCADE"`
-	Speakers   []*Speaker     `json:"speakers" gorm:"many2many:recording_speakers;constraint:OnDelete:CASCADE"`
+	CommonName string           `json:"common_name" gorm:"unique_index:idx_recording_channel" example:"2020-12-polizeigewalt"`
+	Poster     string           `json:"poster" example:"https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/poster.png"`
+	Preview    string           `json:"preview" example:"https://media.kukoon.de/videos/df1555f5-7046-4f7a-adcc-195b73949723/728edaf7-9ad9-f972-4d09-ba5940cd43f9/preview.webp"`
+	Duration   time.Duration    `json:"duration" swaggertype:"primitive,integer"`
+	Public     bool             `json:"public"`
+	Listed     bool             `json:"listed"`
+	Viewers    uint64           `json:"viewers"`
+	Lang       *RecordingLang   `json:"lang" gorm:"constraint:OnDelete:CASCADE"`
+	Langs      []*RecordingLang `json:"-"`
+	LangShorts []string         `json:"lang_shorts,omitempty" gorm:"-"`
+	EventID    *uuid.UUID       `json:"-" gorm:"type:uuid"`
+	Event      *Event           `json:"event"`
+	Tags       []*Tag           `json:"tags" gorm:"many2many:recording_tags;constraint:OnDelete:CASCADE"`
+	Speakers   []*Speaker       `json:"speakers" gorm:"many2many:recording_speakers;constraint:OnDelete:CASCADE"`
+}
+
+func (r *Recording) AfterFind(tx *gorm.DB) (err error) {
+	count := len(r.Langs)
+	if count > 0 {
+		r.LangShorts = make([]string, count)
+		for i, l := range r.Langs {
+			r.LangShorts[i] = l.Lang
+		}
+	}
+	return
 }
 
 // HasPermission - has user permission on stream
