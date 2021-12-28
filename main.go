@@ -31,7 +31,7 @@ func main() {
 	configPath := "config.toml"
 	showVersion := false
 
-	log := zap.L()
+	log, _ := zap.NewProduction()
 
 	flag.StringVar(&configPath, "c", configPath, "path to configuration file")
 	flag.BoolVar(&showVersion, "version", showVersion, "show current version")
