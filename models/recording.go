@@ -25,7 +25,7 @@ type Recording struct {
 	Listed     bool             `json:"listed"`
 	Viewers    uint64           `json:"viewers"`
 	Lang       *RecordingLang   `json:"lang" gorm:"constraint:OnDelete:CASCADE"`
-	Langs      []*RecordingLang `json:"-"`
+	Langs      []*RecordingLang `json:"-" gorm:"constraint:OnDelete:CASCADE" swaggerignore:"true"`
 	LangShorts []string         `json:"lang_shorts,omitempty" gorm:"-"`
 	EventID    *uuid.UUID       `json:"-" gorm:"type:uuid"`
 	Event      *Event           `json:"event"`
