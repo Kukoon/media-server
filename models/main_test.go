@@ -4,11 +4,12 @@ import (
 	"fmt"
 
 	"dev.sum7.eu/genofire/golang-lib/database"
+	"dev.sum7.eu/genofire/golang-lib/web/webtest"
 )
 
 func DatabaseForTesting() *database.Database {
 	dbConfig := database.Database{
-		Connection: DBTestConnection,
+		Connection: webtest.DBConnection,
 		Testdata:   true,
 		Debug:      false,
 		LogLevel:   0,

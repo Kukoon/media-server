@@ -1,0 +1,104 @@
+image: "golang:latest"
+
+stages:
+  - test
+  - build
+  - deploy
+
+test-cov:
+  stage: test
+  variables:
+    POSTGRES_USER: root
+    POSTGRES_PASSWORD: root
+    POSTGRES_DB: defaultdb
+  services:
+  - name: postgres:latest
+    alias: db-host
+  script:
+    - go install github.com/boumenot/gocover-cobertura@latest
+    - go test $(go list ./... | grep -v /vendor/) -ldflags "-X 'dev.sum7.eu/genofire/golang-lib/web/webtest.DBConnection=postgres://root:root@db-host/defaultdb?sslmode=disable'" -v -failfast -p 1 -coverprofile .testCoverage.txt -covermode count
+    - go tool cover -func="$CI_PROJECT_DIR/.testCoverage.txt"
+    - gocover-cobertura < .testCoverage.txt > coverage.xml
+  artifacts:
+    reports:
+      cobertura: "coverage.xml"
+    paths:
+     - .testCoverage.txt
+     - coverage.xml
+
+test-lint:
+  stage: test
+  script:
+    - go install github.com/client9/misspell/cmd/misspell@latest
+    - find . -type f -not -path "./webroot/assets" | grep -v "models/.*_testdata.*.go" | xargs misspell -error
+    - ./.ci/check-gofmt
+    - ./.ci/check-testfiles
+
+test-docs:
+  stage: test
+  script:
+    - go install github.com/swaggo/swag/cmd/swag@latest
+    - swag init --parseDependency --parseDepth 4 --parseInternal -g web/docs.go -o web/docs
+
+build-linux:
+  stage: build
+  except:
+    - tags
+    - master
+    - main
+  script:
+    # build doc
+    - go install github.com/swaggo/swag/cmd/swag@latest
+    - swag init --parseDependency --parseDepth 4 --parseInternal -g web/docs.go -o web/docs
+    # build app with version
+    - go install -ldflags "-X main.VERSION=`git describe --tags`_ci-$CI_JOB_ID" .
+    - mv "/go/bin/$CI_PROJECT_NAME" "$CI_PROJECT_DIR/$CI_PROJECT_NAME"
+  artifacts:
+    paths:
+      - config_example.toml
+      - "$CI_PROJECT_NAME"
+
+build-deploy_staging:
+  stage: deploy
+  only:
+    - master
+    - main
+  script:
+    # build doc
+    - go install github.com/swaggo/swag/cmd/swag@latest
+    - swag init --parseDependency --parseDepth 4 --parseInternal -g web/docs.go -o web/docs
+    # setup ssh for deploy
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan -p $CI_DEPLOY_PORT $CI_DEPLOY_ADDR >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    # build app with version + deploy
+    - go install -ldflags "-X main.VERSION=`git describe --tags`_ci-$CI_JOB_ID" .
+    - ssh -p $CI_DEPLOY_PORT "$CI_DEPLOY_USER@$CI_DEPLOY_ADDR" sudo systemctl stop "$CI_PROJECT_NAME"
+    - scp -P $CI_DEPLOY_PORT "/go/bin/$CI_PROJECT_NAME" "$CI_DEPLOY_USER@$CI_DEPLOY_ADDR:~/bin/$CI_PROJECT_NAME"
+    - ssh -p $CI_DEPLOY_PORT "$CI_DEPLOY_USER@$CI_DEPLOY_ADDR" "sudo systemctl start $CI_PROJECT_NAME && sudo systemctl status $CI_PROJECT_NAME"
+    - mv "/go/bin/$CI_PROJECT_NAME" "$CI_PROJECT_DIR/$CI_PROJECT_NAME"
+  artifacts:
+    paths:
+      - config_example.toml
+      - "$CI_PROJECT_NAME"
+
+build-release:
+  stage: build
+  only:
+    - tags
+  script:
+    # build doc
+    - go install github.com/swaggo/swag/cmd/swag@latest
+    - swag init --parseDependency --parseDepth 4 --parseInternal -g web/docs.go -o web/docs
+    # build app with version
+    - go install -ldflags "-X main.VERSION=`git describe --tags`_ci-${CI_JOB_ID}" .
+    - mv "/go/bin/$CI_PROJECT_NAME" "$CI_PROJECT_DIR/$CI_PROJECT_NAME"
+  artifacts:
+    paths:
+      - config_example.toml
+      - "$CI_PROJECT_NAME"
+    expire_in: never
