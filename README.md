@@ -1,5 +1,6 @@
 # media-server
-[![Build Server](https://github.com/Kukoon/media-server/workflows/Build%20Server/badge.svg)](https://github.com/Kukoon/media-server/actions?query=workflow%3A%22Build+Server%22)
+[![pipeline status](https://gitlab.com/kukoon/mediathek/media-server/badges/main/pipeline.svg)](https://gitlab.com/kukoon/mediathek/media-server/-/commits/main)
+[![coverage report](https://gitlab.com/kukoon/mediathek/media-server/badges/main/coverage.svg)](https://gitlab.com/kukoon/mediathek/media-server/-/commits/main) 
 [![Go Report Card](https://goreportcard.com/badge/github.com/Kukoon/media-server)](https://goreportcard.com/report/github.com/Kukoon/media-server)
 
 This should become the Server of the OpenSource Mediathek and Streaming-Server.
