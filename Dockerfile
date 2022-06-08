@@ -2,6 +2,7 @@
 # Compile application
 ##
 FROM golang:latest AS build-env
+ARG VERSION
 WORKDIR /app
 COPY . .
 # Build Docs
@@ -10,7 +11,7 @@ RUN swag init --parseDependency --parseDepth 4 --parseInternal -g web/docs.go -o
 # ge dependencies
 RUN go mod tidy
 # build binary
-RUN CGO_ENABLED=0 go build -ldflags="-w -s -X main.VERSION=$CI_COMMIT_REF_SLUG" -o server
+RUN CGO_ENABLED=0 go build -ldflags="-w -s -X main.VERSION=$VERSION" -o server
 
 
 ##

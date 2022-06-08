@@ -59,7 +59,7 @@ build-linux:
     - go install github.com/swaggo/swag/cmd/swag@latest
     - swag init --parseDependency --parseDepth 4 --parseInternal -g web/docs.go -o web/docs
     # build app with version
-    - go install -ldflags "-X main.VERSION=`git describe --tags`_ci-$CI_JOB_ID" .
+    - go install -ldflags "-X main.VERSION=$CI_COMMIT_REF_SLUG" .
     - mv "/go/bin/$CI_PROJECT_NAME" "$CI_PROJECT_DIR/$CI_PROJECT_NAME"
   artifacts:
     paths:
@@ -73,7 +73,7 @@ build-docker:
     - docker:dind
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build -t $DOCKER_IMAGE_TAG .
+    - docker build -t $DOCKER_IMAGE_TAG --build-arg VERSION=$CI_COMMIT_REF_SLUG .
     - docker push $DOCKER_IMAGE_TAG
 
 build-deploy_staging:
@@ -94,7 +94,7 @@ build-deploy_staging:
     - ssh-keyscan -p $CI_DEPLOY_PORT $CI_DEPLOY_ADDR >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     # build app with version + deploy
-    - go install -ldflags "-X main.VERSION=`git describe --tags`_ci-$CI_JOB_ID" .
+    - go install -ldflags "-X main.VERSION=$CI_COMMIT_REF_SLUG" .
     - ssh -p $CI_DEPLOY_PORT "$CI_DEPLOY_USER@$CI_DEPLOY_ADDR" sudo systemctl stop "$CI_PROJECT_NAME"
     - scp -P $CI_DEPLOY_PORT "/go/bin/$CI_PROJECT_NAME" "$CI_DEPLOY_USER@$CI_DEPLOY_ADDR:~/bin/$CI_PROJECT_NAME"
     - ssh -p $CI_DEPLOY_PORT "$CI_DEPLOY_USER@$CI_DEPLOY_ADDR" "sudo systemctl start $CI_PROJECT_NAME && sudo systemctl status $CI_PROJECT_NAME"
@@ -113,7 +113,7 @@ build-release:
     - go install github.com/swaggo/swag/cmd/swag@latest
     - swag init --parseDependency --parseDepth 4 --parseInternal -g web/docs.go -o web/docs
     # build app with version
-    - go install -ldflags "-X main.VERSION=`git describe --tags`_ci-${CI_JOB_ID}" .
+    - go install -ldflags "-X main.VERSION=$CI_COMMIT_REF_SLUG" .
     - mv "/go/bin/$CI_PROJECT_NAME" "$CI_PROJECT_DIR/$CI_PROJECT_NAME"
   artifacts:
     paths:
