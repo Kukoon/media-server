@@ -59,6 +59,7 @@ build-linux:
     - go install github.com/swaggo/swag/cmd/swag@latest
     - swag init --parseDependency --parseDepth 4 --parseInternal -g web/docs.go -o web/docs
     # build app with version
+    - export CGO_ENABLED=0
     - go install -ldflags "-X main.VERSION=$CI_COMMIT_REF_SLUG" .
     - mv "/go/bin/$CI_PROJECT_NAME" "$CI_PROJECT_DIR/$CI_PROJECT_NAME"
   artifacts:
@@ -94,6 +95,7 @@ build-deploy_staging:
     - ssh-keyscan -p $CI_DEPLOY_PORT $CI_DEPLOY_ADDR >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     # build app with version + deploy
+    - export CGO_ENABLED=0
     - go install -ldflags "-X main.VERSION=$CI_COMMIT_REF_SLUG" .
     - ssh -p $CI_DEPLOY_PORT "$CI_DEPLOY_USER@$CI_DEPLOY_ADDR" sudo systemctl stop "$CI_PROJECT_NAME"
     - scp -P $CI_DEPLOY_PORT "/go/bin/$CI_PROJECT_NAME" "$CI_DEPLOY_USER@$CI_DEPLOY_ADDR:~/bin/$CI_PROJECT_NAME"
@@ -113,6 +115,7 @@ build-release:
     - go install github.com/swaggo/swag/cmd/swag@latest
     - swag init --parseDependency --parseDepth 4 --parseInternal -g web/docs.go -o web/docs
     # build app with version
+    - export CGO_ENABLED=0
     - go install -ldflags "-X main.VERSION=$CI_COMMIT_REF_SLUG" .
     - mv "/go/bin/$CI_PROJECT_NAME" "$CI_PROJECT_DIR/$CI_PROJECT_NAME"
   artifacts:

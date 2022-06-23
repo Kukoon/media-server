@@ -70,6 +70,8 @@ jobs:
       run: /home/runner/go/bin/swag init --parseDependency --parseDepth 2 --parseInternal -g web/docs.go -o web/docs
     - name: Build
       run: go build -ldflags "-X main.VERSION=$(git describe --tags)" -v
+      env:
+        CGO_ENABLED: 0
     - name: Archive build artifacts
       uses: actions/upload-artifact@v2
       with:
