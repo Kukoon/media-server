@@ -1,7 +1,6 @@
 image: "golang:latest"
 
 variables:
-  DOCKER_IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
   # Tell 'docker:dind' to enable TLS (recommended)
   # and generate certificates in the specified directory.
   DOCKER_TLS_CERTDIR: "/certs"
@@ -60,22 +59,45 @@ build-linux:
     - swag init --parseDependency --parseDepth 4 --parseInternal -g web/docs.go -o web/docs
     # build app with version
     - export CGO_ENABLED=0
-    - go install -ldflags "-X main.VERSION=$CI_COMMIT_REF_SLUG" .
+    - go install -ldflags "-X main.VERSION=$CI_COMMIT_TAG" .
     - mv "/go/bin/$CI_PROJECT_NAME" "$CI_PROJECT_DIR/$CI_PROJECT_NAME"
   artifacts:
     paths:
       - config_example.toml
       - "$CI_PROJECT_NAME"
 
-build-docker:
+build-docker-latest:
   stage: build
   image: docker:latest
   services:
     - docker:dind
+  only:
+    - master
+    - main
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build -t $DOCKER_IMAGE_TAG --build-arg VERSION=$CI_COMMIT_REF_SLUG .
-    - docker push $DOCKER_IMAGE_TAG
+    - docker build --build-arg VERSION=$CI_COMMIT_TAG 
+      -t $CI_REGISTRY_IMAGE:latest 
+      .
+    - docker push $CI_REGISTRY_IMAGE:latest
+
+build-docker-release:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  only:
+    - tags
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build --build-arg VERSION=$CI_COMMIT_TAG 
+      -t $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG 
+      -t $CI_REGISTRY_IMAGE:${CI_COMMIT_TAG%\.[0-9]*} 
+      -t $CI_REGISTRY_IMAGE:${CI_COMMIT_TAG%\.[0-9]*\.[0-9]*} 
+      .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+    - docker push $CI_REGISTRY_IMAGE:${CI_COMMIT_TAG%\.[0-9]*}
+    - docker push $CI_REGISTRY_IMAGE:${CI_COMMIT_TAG%\.[0-9]*\.[0-9]*}
 
 build-deploy_staging:
   stage: deploy
@@ -96,7 +118,7 @@ build-deploy_staging:
     - chmod 644 ~/.ssh/known_hosts
     # build app with version + deploy
     - export CGO_ENABLED=0
-    - go install -ldflags "-X main.VERSION=$CI_COMMIT_REF_SLUG" .
+    - go install -ldflags "-X main.VERSION=$CI_COMMIT_TAG" .
     - ssh -p $CI_DEPLOY_PORT "$CI_DEPLOY_USER@$CI_DEPLOY_ADDR" sudo systemctl stop "$CI_PROJECT_NAME"
     - scp -P $CI_DEPLOY_PORT "/go/bin/$CI_PROJECT_NAME" "$CI_DEPLOY_USER@$CI_DEPLOY_ADDR:~/bin/$CI_PROJECT_NAME"
     - ssh -p $CI_DEPLOY_PORT "$CI_DEPLOY_USER@$CI_DEPLOY_ADDR" "sudo systemctl start $CI_PROJECT_NAME && sudo systemctl status $CI_PROJECT_NAME"
@@ -116,7 +138,7 @@ build-release:
     - swag init --parseDependency --parseDepth 4 --parseInternal -g web/docs.go -o web/docs
     # build app with version
     - export CGO_ENABLED=0
-    - go install -ldflags "-X main.VERSION=$CI_COMMIT_REF_SLUG" .
+    - go install -ldflags "-X main.VERSION=$CI_COMMIT_TAG" .
     - mv "/go/bin/$CI_PROJECT_NAME" "$CI_PROJECT_DIR/$CI_PROJECT_NAME"
   artifacts:
     paths:
