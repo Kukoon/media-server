@@ -20,7 +20,7 @@ import (
 )
 
 // Bind to webservice
-func Bind(oven *oven.Service) web.ModuleRegisterFunc {
+func Bind(oven *oven.Service, channelConfig *channel.ConfigStream) web.ModuleRegisterFunc {
 	return func(r *gin.Engine, ws *web.Service) {
 		docs.Bind(r, ws)
 
@@ -28,7 +28,7 @@ func Bind(oven *oven.Service) web.ModuleRegisterFunc {
 		metrics.Register(r, ws)
 		auth.Register(r, ws)
 
-		channel.Bind(r, ws, oven)
+		channel.Bind(r, ws, oven, channelConfig)
 		recording.Bind(r, ws)
 		stream.Bind(r, ws)
 

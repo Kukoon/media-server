@@ -7,6 +7,18 @@ import (
 )
 
 func bindTest(r *gin.Engine, ws *web.Service) {
-	Bind(r, ws, nil)
+	Bind(r, ws, nil, &ConfigStream{
+		Ingress: StreamIngress{
+			WebRTC: "",
+			RTMP:   "",
+		},
+		Streams: []StreamSource{
+			{
+				Label: "Live",
+				Type:  "ll-hls",
+				File:  "http://localhost/app/{ID}/ll-hls.m3u",
+			},
+		},
+	})
 	auth.Register(r, ws)
 }

@@ -7,7 +7,6 @@ token = "ome-access-token"
 default_vhost = "default"
 default_app = "stream"
 
-
 [webserver]
 listen = ":8090"
 access_log = true
@@ -22,6 +21,16 @@ secret = "CHANGEME"
 enable = false
 domains = ["example1.com", "example2.com"]
 cache = "/var/www/.cache"
+
+[stream_urls.ingress]
+webrtc = "wss://ingress.media.sum7.eu/app/{ID}?direction=send&transport=tcp"
+rtmp = "rtmp://ingress.media.sum7.eu/app/{ID}"
+
+[[stream_urls.stream_sources]]
+label = "Realtime"
+type = "ll-hls"
+file = "https://ingress.media.sum7.eu/app/{ID}/llhls.m3u8"
+framerate = 0
 
 [database]
 connection = "user=root dbname=media_server host=localhost port=26257 sslmode=disable"

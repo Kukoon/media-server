@@ -2,26 +2,42 @@ package main
 
 import (
 	"flag"
+	"path/filepath"
+	"strings"
 
 	"dev.sum7.eu/genofire/golang-lib/database"
-	"dev.sum7.eu/genofire/golang-lib/file"
 	"dev.sum7.eu/genofire/golang-lib/web"
 	apiStatus "dev.sum7.eu/genofire/golang-lib/web/api/status"
 	webM "dev.sum7.eu/genofire/golang-lib/web/metrics"
+	"github.com/knadh/koanf"
+	"github.com/knadh/koanf/parsers/json"
+	"github.com/knadh/koanf/parsers/toml"
+	"github.com/knadh/koanf/parsers/yaml"
+	"github.com/knadh/koanf/providers/env"
+	"github.com/knadh/koanf/providers/file"
 	"go.uber.org/zap"
 
 	"github.com/Kukoon/media-server/models"
 	"github.com/Kukoon/media-server/oven"
 	webOWN "github.com/Kukoon/media-server/web"
+	"github.com/Kukoon/media-server/web/api/channel"
 )
 
 var VERSION = "development"
 
+var configExtParser = map[string]koanf.Parser{
+	".json": json.Parser(),
+	".toml": toml.Parser(),
+	".yaml": yaml.Parser(),
+	".yml":  yaml.Parser(),
+}
+
 type configData struct {
-	Log       *zap.Config       `toml:"log"`
-	Database  database.Database `toml:"database"`
-	Webserver web.Service       `toml:"webserver"`
-	Oven      oven.Service      `toml:"oven"`
+	Log        *zap.Config          `config:"log"`
+	Database   database.Database    `config:"database"`
+	Webserver  web.Service          `config:"webserver"`
+	Oven       oven.Service         `config:"oven"`
+	StreamURLs channel.ConfigStream `config:"stream_urls"`
 }
 
 func main() {
@@ -38,14 +54,32 @@ func main() {
 
 	flag.Parse()
 
-	if showVersion {
-		log.Info("Version", zap.String("version", VERSION))
-		return
+	k := koanf.New("/")
+
+	if configPath != "" {
+		fileExt := filepath.Ext(configPath)
+		parser, ok := configExtParser[fileExt]
+		if !ok {
+			log.Panic("unsupported file extension:",
+				zap.String("config-path", configPath),
+				zap.String("file-ext", fileExt),
+			)
+		}
+		if err := k.Load(file.Provider(configPath), parser); err != nil {
+			log.Panic("load file config:", zap.Error(err))
+		}
+	}
+
+	if err := k.Load(env.Provider("OVEN_E_", "/", func(s string) string {
+		return strings.Replace(strings.ToLower(
+			strings.TrimPrefix(s, "OVEN_E_")), "__", "/", -1)
+	}), nil); err != nil {
+		log.Panic("load env:", zap.Error(err))
 	}
 
 	config := &configData{}
-	if err := file.ReadTOML(configPath, config); err != nil {
-		log.Panic("open config file", zap.Error(err))
+	if err := k.UnmarshalWithConf("", &config, koanf.UnmarshalConf{Tag: "config"}); err != nil {
+		log.Panic("reading config", zap.Error(err))
 	}
 
 	if config.Log != nil {
@@ -71,7 +105,7 @@ func main() {
 	apiStatus.VERSION = webM.VERSION
 	apiStatus.UP = webM.UP
 
-	config.Webserver.ModuleRegister(webOWN.Bind(&config.Oven))
+	config.Webserver.ModuleRegister(webOWN.Bind(&config.Oven, &config.StreamURLs))
 
 	config.Oven.Run(log)
 

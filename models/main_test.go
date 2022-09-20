@@ -9,11 +9,11 @@ import (
 
 func DatabaseForTesting() *database.Database {
 	dbConfig := database.Database{
-		Connection: webtest.DBConnection,
-		Testdata:   true,
-		Debug:      false,
-		LogLevel:   0,
+		Testdata: true,
+		Debug:    false,
+		LogLevel: 0,
 	}
+	dbConfig.Connection.URI = webtest.DBConnection
 	SetupMigration(&dbConfig)
 	err := dbConfig.ReRun()
 	if err != nil {

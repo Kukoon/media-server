@@ -1,7 +1,7 @@
 ##
 # Compile application
 ##
-FROM golang:latest AS build-env
+FROM golang:alpine AS build-env
 ARG VERSION
 WORKDIR /app
 COPY . .
@@ -18,8 +18,8 @@ RUN CGO_ENABLED=0 go build -ldflags="-w -s -X main.VERSION=$VERSION" -o server
 # Build Image
 ##
 FROM scratch
+COPY --from=build-env ["/etc/ssl/cert.pem", "/etc/ssl/certs/ca-certificates.crt"]
 COPY --from=build-env /app/server /server
-COPY --from=build-env /app/config_example.toml /config.toml
 
 WORKDIR /
-ENTRYPOINT ["/server"]
+ENTRYPOINT ["/server", "-c", ""]

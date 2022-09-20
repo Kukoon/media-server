@@ -7,13 +7,13 @@ import (
 )
 
 // Bind to webservice
-func Bind(r *gin.Engine, ws *web.Service, oven *oven.Service) {
+func Bind(r *gin.Engine, ws *web.Service, oven *oven.Service, config *ConfigStream) {
 	apiRestreamList(r, ws, oven)
 	apiRestreamDelete(r, ws, oven)
 	apiRestreamAdd(r, ws, oven)
 	apiList(r, ws)
 	apiListMy(r, ws)
-	apiGet(r, ws)
+	apiGet(r, ws, config)
 	apiPost(r, ws)
 	apiPut(r, ws)
 	apiDelete(r, ws)
