@@ -70,9 +70,9 @@ func main() {
 		}
 	}
 
-	if err := k.Load(env.Provider("OVEN_E_", "/", func(s string) string {
+	if err := k.Load(env.Provider("MEDIA_SERVER_", "/", func(s string) string {
 		return strings.Replace(strings.ToLower(
-			strings.TrimPrefix(s, "OVEN_E_")), "__", "/", -1)
+			strings.TrimPrefix(s, "MEDIA_SERVER_")), "__", "/", -1)
 	}), nil); err != nil {
 		log.Panic("load env:", zap.Error(err))
 	}

@@ -14,9 +14,9 @@ import (
 type Service struct {
 	log         *zap.Logger
 	w           *worker.Worker
-	Client      ovenAPI.Client    `toml:"client"`
-	StreamCheck file.TOMLDuration `toml:"stream_check"`
-	DB          *gorm.DB          `toml:"-"`
+	Client      ovenAPI.Client    `config:"client"`
+	StreamCheck file.TOMLDuration `config:"stream_check"`
+	DB          *gorm.DB          `config:"-"`
 }
 
 // Run start all related workers on oven service
