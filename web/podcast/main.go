@@ -133,7 +133,7 @@ func Bind(r *gin.Engine, ws *web.Service) {
 		if err := db.Preload("Recordings.Lang", func(db *gorm.DB) *gorm.DB {
 			return db.Where("lang", language)
 		}).Preload("Recordings", func(db *gorm.DB) *gorm.DB {
-			return db.Order("created_at DESC")
+			return db.Where("public", true).Where("listed", true).Order("created_at DESC")
 		}).Preload("Recordings.Formats", func(db *gorm.DB) *gorm.DB {
 			return db.Where("is_video", isVideo).Where("quality >= ?", formatStr.MinQuality()).Order("quality ASC")
 		}).First(&obj).Error; err != nil {
@@ -157,7 +157,7 @@ func Bind(r *gin.Engine, ws *web.Service) {
 
 		for _, recording := range obj.Recordings {
 
-			if recording.Lang == nil || len(recording.Formats) == 0 {
+			if recording.Lang == nil || recording.Lang.Title == "" || recording.Lang.Long == "" || len(recording.Formats) == 0 {
 				continue
 			}
 
